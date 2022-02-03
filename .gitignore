@@ -1,0 +1,13 @@
+# generic files
+*.o
+*.a
+*~
+*.bak
+build/
+html/
+CMakeCache.txt
+CMakeFiles/
+Testing/
+# specific executable
+game_text
+game_test
