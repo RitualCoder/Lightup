@@ -10,9 +10,9 @@
 #include <string.h>
 #include <time.h>
 
-#include "game.h"
-#include "game_aux.h"
-#include "game_ext.h"
+#include "./libgame/game.h"
+#include "./libgame/game_aux.h"
+#include "./libgame/game_ext.h"
 
 /* ************************************************************************** */
 
