@@ -12,8 +12,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "game.h"
-#include "game_ext.h"
+#include "../libgame/game.h"
+#include "../libgame/game_ext.h"
 
 /* ************************************************************************** */
 /*                                  MISC                                      */

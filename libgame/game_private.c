@@ -12,7 +12,7 @@
 
 #include "game.h"
 #include "game_ext.h"
-#include "queue.h"
+#include "../libstack/queue.h"
 
 /* ************************************************************************** */
 /*                             STACK ROUTINES                                 */

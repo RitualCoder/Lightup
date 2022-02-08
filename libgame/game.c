@@ -12,7 +12,7 @@
 
 #include "game_ext.h"
 #include "game_private.h"
-#include "queue.h"
+#include "../libstack/queue.h"
 
 /* ************************************************************************** */
 /*                                INTERNAL                                    */

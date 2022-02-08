@@ -10,7 +10,7 @@
 #include <stdbool.h>
 
 #include "game.h"
-#include "queue.h"
+#include "../libstack/queue.h"
 
 /* ************************************************************************** */
 /*                                CONSTANTS                                   */

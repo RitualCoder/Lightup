@@ -5,14 +5,14 @@
  *
  **/
 
-#include "game.h"
+#include "../libgame/game.h"
 
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "game_ext.h"
+#include "../libgame/game_ext.h"
 #include "game_test.h"
 
 /* ************************************************************************** */

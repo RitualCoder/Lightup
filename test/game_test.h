@@ -7,8 +7,8 @@
 #ifndef __GAME_TEST_H__
 #define __GAME_TEST_H__
 
-#include "game.h"
-#include "game_ext.h"
+#include "../libgame/game.h"
+#include "../libgame/game_ext.h"
 
 /* ************************************************************************** */
 /*                               CHECK ROUTINES                               */
