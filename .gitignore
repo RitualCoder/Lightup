@@ -2,7 +2,7 @@
 *.o
 *.a
 *~
-*.bak
+*bak
 build/
 html/
 CMakeCache.txt
