@@ -65,4 +65,11 @@ int test_undo_redo_some(void);
 int test_undo_redo_all(void);
 int test_restart_undo(void);
 
+/* ************************************************************************** */
+/*                               IO TESTS (V2)                                */
+/* ************************************************************************** */
+
+int test_save(void);
+int test_load(void);
+
 #endif  // __GAME_TEST_H__
