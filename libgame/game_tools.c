@@ -1,6 +1,7 @@
 #include "game_tools.h"
 #include "game.h"
 #include "game_ext.h"
+#include "game_private.h"
 
 #include <stdlib.h>
 
@@ -85,4 +86,41 @@ game game_load(char * filename){
     fclose(file);
 
     return rgame;
+}
+
+void game_save(cgame g, char *filename){
+    FILE* f=fopen(filename ,'w');
+    if (f == NULL){
+        fprintf(stderr, "inexistant file");
+        exit(5);
+    }
+    uint wall_nb;
+    uint wrap;
+    if (g -> wrapping){
+        wrap = 1;
+    }
+    else {
+        wrap = 0;
+    }
+    fprintf(filename, "%d ", g -> nb_rows);
+    fprintf(filename, "%d ", g -> nb_cols);
+    fprintf(filename, "%d\n", wrap);
+    for (uint i = 0; i < game_nb_rows(g); i++) {
+        for (uint j = 0; j < game_nb_cols(g); j++) {
+            if (game_get_state(g, i, j) == S_LIGHTBULB){
+                fprintf(filename, "*");
+            }
+            if (game_get_state(g, i, j) == S_BLACK0){
+                fprintf(filename, "w");
+            }
+            if (game_is_black(g, i, j) && game_get_state(g, i, j) != S_BLACK0){
+                fprintf(filename, "%d", game_get_black_number(g, i, j));
+            }
+            if (game_is_blank(g, i, j)){
+                fprintf(filename, 'b');
+            }
+        }
+        fprintf(filename, "\n");
+    }
+    fclose(filename);
 }
