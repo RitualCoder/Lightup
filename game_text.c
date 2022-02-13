@@ -91,25 +91,16 @@ static bool game_step(game g) {
 
     } 
     else if(c == 'w'){ // save current game
-        char filename[20];
-        int ret=scanf(" %c",filename); //get file name
-        if (ret != 1) {
-            printf("Error: invalid user input!\n");
-            return true;
-        }
-        FILE* f=fopen(filename,"r");
-        if (f==NULL){
-            exit(EXIT_FAILURE);
-            }
+        char filename[10];
+        scanf("%s",filename);
+        printf("> action: save\n");
         game_save(g,filename);
-        return false;
+        return true;
     }
-    
     else {
         printf("Error: invalid user input!\n");
         return true;
     }
-
     return true;  // continue...
 }
 
