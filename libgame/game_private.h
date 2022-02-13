@@ -9,8 +9,8 @@
 
 #include <stdbool.h>
 
-#include "game.h"
 #include "../libstack/queue.h"
+#include "game.h"
 
 /* ************************************************************************** */
 /*                                CONSTANTS                                   */
@@ -31,12 +31,12 @@
  * @details This is an opaque data type.
  */
 struct game_s {
-  uint nb_rows;      /**< number of rows in the game */
-  uint nb_cols;      /**< number of columns in the game */
-  square* squares;   /**< the grid of squares */
-  bool wrapping;     /**< the wrapping option */
-  queue* undo_stack; /**< stack to undo moves */
-  queue* redo_stack; /**< stack to redo moves */
+    uint nb_rows;      /**< number of rows in the game */
+    uint nb_cols;      /**< number of columns in the game */
+    square* squares;   /**< the grid of squares */
+    bool wrapping;     /**< the wrapping option */
+    queue* undo_stack; /**< stack to undo moves */
+    queue* redo_stack; /**< stack to redo moves */
 };
 
 /**
@@ -44,8 +44,8 @@ struct game_s {
  * @details This structure is used to save the game history.
  */
 struct move_s {
-  uint i, j;
-  square old, new;
+    uint i, j;
+    square old, new;
 };
 
 typedef struct move_s move;

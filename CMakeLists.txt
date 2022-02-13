@@ -30,6 +30,6 @@ target_link_libraries(game_text game)
 #on ajoute les tests
 add_subdirectory(test)
 
-#On copie les jeux de test
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/game_save/default.txt DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/game_save/default_solution.txt DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+#On copie les jeux de test dans le dossier der test
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/game_save/default.txt DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/test)
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/game_save/default_solution.txt DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/test)
