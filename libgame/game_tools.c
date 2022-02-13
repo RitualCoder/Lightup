@@ -108,10 +108,10 @@ void game_save(cgame g, char* filename) {
             if (game_get_state(g, i, j) == S_LIGHTBULB) {
                 fprintf(f, "*");
             }
-            if (game_get_state(g, i, j) == S_BLACK0) {
+            if (game_get_state(g, i, j) == S_BLACKU) {
                 fprintf(f, "w");
             }
-            if (game_is_black(g, i, j) && game_get_state(g, i, j) != S_BLACK0) {
+            if (game_is_black(g, i, j) && game_get_state(g, i, j) != S_BLACKU) {
                 fprintf(f, "%d", game_get_black_number(g, i, j));
             }
             if (game_is_blank(g, i, j)) {
