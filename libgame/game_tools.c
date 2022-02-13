@@ -78,7 +78,7 @@ game game_load(char* filename) {
 
     // convert int to bool, wrapping
     bool bool_wrapping;
-    bool_wrapping = wrapping == 0;
+    bool_wrapping = wrapping != 0;
 
     game rgame = game_new_ext(nb_rows, nb_cols, read_data, bool_wrapping);
 
