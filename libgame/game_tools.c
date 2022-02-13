@@ -89,37 +89,36 @@ game game_load(char* filename) {
 }
 
 void game_save(cgame g, char* filename) {
-    FILE* f = fopen(filename, 'w');
+    FILE* f = fopen(filename, "w");
     if (f == NULL) {
         fprintf(stderr, "inexistant file");
         exit(5);
     }
-    uint wall_nb;
     uint wrap;
     if (g->wrapping) {
         wrap = 1;
     } else {
         wrap = 0;
     }
-    fprintf(filename, "%d ", g->nb_rows);
-    fprintf(filename, "%d ", g->nb_cols);
-    fprintf(filename, "%d\n", wrap);
+    fprintf(f, "%d ", g->nb_rows);
+    fprintf(f, "%d ", g->nb_cols);
+    fprintf(f, "%d\n", wrap);
     for (uint i = 0; i < game_nb_rows(g); i++) {
         for (uint j = 0; j < game_nb_cols(g); j++) {
             if (game_get_state(g, i, j) == S_LIGHTBULB) {
-                fprintf(filename, "*");
+                fprintf(f, "*");
             }
             if (game_get_state(g, i, j) == S_BLACK0) {
-                fprintf(filename, "w");
+                fprintf(f, "w");
             }
             if (game_is_black(g, i, j) && game_get_state(g, i, j) != S_BLACK0) {
-                fprintf(filename, "%d", game_get_black_number(g, i, j));
+                fprintf(f, "%d", game_get_black_number(g, i, j));
             }
             if (game_is_blank(g, i, j)) {
-                fprintf(filename, 'b');
+                fprintf(f, "b");
             }
         }
-        fprintf(filename, "\n");
+        fprintf(f, "\n");
     }
-    fclose(filename);
+    fclose(f);
 }
