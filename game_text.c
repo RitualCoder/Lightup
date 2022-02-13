@@ -13,6 +13,8 @@
 #include "./libgame/game.h"
 #include "./libgame/game_aux.h"
 #include "./libgame/game_ext.h"
+#include "./libgame/game_tools.h"
+
 
 /* ************************************************************************** */
 
@@ -86,7 +88,24 @@ static bool game_step(game g) {
         }
         game_play_move(g, i, j, s);
         return true;  // continue to play
-    } else {
+
+    } 
+    else if(c == 'w'){ // save current game
+        char filename[20];
+        int ret=scanf(" %c",filename); //get file name
+        if (ret != 1) {
+            printf("Error: invalid user input!\n");
+            return true;
+        }
+        FILE* f=fopen(filename,"r");
+        if (f==NULL){
+            exit(EXIT_FAILURE);
+            }
+        game_save(g,filename);
+        return false;
+    }
+    
+    else {
         printf("Error: invalid user input!\n");
         return true;
     }
@@ -96,14 +115,14 @@ static bool game_step(game g) {
 
 /* ************************************************************************** */
 
-int main(void) {
+int main(int argc, char *argv[]) {
     game g = NULL;
-    // if (argc == 2)
-    //   g = game_load(argv[1]);
-    // else
-    g = game_default();
+    //printf("%d",argc);
+    if (argc == 2)
+        g = game_load(argv[1]);
+    else
+        g = game_default();
     assert(g);
-
     game_print(g);
     bool win = game_is_over(g);
     bool cont = true;
