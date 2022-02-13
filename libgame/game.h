@@ -33,20 +33,20 @@ typedef unsigned int uint;
  * https://en.wikipedia.org/wiki/Bitwise_operations_in_C.
  **/
 typedef enum {
-  /* states */
-  S_BLANK = 0,        /**< a blank square */
-  S_LIGHTBULB = 1,    /**< a light bulb */
-  S_MARK = 2,         /**< a marked square (as not-a-light) */
-  S_BLACK = 8,        /**< black wall base code */
-  S_BLACK0 = S_BLACK, /**< a numbered black wall (with 0 adjacent lights) */
-  S_BLACK1,           /**< a numbered black wall (with 1 adjacent light) */
-  S_BLACK2,           /**< a numbered black wall (with 2 adjacent lights) */
-  S_BLACK3,           /**< a numbered black wall (with 3 adjacent lights) */
-  S_BLACK4,           /**< a numbered black wall (with 4 adjacent lights) */
-  S_BLACKU,           /**< an unnumbered black wall (any number of adjacent lights) */
-  /* flags */
-  F_LIGHTED = 16, /**< lighted flag */
-  F_ERROR = 32    /**< error flag */
+    /* states */
+    S_BLANK = 0,        /**< a blank square */
+    S_LIGHTBULB = 1,    /**< a light bulb */
+    S_MARK = 2,         /**< a marked square (as not-a-light) */
+    S_BLACK = 8,        /**< black wall base code */
+    S_BLACK0 = S_BLACK, /**< a numbered black wall (with 0 adjacent lights) */
+    S_BLACK1,           /**< a numbered black wall (with 1 adjacent light) */
+    S_BLACK2,           /**< a numbered black wall (with 2 adjacent lights) */
+    S_BLACK3,           /**< a numbered black wall (with 3 adjacent lights) */
+    S_BLACK4,           /**< a numbered black wall (with 4 adjacent lights) */
+    S_BLACKU,           /**< an unnumbered black wall (any number of adjacent lights) */
+    /* flags */
+    F_LIGHTED = 16, /**< lighted flag */
+    F_ERROR = 32    /**< error flag */
 } square;
 
 /** state mask used in square enum */
