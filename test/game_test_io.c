@@ -34,6 +34,9 @@ int test_load(void) {
     ok = ok && game_is_over(g_load);
     ok = ok && game_equal(g_load, g_private);
 
+    game_delete(g_load);
+    game_delete(g_private);
+
     if (ok) {
         return EXIT_SUCCESS;
     } else {
@@ -43,4 +46,47 @@ int test_load(void) {
 
 /* ************************************************************************** */
 
-int test_save() { return EXIT_SUCCESS; }
+int test_save() {
+    bool ok = true;
+
+    // Test with a saved grid default and an unsaved one
+    game default1 = game_default();
+    game_save(default1, "save.txt");
+    game loaded = game_load("save.txt");
+    if (!game_equal(default1, loaded)){
+        ok = false;
+    }
+    game_delete(default1);
+    remove("save.txt");
+
+    // Test with two default solution & if the grid sol is won
+    game default_s = game_default_solution();
+    game_save(default_s, "save2.txt");
+    loaded = game_load("save2.txt");
+    game_update_flags(loaded);
+    if (!game_equal(loaded, default_s) || !game_is_over(loaded)){
+        ok = false;
+    }
+    game_delete(default_s);
+    remove("save2.txt");
+
+    // Test with two different grid
+    game default3 = game_default();
+    game default4 = game_default();
+    game_play_move(default3, 0, 0, S_LIGHTBULB);
+    game_save(default3, "save3.txt");
+    loaded = game_load("save3.txt");
+    game_update_flags(loaded);
+    if (game_equal(loaded, default4)){
+        ok = false;
+    }
+    game_delete(loaded);
+    game_delete(default3);
+    remove("save3.txt");
+
+    if (ok) {
+        return EXIT_SUCCESS;
+    } else {
+        return EXIT_FAILURE;
+    }
+}
