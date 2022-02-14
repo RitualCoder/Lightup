@@ -15,7 +15,6 @@
 #include "./libgame/game_ext.h"
 #include "./libgame/game_tools.h"
 
-
 /* ************************************************************************** */
 
 static void game_print_errors(game g) {
@@ -89,15 +88,13 @@ static bool game_step(game g) {
         game_play_move(g, i, j, s);
         return true;  // continue to play
 
-    } 
-    else if(c == 'w'){ // save current game
+    } else if (c == 'w') {  // save current game
         char filename[10];
-        scanf("%s",filename);
+        scanf("%s", filename);
         printf("> action: save\n");
-        game_save(g,filename);
+        game_save(g, filename);
         return true;
-    }
-    else {
+    } else {
         printf("Error: invalid user input!\n");
         return true;
     }
@@ -108,7 +105,7 @@ static bool game_step(game g) {
 
 int main(int argc, char *argv[]) {
     game g = NULL;
-    //printf("%d",argc);
+    // printf("%d",argc);
     if (argc == 2)
         g = game_load(argv[1]);
     else
