@@ -24,6 +24,9 @@ int test_load(void) {
 
     ok = game_equal(g_load, g_private);
 
+    game_delete(g_load);
+    game_delete(g_private);
+
     /*Test with default solution*/
 
     g_load = game_load("default_solution.txt");
@@ -57,6 +60,7 @@ int test_save() {
         ok = false;
     }
     game_delete(default1);
+    game_delete(loaded);
     remove("save.txt");
 
     // Test with two default solution & if the grid sol is won
@@ -68,6 +72,7 @@ int test_save() {
         ok = false;
     }
     game_delete(default_s);
+    game_delete(loaded);
     remove("save2.txt");
 
     // Test with two different grid
@@ -82,6 +87,7 @@ int test_save() {
     }
     game_delete(loaded);
     game_delete(default3);
+    game_delete(default4);
     remove("save3.txt");
 
     if (ok) {

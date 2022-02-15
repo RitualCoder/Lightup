@@ -84,6 +84,7 @@ game game_load(char* filename) {
 
     free(read_data);
     fclose(file);
+    game_update_flags(rgame);
 
     return rgame;
 }
