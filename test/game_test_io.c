@@ -53,7 +53,7 @@ int test_save() {
     game default1 = game_default();
     game_save(default1, "save.txt");
     game loaded = game_load("save.txt");
-    if (!game_equal(default1, loaded)){
+    if (!game_equal(default1, loaded)) {
         ok = false;
     }
     game_delete(default1);
@@ -64,7 +64,7 @@ int test_save() {
     game_save(default_s, "save2.txt");
     loaded = game_load("save2.txt");
     game_update_flags(loaded);
-    if (!game_equal(loaded, default_s) || !game_is_over(loaded)){
+    if (!game_equal(loaded, default_s) || !game_is_over(loaded)) {
         ok = false;
     }
     game_delete(default_s);
@@ -77,7 +77,7 @@ int test_save() {
     game_save(default3, "save3.txt");
     loaded = game_load("save3.txt");
     game_update_flags(loaded);
-    if (game_equal(loaded, default4)){
+    if (game_equal(loaded, default4)) {
         ok = false;
     }
     game_delete(loaded);

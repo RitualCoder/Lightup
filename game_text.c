@@ -106,9 +106,10 @@ static bool game_step(game g) {
 int main(int argc, char *argv[]) {
     game g = NULL;
     // printf("%d",argc);
-    if (argc == 2)
+    if (argc == 2) {
         g = game_load(argv[1]);
-    else
+        game_update_flags(g);
+    } else
         g = game_default();
     assert(g);
     game_print(g);
