@@ -123,3 +123,39 @@ void game_save(cgame g, char* filename) {
     }
     fclose(f);
 }
+
+bool genGame(int pos, int size, game g, bool stopAtFirstSolution, game* SolTab, int* nbSolFound ,int nbLightbulb, int posedLight){
+    if(pos == size){
+        if (posedLight == nbLightbulb){
+            if(game_is_over(g)){
+                SolTab[*nbSolFound] = game_copy(g);
+                return true;
+            }
+        }
+    }
+
+    bool ret;
+    g -> squares[pos] = S_BLANK;
+    
+    ret = genGame(pos+1, size, g, nbLightbulb, posedLight);
+    if(stopAtFirstSolution && ret){
+        return ret;
+    }
+
+    if(posedLight +1 <= nbLightbulb){
+        g -> squares[pos] = S_LIGHTBULB;
+        ret = genGame(pos+1, size, g, nbLightbulb, posedLight+1);
+        if(stopAtFirstSolution && ret){
+            return ret;
+        }
+    }
+    return false;
+}
+
+bool game_solve(game g){
+    return NULL;
+}
+
+uint game_nb_solutions(cgame g){
+    return NULL;
+}
