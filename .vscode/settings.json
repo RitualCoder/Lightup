@@ -1,11 +1,10 @@
 {
-    "cmake.debugConfig": {
-        "args": [
-            "new"
-        ],
-        "stopAtEntry": true
-    },
-    "files.associations": {
-        "game_examples.h": "c"
-    }
+  "cmake.debugConfig": {
+    "args": ["new"],
+    "stopAtEntry": true
+  },
+  "files.associations": {
+    "game_examples.h": "c",
+    "game_private.h": "c"
+  }
 }

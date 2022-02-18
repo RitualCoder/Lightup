@@ -94,6 +94,9 @@ static bool game_step(game g) {
         printf("> action: save\n");
         game_save(g, filename);
         return true;
+    } else if (c == 's') {  // save current game
+        game_solve(g);
+        return true;
     } else {
         printf("Error: invalid user input!\n");
         return true;

@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include "game.h"
+#include "game_aux.h"
 #include "game_ext.h"
 #include "game_private.h"
 
@@ -124,38 +125,59 @@ void game_save(cgame g, char* filename) {
     fclose(f);
 }
 
-bool genGame(int pos, int size, game g, bool stopAtFirstSolution, game* SolTab, int* nbSolFound ,int nbLightbulb, int posedLight){
-    if(pos == size){
-        if (posedLight == nbLightbulb){
-            if(game_is_over(g)){
-                SolTab[*nbSolFound] = game_copy(g);
+bool genGame(int pos, int size, game g, bool stopAtFirstSolution, bool saveInFile, char* filename, int nbLightbulb,
+             int posedLight) {
+    if (pos == size) {
+        if (posedLight == nbLightbulb) {
+            game_update_flags(g);
+            if (game_is_over(g)) {
+                if (saveInFile) {
+                    game_save(g, filename);  // TODO: faire une fonction auxilière qui gère plusieur écriture dans un
+                                             // même fichier
+                } else {
+                    game_print(g);
+                }
                 return true;
             }
+            return false;
         }
+        return false;
     }
 
-    bool ret;
-    g -> squares[pos] = S_BLANK;
-    
-    ret = genGame(pos+1, size, g, nbLightbulb, posedLight);
-    if(stopAtFirstSolution && ret){
+    bool ret;  // TODO: creer un fonction auxilière pour suprimer le code copier-coller
+    if ((g->squares[pos] & S_MASK) & S_BLACK) {
+        ret = genGame(pos + 1, size, g, stopAtFirstSolution, saveInFile, filename, nbLightbulb, posedLight);
+        if (stopAtFirstSolution && ret) {
+            return ret;
+        }
+        return false;
+    }
+    g->squares[pos] = S_BLANK;
+
+    ret = genGame(pos + 1, size, g, stopAtFirstSolution, saveInFile, filename, nbLightbulb, posedLight);
+    if (stopAtFirstSolution && ret) {
         return ret;
     }
 
-    if(posedLight +1 <= nbLightbulb){
-        g -> squares[pos] = S_LIGHTBULB;
-        ret = genGame(pos+1, size, g, nbLightbulb, posedLight+1);
-        if(stopAtFirstSolution && ret){
+    if (posedLight + 1 <= nbLightbulb) {
+        g->squares[pos] = S_LIGHTBULB;
+        ret = genGame(pos + 1, size, g, stopAtFirstSolution, saveInFile, filename, nbLightbulb, posedLight + 1);
+        if (stopAtFirstSolution && ret) {
             return ret;
         }
     }
     return false;
 }
 
-bool game_solve(game g){
-    return NULL;
+bool game_solve(game g) {
+    int len_g = g->nb_cols * g->nb_rows;
+    for (int i = 1; i < len_g; i++) {
+        printf("Trying with %d lightBulb\n", i);
+        if (genGame(0, (g->nb_cols * g->nb_rows), g, true, false, "0", i, 0)) {
+            return true;
+        }
+    }
+    return false;
 }
 
-uint game_nb_solutions(cgame g){
-    return NULL;
-}
+uint game_nb_solutions(cgame g) { return 0; }
