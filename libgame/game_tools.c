@@ -90,11 +90,19 @@ game game_load(char* filename) {
     return rgame;
 }
 
-void game_save(cgame g, char* filename) {
+void game_save_int(cgame g, char* filename, bool appendMode) {
     FILE* f = fopen(filename, "w");
     if (f == NULL) {
-        fprintf(stderr, "inexistant file");
+        fprintf(stderr, "inexistant file\n");
         exit(5);
+    }
+    if(appendMode){
+        int ch = getc(f);
+        while (ch != EOF)
+        {
+            ch = getc(f);
+        }
+        
     }
     uint wrap;
     if (g->wrapping) {
@@ -125,6 +133,10 @@ void game_save(cgame g, char* filename) {
     fclose(f);
 }
 
+void game_save(cgame g, char* filename){
+    game_save_int(g, filename, false);
+}
+
 bool genGame(int pos, int size, game g, bool stopAtFirstSolution, bool saveInFile, char* filename, int nbLightbulb,
              int posedLight) {
     if (pos == size) {
@@ -145,25 +157,25 @@ bool genGame(int pos, int size, game g, bool stopAtFirstSolution, bool saveInFil
     }
 
     bool ret;  // TODO: creer un fonction auxilière pour suprimer le code copier-coller
-    if ((g->squares[pos] & S_MASK) & S_BLACK) {
+    if ((g->squares[pos] & S_MASK) & S_BLACK) { // Si c'est un mur alors on saute la case
         ret = genGame(pos + 1, size, g, stopAtFirstSolution, saveInFile, filename, nbLightbulb, posedLight);
         if (stopAtFirstSolution && ret) {
             return ret;
         }
-        return false;
-    }
-    g->squares[pos] = S_BLANK;
+    } else {
+        g->squares[pos] = S_BLANK; //cas ou on pose un blanc
 
-    ret = genGame(pos + 1, size, g, stopAtFirstSolution, saveInFile, filename, nbLightbulb, posedLight);
-    if (stopAtFirstSolution && ret) {
-        return ret;
-    }
-
-    if (posedLight + 1 <= nbLightbulb) {
-        g->squares[pos] = S_LIGHTBULB;
-        ret = genGame(pos + 1, size, g, stopAtFirstSolution, saveInFile, filename, nbLightbulb, posedLight + 1);
+        ret = genGame(pos + 1, size, g, stopAtFirstSolution, saveInFile, filename, nbLightbulb, posedLight);
         if (stopAtFirstSolution && ret) {
             return ret;
+        }
+
+        if (posedLight + 1 <= nbLightbulb) { // cas d'un lightbulb
+            g->squares[pos] = S_LIGHTBULB;
+            ret = genGame(pos + 1, size, g, stopAtFirstSolution, saveInFile, filename, nbLightbulb, posedLight + 1);
+            if (stopAtFirstSolution && ret) {
+                return ret;
+            }
         }
     }
     return false;

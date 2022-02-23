@@ -33,3 +33,4 @@ add_subdirectory(test)
 #On copie les jeux de test dans le dossier der test
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/game_save/default.txt DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/test)
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/game_save/default_solution.txt DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/test)
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/game_save/3x3.txt DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/test)
