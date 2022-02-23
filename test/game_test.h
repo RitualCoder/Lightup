@@ -72,4 +72,10 @@ int test_restart_undo(void);
 int test_save(void);
 int test_load(void);
 
+/* ************************************************************************** */
+/*                               SOLVER TEST                                  */
+/* ************************************************************************** */
+
+int test_game_solve();
+
 #endif  // __GAME_TEST_H__

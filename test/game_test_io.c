@@ -40,6 +40,19 @@ int test_load(void) {
     game_delete(g_load);
     game_delete(g_private);
 
+    /*Test with exhauting load*/
+
+    g_load = game_load("mark_test.txt");
+    square s_private[9] = {S_BLANK, S_LIGHTBULB, S_BLACK0, S_BLACK1, S_BLACK2, S_BLACK3, S_BLACK4, S_BLACKU, S_MARK};
+    g_private = game_new_ext(1, 9, s_private, true);
+    game_update_flags(g_load);
+    game_update_flags(g_private);
+
+    ok = ok && game_equal(g_load, g_private);
+
+    game_delete(g_load);
+    game_delete(g_private);
+
     if (ok) {
         return EXIT_SUCCESS;
     } else {

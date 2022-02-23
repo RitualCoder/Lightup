@@ -11,7 +11,7 @@ set(CMAKE_C_FLAGS_DEBUG "-g --coverage")    # use CMake option: -DCMAKE_BUILD_TY
 set(CMAKE_C_FLAGS_RELEASE "-O3 -DNDEBUG")   # use CMake option: -DCMAKE_BUILD_TYPE=RELEASE
 
 # game tests
-add_executable(game_test game_test.c game_test_aux.c game_test_v1.c game_test_v2.c game_examples.c game_test_io.c)
+add_executable(game_test game_test.c game_test_aux.c game_test_v1.c game_test_v2.c game_examples.c game_test_io.c game_solver_test.c)
 target_link_libraries(game_test game)
 
 ############################# TEST V1 #############################
@@ -61,3 +61,10 @@ add_test(testv2_restart_undo ./game_test "restart_undo")
 #Tools test (game_tools.h)
 add_test(testio_load ./game_test "game_load")
 add_test(testio_save ./game_test "game_save")
+
+########################## TEST SOLVER ############################
+
+#Tools test (game_tools.h)
+add_test(test_game_solve ./game_test "game_solve")
+
+#game_solve
