@@ -77,7 +77,7 @@ int test_save() {
     remove("save.txt"); */
 
     // Test with two default solution & if the grid sol is won
-    game default_s = game_default_solution();
+    /* game default_s = game_default_solution();
     game_save(default_s, "save2.txt");
     game loaded2 = game_load("save2.txt");
     game_update_flags(loaded2);
@@ -100,7 +100,7 @@ int test_save() {
     game_delete(loaded3);
     game_delete(default3);
     game_delete(default4);
-    remove("save3.txt");
+    remove("save3.txt"); */
 
     if (ok) {
         return EXIT_SUCCESS;
