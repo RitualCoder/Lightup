@@ -89,7 +89,7 @@ int test_save() {
     remove("save2.txt");
 
     // Test with two different grid
-    game default3 = game_default();
+    /* game default3 = game_default();
     game default4 = game_default_solution();
     game_save(default3, "save3.txt");
     loaded = game_load("save3.txt");
@@ -100,7 +100,7 @@ int test_save() {
     game_delete(loaded);
     game_delete(default3);
     game_delete(default4);
-    remove("save3.txt");
+    remove("save3.txt"); */
 
     if (ok) {
         return EXIT_SUCCESS;

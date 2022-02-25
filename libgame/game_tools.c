@@ -144,7 +144,7 @@ bool genGame(int pos, int size, game g, bool stopAtFirstSolution, bool saveInFil
             game_update_flags(g);
             if (game_is_over(g)) {
                 if (saveInFile) {
-                    game_save(g, filename);  // TODO: faire une fonction auxilière qui gère plusieur écriture dans un
+                    game_save(g, filename);  // TODO: faire une fonction auxiliaire qui gère plusieurs écritures dans un
                                              // même fichier
                 } else {
                     game_print(g);
@@ -156,7 +156,7 @@ bool genGame(int pos, int size, game g, bool stopAtFirstSolution, bool saveInFil
         return false;
     }
 
-    bool ret;  // TODO: creer un fonction auxilière pour suprimer le code copier-coller
+    bool ret;  // TODO: creer une fonction auxiliaire pour supprimer le code copier-coller
     if ((g->squares[pos] & S_MASK) & S_BLACK) { // Si c'est un mur alors on saute la case
         ret = genGame(pos + 1, size, g, stopAtFirstSolution, saveInFile, filename, nbLightbulb, posedLight);
         if (stopAtFirstSolution && ret) {
