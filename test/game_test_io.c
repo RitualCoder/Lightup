@@ -90,8 +90,7 @@ int test_save() {
 
     // Test with two different grid
     game default3 = game_default();
-    game default4 = game_default();
-    game_play_move(default3, 0, 0, S_LIGHTBULB);
+    game default4 = game_default_solution();
     game_save(default3, "save3.txt");
     loaded = game_load("save3.txt");
     game_update_flags(loaded);
