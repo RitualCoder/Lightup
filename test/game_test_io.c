@@ -92,12 +92,12 @@ int test_save() {
     game default3 = game_default();
     game default4 = game_default_solution();
     game_save(default3, "save3.txt");
-    loaded = game_load("save3.txt");
-    game_update_flags(loaded);
-    if (game_equal(loaded, default4)) {
+    game loaded3 = game_load("save3.txt");
+    game_update_flags(loaded3);
+    if (game_equal(loaded3, default4)) {
         ok = false;
     }
-    game_delete(loaded);
+    game_delete(loaded3);
     game_delete(default3);
     game_delete(default4);
     remove("save3.txt");
