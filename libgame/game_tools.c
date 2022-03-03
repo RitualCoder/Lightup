@@ -136,11 +136,11 @@ void game_save(cgame g, char* filename) { game_save_int(g, filename, false); }
 
 bool genGame(int pos, int size, game g, bool stopAtFirstSolution, bool saveInFile, char* filename, int nbLightbulb,
              int posedLight, int* generatedGame, int* testedGame, int* solutionFind) {
+    game_update_flags(g);
     if (pos == size) {
         *generatedGame = *generatedGame + 1;
         if (posedLight == nbLightbulb) {
             *testedGame = *testedGame + 1;
-            game_update_flags(g);
             if (game_is_over(g)) {
                 *solutionFind = *solutionFind + 1;
                 if (saveInFile) {
@@ -164,21 +164,20 @@ bool genGame(int pos, int size, game g, bool stopAtFirstSolution, bool saveInFil
             return ret;
         }
     } else {
-        g->squares[pos] = S_BLANK;  // cas ou on pose un blanc
-
-        ret = genGame(pos + 1, size, g, stopAtFirstSolution, saveInFile, filename, nbLightbulb, posedLight,
-                      generatedGame, testedGame, solutionFind);
-        if (stopAtFirstSolution && ret) {
-            return ret;
-        }
-
-        if (posedLight + 1 <= nbLightbulb) {  // cas d'un lightbulb
+        if (posedLight + 1 <= nbLightbulb && ((g->squares[pos] & F_MASK) != F_LIGHTED)) {  // cas d'un lightbulb
             g->squares[pos] = S_LIGHTBULB;
             ret = genGame(pos + 1, size, g, stopAtFirstSolution, saveInFile, filename, nbLightbulb, posedLight + 1,
                           generatedGame, testedGame, solutionFind);
             if (stopAtFirstSolution && ret) {
                 return ret;
             }
+        }
+
+        g->squares[pos] = S_BLANK;  // cas ou on pose un blanc
+        ret = genGame(pos + 1, size, g, stopAtFirstSolution, saveInFile, filename, nbLightbulb, posedLight,
+                      generatedGame, testedGame, solutionFind);
+        if (stopAtFirstSolution && ret) {
+            return ret;
         }
     }
     return false;
@@ -198,7 +197,7 @@ bool game_solve(game g) {
     int generatedGame = 0;
     int solutionFound = 0;
     gettimeofday(&start, NULL);
-    for (int i = min(g->nb_cols, g->nb_rows); i < len_g; i++) {
+    for (int i = min(g->nb_cols, g->nb_rows); i < len_g; i++) {  // A RE MODIF!!
         printf("Trying with %d lightBulb\n", i);
         if (genGame(0, (g->nb_cols * g->nb_rows), g, true, false, "0", i, 0, &generatedGame, &testedGame,
                     &solutionFound)) {
@@ -220,13 +219,14 @@ uint game_nb_solutions(cgame g) {
     struct timeval start, end;
     int len_g = g->nb_cols * g->nb_rows;
     int testedGame = 0;
+    game workingGame = game_copy(g);
     int generatedGame = 0;
     int solutionFound = 0;
-    game workingGame = game_copy(g);
     gettimeofday(&start, NULL);
     for (int i = min(g->nb_cols, g->nb_rows); i < len_g; i++) {
         printf("Trying with %d lightBulb\n", i);
-        genGame(0, (g->nb_cols * g->nb_rows), workingGame, false, false, "solution", i, 0, &generatedGame, &testedGame, &solutionFound);
+        genGame(0, (g->nb_cols * g->nb_rows), workingGame, false, false, "solution", i, 0, &generatedGame, &testedGame,
+                &solutionFound);
     }
     gettimeofday(&end, NULL);
     double elapsedTime = (end.tv_sec - start.tv_sec) * 1000.0;  // sec
