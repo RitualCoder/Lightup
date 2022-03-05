@@ -134,8 +134,21 @@ void game_save_int(cgame g, char* filename, bool appendMode) {
 
 void game_save(cgame g, char* filename) { game_save_int(g, filename, false); }
 
-bool genGame(int pos, int size, game g, bool stopAtFirstSolution, int nbLightbulb, int posedLight, int* generatedGame,
-             int* testedGame, int* solutionFind) {
+static bool _checkErr(game g) {
+    bool ret = false;
+    for (int x = g->nb_cols - 1; x >= 0; x--) {
+        for (int y = g->nb_rows - 1; y >= 0; y--) {
+            ret = game_has_error(g, x, y);
+            if (ret) {
+                return ret;
+            }
+        }
+    }
+    return ret;
+}
+
+static bool genGame(int pos, int size, game g, bool stopAtFirstSolution, int nbLightbulb, int posedLight,
+                    int* generatedGame, int* testedGame, int* solutionFind) {
     game_update_flags(g);
     if (pos == size) {
         *generatedGame = *generatedGame + 1;
@@ -153,7 +166,7 @@ bool genGame(int pos, int size, game g, bool stopAtFirstSolution, int nbLightbul
     }
 
     bool ret;  // TODO: creer un fonction auxilière pour suprimer le code copier-coller
-    if(nbLightbulb - posedLight > size - pos){
+    if (nbLightbulb - posedLight > size - pos || _checkErr(g)) {
         return false;
     }
     if ((g->squares[pos] & S_MASK) & S_BLACK) {  // Si c'est un mur alors on saute la case
