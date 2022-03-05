@@ -23,9 +23,11 @@ add_library(game ${GameSources} ${StackSources} ${GameHeaders} ${StackHeaders})
 
 #création de l'éxécutable
 add_executable(game_text game_text.c)
+add_executable(game_solve game_solve_tmp.c)
 
 #on lie les librairie
 target_link_libraries(game_text game)
+target_link_libraries(game_solve game)
 
 #on ajoute les tests
 add_subdirectory(test)

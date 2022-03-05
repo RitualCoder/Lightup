@@ -153,6 +153,9 @@ bool genGame(int pos, int size, game g, bool stopAtFirstSolution, int nbLightbul
     }
 
     bool ret;  // TODO: creer un fonction auxilière pour suprimer le code copier-coller
+    if(nbLightbulb - posedLight > size - pos){
+        return false;
+    }
     if ((g->squares[pos] & S_MASK) & S_BLACK) {  // Si c'est un mur alors on saute la case
         ret = genGame(pos + 1, size, g, stopAtFirstSolution, nbLightbulb, posedLight, generatedGame, testedGame,
                       solutionFind);
