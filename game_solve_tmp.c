@@ -10,6 +10,8 @@ int main(int argc, char* argv[]) {
         return EXIT_FAILURE;
     }
     game g  = game_load(argv[1]);
+    game g2 = game_copy(g);
     game_solve(g);
+    game_nb_solutions(g2);
     return EXIT_SUCCESS;
 }

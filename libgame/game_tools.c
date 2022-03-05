@@ -150,6 +150,7 @@ static bool _checkErr(game g) {
 static bool genGame(int pos, int size, game g, bool stopAtFirstSolution, int nbLightbulb, int posedLight,
                     int* generatedGame, int* testedGame, int* solutionFind) {
     game_update_flags(g);
+
     if (pos == size) {
         *generatedGame = *generatedGame + 1;
         if (posedLight == nbLightbulb) {
@@ -232,14 +233,15 @@ uint game_nb_solutions(cgame g) {
     struct timeval start, end;
     int len_g = g->nb_cols * g->nb_rows;
     int testedGame = 0;
-    game workingGame = game_copy(g);
     int generatedGame = 0;
     int solutionFound = 0;
     gettimeofday(&start, NULL);
 
     for (int i = min(g->nb_cols, g->nb_rows); i < len_g; i++) {
+        game workingGame = game_copy(g);
         printf("Trying with %d lightBulb\n", i);
         genGame(0, (g->nb_cols * g->nb_rows), workingGame, false, i, 0, &generatedGame, &testedGame, &solutionFound);
+        game_delete(workingGame);
     }
 
     gettimeofday(&end, NULL);
