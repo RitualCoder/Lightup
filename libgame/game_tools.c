@@ -248,7 +248,7 @@ uint game_nb_solutions(cgame g) {
     double elapsedTime = (end.tv_sec - start.tv_sec) * 1000.0;  // sec to ms
     elapsedTime += (end.tv_usec - start.tv_usec) / 1000.0;      // us to ms
     double speed = testedGame / elapsedTime;
-    printf("Stats:\n    - generated Game: %d\n    - tested Game: %d\nall solution find in %.2lf s (%.0lf try / s).\n",
+    printf("Stats:\n    - generated Game: %d\n    - tested Game: %d\nall solution find in %.2lf ms (%.0lf try / ms).\n",
            generatedGame, testedGame, elapsedTime, speed);
 
     return solutionFound;

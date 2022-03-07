@@ -14,9 +14,9 @@
 /*                               SOLVER TEST                                  */
 /* ************************************************************************** */
 
-int test_game_solve(){
+int test_game_solve() {
     game g = game_load("3x3.txt");
-    if(game_solve(g)){
+    if (game_solve(g)) {
         return EXIT_SUCCESS;
     }
     return EXIT_FAILURE;
