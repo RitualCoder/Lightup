@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
     } else {
         usage();
     }
-    
+
     /* game g = game_load(argv[1]);
     game g2 = game_copy(g);
     game_solve(g);
