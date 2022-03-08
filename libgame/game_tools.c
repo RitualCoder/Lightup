@@ -211,7 +211,7 @@ bool game_solve(game g) {
     int solutionFound = 0;
     gettimeofday(&start, NULL);
 
-    for (int i = min(g->nb_cols, g->nb_rows); i < len_g; i++) {  // A RE MODIF!!
+    for (int i = 1; i < len_g; i++) {  // A RE MODIF!!
         printf("Trying with %d lightBulb\n", i);
 
         if (genGame(0, (g->nb_cols * g->nb_rows), g, true, i, 0, &generatedGame, &testedGame, &solutionFound)) {
@@ -237,7 +237,7 @@ uint game_nb_solutions(cgame g) {
     int solutionFound = 0;
     gettimeofday(&start, NULL);
 
-    for (int i = min(g->nb_cols, g->nb_rows); i < len_g; i++) {
+    for (int i = 1; i < len_g; i++) {
         game workingGame = game_copy(g);
         printf("Trying with %d lightBulb\n", i);
         genGame(0, (g->nb_cols * g->nb_rows), workingGame, false, i, 0, &generatedGame, &testedGame, &solutionFound);
