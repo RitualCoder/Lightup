@@ -15,9 +15,16 @@
 /* ************************************************************************** */
 
 int test_game_solve() {
+    int retVal = EXIT_SUCCESS;
     game g = game_load("3x3.txt");
-    if (game_solve(g)) {
-        return EXIT_SUCCESS;
+    if (!game_solve(g)) {
+        retVal = EXIT_FAILURE;
     }
-    return EXIT_FAILURE;
+    game_delete(g);
+    g = game_load("3x3.txt");
+    if(game_nb_solutions(g)!= 4){
+        retVal = EXIT_FAILURE;
+    }
+    game_delete(g);
+    return retVal;
 }
