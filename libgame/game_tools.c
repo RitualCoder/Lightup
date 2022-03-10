@@ -135,60 +135,50 @@ void game_save_int(cgame g, char* filename, bool appendMode) {
 void game_save(cgame g, char* filename) { game_save_int(g, filename, false); }
 
 static bool _checkErr(game g) {
-    bool ret = false;
     for (int x = g->nb_cols - 1; x >= 0; x--) {
         for (int y = g->nb_rows - 1; y >= 0; y--) {
-            ret = game_has_error(g, x, y);
-            if (ret) {
-                return ret;
+            if( game_has_error(g, x, y)){
+                return true;
             }
         }
     }
-    return ret;
+    return false;
 }
 
-static bool genGame(int pos, int size, game g, bool stopAtFirstSolution, int nbLightbulb, int posedLight,
-                    int* generatedGame, int* testedGame, int* solutionFind) {
+static bool genGame(int pos, int size, game g, bool stopAtFirstSolution, int* generatedGame, int* solutionFind) {
     game_update_flags(g);
 
     if (pos == size) {
         *generatedGame = *generatedGame + 1;
-        if (posedLight == nbLightbulb) {
-            *testedGame = *testedGame + 1;
-            if (game_is_over(g)) {
-                *solutionFind = *solutionFind + 1;
-                //game_print(g);
-                return true;
-            }
-            return false;
+        if (game_is_over(g)) {
+            *solutionFind = *solutionFind + 1;
+            // game_print(g);
+            return true;
         }
 
         return false;
     }
 
     bool ret;  // TODO: creer un fonction auxilière pour suprimer le code copier-coller
-    if (nbLightbulb - posedLight > size - pos || _checkErr(g)) {
+    if (_checkErr(g)) {
         return false;
     }
     if ((g->squares[pos] & S_MASK) & S_BLACK) {  // Si c'est un mur alors on saute la case
-        ret = genGame(pos + 1, size, g, stopAtFirstSolution, nbLightbulb, posedLight, generatedGame, testedGame,
-                      solutionFind);
+        ret = genGame(pos + 1, size, g, stopAtFirstSolution, generatedGame, solutionFind);
         if (stopAtFirstSolution && ret) {
             return ret;
         }
     } else {
-        if (posedLight + 1 <= nbLightbulb && ((g->squares[pos] & F_MASK) != F_LIGHTED)) {  // cas d'un lightbulb
+        if ((g->squares[pos] & F_MASK) != F_LIGHTED) {  // cas d'un lightbulb
             g->squares[pos] = S_LIGHTBULB;
-            ret = genGame(pos + 1, size, g, stopAtFirstSolution, nbLightbulb, posedLight + 1, generatedGame, testedGame,
-                          solutionFind);
+            ret = genGame(pos + 1, size, g, stopAtFirstSolution, generatedGame, solutionFind);
             if (stopAtFirstSolution && ret) {
                 return ret;
             }
         }
 
         g->squares[pos] = S_BLANK;  // cas ou on pose un blanc
-        ret = genGame(pos + 1, size, g, stopAtFirstSolution, nbLightbulb, posedLight, generatedGame, testedGame,
-                      solutionFind);
+        ret = genGame(pos + 1, size, g, stopAtFirstSolution, generatedGame, solutionFind);
         if (stopAtFirstSolution && ret) {
             return ret;
         }
@@ -204,63 +194,24 @@ int min(int a, int b) {
 }
 
 bool game_solve(game g) {
-    struct timeval start, end;
-    int len_g = g->nb_cols * g->nb_rows;
-    int testedGame = 0;
     int generatedGame = 0;
     int solutionFound = 0;
-    gettimeofday(&start, NULL);
 
-    for (int i = 1; i < len_g; i++) {  // A RE MODIF!!
-        printf("Trying with %d lightBulb\n", i);
-
-        if (genGame(0, (g->nb_cols * g->nb_rows), g, true, i, 0, &generatedGame, &testedGame, &solutionFound)) {
-            gettimeofday(&end, NULL);
-            double elapsedTime = (end.tv_sec - start.tv_sec) * 1000.0;  // sec to ms
-            elapsedTime += (end.tv_usec - start.tv_usec) / 1000.0;      // us to ms
-            double speed = testedGame / elapsedTime;
-            printf(
-                "Stats:\n    - generated Game: %d\n    - tested Game: %d\nSolution find in %.2lf ms (%.0lf try / "
-                "ms).\n",
-                generatedGame, testedGame, elapsedTime, speed);
-            return true;
-        }
+    if (genGame(0, (g->nb_cols * g->nb_rows), g, true, &generatedGame, &solutionFound)) {
+        printf("Stats:\n    - generated Game: %d", generatedGame);
+        return true;
     }
+
     return false;
 }
 
-static int max(int a, int b){
-    if(a>=b){
-        return a;
-    }
-    return b;
-}
-
 uint game_nb_solutions(cgame g) {
-    struct timeval start, end;
-    int len_g = g->nb_cols * g->nb_rows;
-    int testedGame = 0;
     int generatedGame = 0;
     int solutionFound = 0;
-    gettimeofday(&start, NULL);
-
-    for (int i = max(g->nb_cols, g->nb_rows); i < len_g; i++) {
-        game workingGame = game_copy(g);
-        printf("Trying with %d lightBulb\n", i);
-        genGame(0, (g->nb_cols * g->nb_rows), workingGame, false, i, 0, &generatedGame, &testedGame,
-                           &solutionFound);
-        game_delete(workingGame);
-        if (solutionFound != 0) {
-            break;
-        }
-    }
-
-    gettimeofday(&end, NULL);
-    double elapsedTime = (end.tv_sec - start.tv_sec) * 1000.0;  // sec to ms
-    elapsedTime += (end.tv_usec - start.tv_usec) / 1000.0;      // us to ms
-    double speed = testedGame / elapsedTime;
-    printf("Stats:\n    - generated Game: %d\n    - tested Game: %d\nall solution find in %.2lf ms (%.0lf try / ms).\n",
-           generatedGame, testedGame, elapsedTime, speed);
+    game workingGame = game_copy(g);
+    genGame(0, (g->nb_cols * g->nb_rows), workingGame, false, &generatedGame, &solutionFound);
+    game_delete(workingGame);
+    printf("Stats:\n    - generated Game: %d\n ", generatedGame);
 
     return solutionFound;
 }
