@@ -157,7 +157,7 @@ static bool genGame(int pos, int size, game g, bool stopAtFirstSolution, int nbL
             *testedGame = *testedGame + 1;
             if (game_is_over(g)) {
                 *solutionFind = *solutionFind + 1;
-                game_print(g);
+                //game_print(g);
                 return true;
             }
             return false;
@@ -229,6 +229,13 @@ bool game_solve(game g) {
     return false;
 }
 
+static int max(int a, int b){
+    if(a>=b){
+        return a;
+    }
+    return b;
+}
+
 uint game_nb_solutions(cgame g) {
     struct timeval start, end;
     int len_g = g->nb_cols * g->nb_rows;
@@ -237,11 +244,15 @@ uint game_nb_solutions(cgame g) {
     int solutionFound = 0;
     gettimeofday(&start, NULL);
 
-    for (int i = 1; i < len_g; i++) {
+    for (int i = max(g->nb_cols, g->nb_rows); i < len_g; i++) {
         game workingGame = game_copy(g);
         printf("Trying with %d lightBulb\n", i);
-        genGame(0, (g->nb_cols * g->nb_rows), workingGame, false, i, 0, &generatedGame, &testedGame, &solutionFound);
+        genGame(0, (g->nb_cols * g->nb_rows), workingGame, false, i, 0, &generatedGame, &testedGame,
+                           &solutionFound);
         game_delete(workingGame);
+        if (solutionFound != 0) {
+            break;
+        }
     }
 
     gettimeofday(&end, NULL);
