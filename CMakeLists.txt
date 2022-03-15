@@ -7,8 +7,19 @@ project("Lightup" C)
 include(CTest)
 enable_testing()
 
+#on cherche SDL2
+find_package(SDL2 REQUIRED)
+
+set(SDL2_ALL_INC ${SDL2_INCLUDE_DIRS})
+set(SDL2_ALL_LIBS ${SDL2_LIBRARIES} -lSDL2_ttf -lSDL2_image) # add extra SDL2 libraries
+
+message(STATUS "SDL2 include dir: ${SDL2_ALL_INC}")
+message(STATUS "SDL2 all libraries: ${SDL2_ALL_LIBS}")
+
+include_directories(${SDL2_ALL_INC})
+
 #variable
-set(CMAKE_C_FLAGS "-std=c99 -Wall -pthread -Wextra -Wunused-parameter")
+set(CMAKE_C_FLAGS "-std=c99 -Wall -pthread -Wextra -Wunused-parameter -L SDL2")
 set(CMAKE_C_FLAGS_DEBUG "-g --coverage")    # use CMake option: -DCMAKE_BUILD_TYPE=DEBUG
 set(CMAKE_C_FLAGS_RELEASE "-O3 -DNDEBUG")   # use CMake option: -DCMAKE_BUILD_TYPE=RELEASE
 
@@ -21,16 +32,24 @@ set(StackHeaders libstack/queue.h)
 
 add_library(game ${GameSources} ${StackSources} ${GameHeaders} ${StackHeaders})
 
+#on ajoute la lib SDLUtil
+add_subdirectory(libSDLUtils)
+
 #création de l'éxécutable
 add_executable(game_text game_text.c)
 add_executable(game_solve game_solve.c)
+add_executable(game_sdl game_sdl.c)
 
 #on lie les librairie
 target_link_libraries(game_text game)
 target_link_libraries(game_solve game)
+target_link_libraries(game_sdl SDLUtils game ${SDL2_ALL_LIBS})
 
 #on ajoute les tests
 add_subdirectory(test)
+
+#on copire les images
+add_subdirectory(img)
 
 #On copie les jeux de test dans le dossier der test
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/game_save/default.txt DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/test)
