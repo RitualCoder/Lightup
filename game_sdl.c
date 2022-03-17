@@ -8,13 +8,19 @@
 #include "libSDLUtils/env.h"
 #include "libgame/game.h"
 #include "libgame/game_aux.h"
+#include "libgame/game_tools.h"
 
 static double deltaTime(struct timeval start, struct timeval end) {
     return (end.tv_sec - end.tv_sec) * 1000.0 + (end.tv_usec - start.tv_usec) / 1000.0;
 }
 
 int main(int argc, char* argv[]) {
-    game g = game_default_solution();
+    game g;
+    if (argc == 2) {
+        g = game_load(argv[1]);
+    } else {
+        g = game_default();
+    }
 
     SDL_Window* pWindow = NULL;
     SDL_Renderer* pRenderer = NULL;

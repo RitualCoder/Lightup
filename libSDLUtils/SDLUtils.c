@@ -44,7 +44,7 @@ void SDL_initAndSetName(SDL_Renderer** pRenderer, SDL_Window** pWindow) {
         SDL_printError(true);
     }
     // Renderer init with gpu and frame limit
-    *pRenderer = SDL_CreateRenderer(*pWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    *pRenderer = SDL_CreateRenderer(*pWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);  //
     if (*pRenderer == NULL) {
         SDL_printError(true);
     }
@@ -128,11 +128,12 @@ void SDL_DrawCase(game_env genv, SDL_Renderer* pRenderer) {
     rect.x = start_x + genv->sprite_size * genv->case_x;
     rect.y = start_y + genv->sprite_size * genv->case_y;
 
-    // draw and fille rectangle
+    // draw and fill rectangle
     SDL_SetRenderDrawColor(pRenderer, 0, 0, 0, 128);
-    SDL_SetRenderDrawBlendMode(pRenderer, SDL_BLENDMODE_BLEND);
+    SDL_SetRenderDrawBlendMode(pRenderer, SDL_BLENDMODE_BLEND);  // activate blend mode
     SDL_RenderDrawRect(pRenderer, &rect);
     SDL_RenderFillRect(pRenderer, &rect);
+    SDL_SetRenderDrawBlendMode(pRenderer, SDL_BLENDMODE_NONE);  // deactivate blend mode
 }
 
 static void draw_texture_at_pos(SDL_Texture* tex, SDL_Renderer* pRenderer, game_env genv, int y, int x) {
@@ -154,7 +155,7 @@ void drawLighted(game g, game_env genv, SDL_Renderer* pRenderer) {
 
     for (int x = 0; x < game_nb_cols(g); x++) {
         for (int y = 0; y < game_nb_rows(g); y++) {
-            if (game_is_lighted(g, y, x)) {
+            if (game_is_lighted(g, y, x) && !game_has_error(g, y, x)) {
                 SDL_Rect rect;
                 rect.h = genv->sprite_size;
                 rect.w = genv->sprite_size;
@@ -169,11 +170,30 @@ void drawLighted(game g, game_env genv, SDL_Renderer* pRenderer) {
     }
 }
 
-void SDL_DrawGame(game g, game_env genv, SDL_Renderer* pRenderer) {
-    int start_y = genv->windows_width / 2 - (genv->sprite_size * genv->nb_rows) / 2;
-    int start_x = genv->window_height / 2 - (genv->sprite_size * genv->nb_cols) / 2;
+void drawError(game g, game_env genv, SDL_Renderer* pRenderer) {
+    int start_x = genv->windows_width / 2 - (genv->sprite_size * genv->nb_rows) / 2;
+    int start_y = genv->window_height / 2 - (genv->sprite_size * genv->nb_cols) / 2;
 
+    for (int x = 0; x < game_nb_cols(g); x++) {
+        for (int y = 0; y < game_nb_rows(g); y++) {
+            if (game_has_error(g, y, x)) {
+                SDL_Rect rect;
+                rect.h = genv->sprite_size;
+                rect.w = genv->sprite_size;
+                rect.x = start_x + genv->sprite_size * x;
+                rect.y = start_y + genv->sprite_size * y;
+
+                SDL_SetRenderDrawColor(pRenderer, 255, 0, 0, 128);
+                SDL_RenderDrawRect(pRenderer, &rect);
+                SDL_RenderFillRect(pRenderer, &rect);
+            }
+        }
+    }
+}
+
+void SDL_DrawGame(game g, game_env genv, SDL_Renderer* pRenderer) {
     drawLighted(g, genv, pRenderer);
+    drawError(g, genv, pRenderer);
 
     for (int x = 0; x < game_nb_cols(g); x++) {
         for (int y = 0; y < game_nb_rows(g); y++) {
@@ -223,7 +243,7 @@ void printDebug(SDL_Renderer* pRenderer, SDL_Window* pWindow) {
 void render(game_env genv, SDL_Renderer* pRenderer, double fps, game g) {
     SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
     int ret = SDL_RenderClear(pRenderer);
-    if(ret != 0){
+    if (ret != 0) {
         SDL_printError(true);
     }
 
@@ -253,7 +273,12 @@ bool porcess(SDL_Event event, SDL_Window* pWindow, game_env genv) {
     }
 
     SDL_GetWindowSize(pWindow, &genv->windows_width, &genv->window_height);
-    genv->sprite_size = (genv->window_height - 60)/genv->nb_cols;
+    if (genv->window_height < genv->windows_width) {
+        genv->sprite_size = (genv->window_height - 60) / genv->nb_cols;
+    }
+    else{
+        genv->sprite_size = (genv->windows_width - 60) / genv->nb_rows;
+    }
     genv->button = SDL_GetMouseState(&genv->mouse_x, &genv->mouse_y);
     SDL_MouseToCase(genv);
 
@@ -264,16 +289,17 @@ bool porcess(SDL_Event event, SDL_Window* pWindow, game_env genv) {
     return true;
 }
 
-void quit(game_env genv){
+void quit(game_env genv) {
     SDL_DestroyTexture(genv->lighbulb);
     SDL_DestroyTexture(genv->wall1);
     SDL_DestroyTexture(genv->wall2);
     SDL_DestroyTexture(genv->wall3);
     SDL_DestroyTexture(genv->wall4);
     SDL_DestroyTexture(genv->wallu);
+    free(genv);
 }
 
-bool init(SDL_Renderer** pRenderer, SDL_Window** pWindow, game g, game_env genv){
+bool init(SDL_Renderer** pRenderer, SDL_Window** pWindow, game g, game_env genv) {
     // init time managment
     gettimeofday(&genv->startTime, NULL);
 

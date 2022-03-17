@@ -9,6 +9,7 @@
     "chrono": "c",
     "random": "c",
     "limits": "c",
-    "algorithm": "c"
+    "algorithm": "c",
+    "game_ext.h": "c"
   }
 }
