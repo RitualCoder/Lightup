@@ -35,6 +35,7 @@ struct envS {
     SDL_Texture* wall4;
 
     SDL_Texture* lighbulb;
+    SDL_Texture* mark;
 };
 
 typedef struct envS* game_env;

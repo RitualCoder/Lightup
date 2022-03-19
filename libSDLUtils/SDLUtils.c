@@ -60,9 +60,10 @@ void loadWallTexture(game_env genv, SDL_Renderer* pRenderer) {
     genv->wallu = IMG_LoadTexture(pRenderer, "./img/wallu.png");
 
     genv->lighbulb = IMG_LoadTexture(pRenderer, "./img/lightbulb.png");
+    genv->mark = IMG_LoadTexture(pRenderer, "./img/mark.png");
 
     if (genv->wall1 == NULL || genv->wall2 == NULL || genv->wall3 == NULL || genv->wall4 == NULL ||
-        genv->wallu == NULL || genv->lighbulb == NULL) {
+        genv->wallu == NULL || genv->lighbulb == NULL || genv->mark == NULL) {
         SDL_printError(true);
     }
 }
@@ -263,7 +264,7 @@ void render(game_env genv, SDL_Renderer* pRenderer, double fps, game g) {
 #endif
 }
 
-bool porcess(SDL_Event event, SDL_Window* pWindow, game_env genv, game g) {
+bool process(SDL_Event event, SDL_Window* pWindow, game_env genv, game g) {
     SDL_GetWindowSize(pWindow, &genv->windows_width, &genv->window_height);
     if (genv->window_height < genv->windows_width) {
         genv->sprite_size = (genv->window_height - 60) / genv->nb_cols;

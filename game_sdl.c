@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
         gettimeofday(&genv->startTime, NULL);
 
         while (SDL_PollEvent(&event)) {  // process input
-            run = porcess(event, pWindow, genv, g);
+            run = process(event, pWindow, genv, g);
         }
 
         // game logic
