@@ -34,7 +34,7 @@ struct envS {
     SDL_Texture* wall3;
     SDL_Texture* wall4;
 
-    SDL_Texture* lighbulb;
+    SDL_Texture* lightbulb;
     SDL_Texture* mark;
 };
 

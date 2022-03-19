@@ -18,7 +18,7 @@
 #include "../libgame/game.h"
 #include "env.h"
 
-#define WINDOW_NAME "lightup"
+#define WINDOW_NAME "Lightup"
 #define SPRITE_SIZE 64
 #define WINDOW_HEIGHT 800
 #define WINDOW_LENGHT 600

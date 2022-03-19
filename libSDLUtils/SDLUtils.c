@@ -59,11 +59,11 @@ void loadWallTexture(game_env genv, SDL_Renderer* pRenderer) {
     genv->wall4 = IMG_LoadTexture(pRenderer, "./img/wall4.png");
     genv->wallu = IMG_LoadTexture(pRenderer, "./img/wallu.png");
 
-    genv->lighbulb = IMG_LoadTexture(pRenderer, "./img/lightbulb.png");
+    genv->lightbulb = IMG_LoadTexture(pRenderer, "./img/lightbulb.png");
     genv->mark = IMG_LoadTexture(pRenderer, "./img/mark.png");
 
     if (genv->wall1 == NULL || genv->wall2 == NULL || genv->wall3 == NULL || genv->wall4 == NULL ||
-        genv->wallu == NULL || genv->lighbulb == NULL || genv->mark == NULL) {
+        genv->wallu == NULL || genv->lightbulb == NULL || genv->mark == NULL) {
         SDL_printError(true);
     }
 }
@@ -223,7 +223,7 @@ void SDL_DrawGame(game g, game_env genv, SDL_Renderer* pRenderer) {
                 draw_texture_at_pos(draw, pRenderer, genv, y, x);
             }
             if (game_is_lightbulb(g, x, y)) {
-                draw_texture_at_pos(genv->lighbulb, pRenderer, genv, y, x);
+                draw_texture_at_pos(genv->lightbulb, pRenderer, genv, y, x);
             }
             if (game_is_marked(g, x, y)) {
                 draw_texture_at_pos(genv->mark, pRenderer, genv, y, x);
@@ -310,7 +310,7 @@ bool process(SDL_Event event, SDL_Window* pWindow, game_env genv, game g) {
 }
 
 void quit(game_env genv) {
-    SDL_DestroyTexture(genv->lighbulb);
+    SDL_DestroyTexture(genv->lightbulb);
     SDL_DestroyTexture(genv->wall1);
     SDL_DestroyTexture(genv->wall2);
     SDL_DestroyTexture(genv->wall3);
