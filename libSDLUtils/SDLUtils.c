@@ -225,6 +225,9 @@ void SDL_DrawGame(game g, game_env genv, SDL_Renderer* pRenderer) {
             if (game_is_lightbulb(g, x, y)) {
                 draw_texture_at_pos(genv->lighbulb, pRenderer, genv, y, x);
             }
+            if (game_is_marked(g, x, y)) {
+                draw_texture_at_pos(genv->mark, pRenderer, genv, y, x);
+            }
         }
     }
 }
