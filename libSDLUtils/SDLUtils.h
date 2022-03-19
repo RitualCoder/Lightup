@@ -102,7 +102,7 @@ void render(game_env genv, SDL_Renderer* pRenderer, double fps, game g);
  * @return true
  * @return false
  */
-bool porcess(SDL_Event event, SDL_Window* pWindow, game_env genv);
+bool porcess(SDL_Event event, SDL_Window* pWindow, game_env genv, game g);
 
 void loadWallTexture(game_env genv, SDL_Renderer* pRenderer);
 

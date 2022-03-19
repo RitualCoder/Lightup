@@ -263,15 +263,7 @@ void render(game_env genv, SDL_Renderer* pRenderer, double fps, game g) {
 #endif
 }
 
-bool porcess(SDL_Event event, SDL_Window* pWindow, game_env genv) {
-    switch (event.type) {
-        case SDL_QUIT:
-            return false;
-
-        default:
-            break;
-    }
-
+bool porcess(SDL_Event event, SDL_Window* pWindow, game_env genv, game g) {
     SDL_GetWindowSize(pWindow, &genv->windows_width, &genv->window_height);
     if (genv->window_height < genv->windows_width) {
         genv->sprite_size = (genv->window_height - 60) / genv->nb_cols;
@@ -281,7 +273,31 @@ bool porcess(SDL_Event event, SDL_Window* pWindow, game_env genv) {
     }
     genv->button = SDL_GetMouseState(&genv->mouse_x, &genv->mouse_y);
     SDL_MouseToCase(genv);
+    
+    switch (event.type) {
+        case SDL_QUIT:
+            return false;
 
+        default:
+            break;
+    }
+
+    if (event.type == SDL_MOUSEBUTTONDOWN){
+        if (event.button.button == (SDL_BUTTON_LEFT)){
+            game_play_move(g, genv->case_y, genv->case_x, S_LIGHTBULB);
+        }
+        if (event.button.button == (SDL_BUTTON_RIGHT)){
+            game_play_move(g, genv->case_y, genv->case_x, S_MARK);
+        }
+    }
+    else if (event.type == SDL_KEYDOWN){
+        if (event.key.keysym.sym == SDLK_z){
+            game_undo(g);
+        }
+        if (event.key.keysym.sym == SDLK_y){
+            game_redo(g);
+        }
+    }
 #ifdef DEBUG
     SDL_Log("Mouse coordinate x: %d, y: %d\n", genv->mouse_x, genv->mouse_y);
     SDL_Log("case coordinate x: %d, y: %d\n", genv->case_x, genv->case_y);
