@@ -33,9 +33,11 @@ int game_loop(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv, game 
 
 int main(int argc, char* argv[]) {
     // load game in passed in parametter
+    bool load_from_cmd = false;
     game g;
     if (argc == 2) {
         g = game_load(argv[1]);
+        load_from_cmd = true;
     } else {
         g = game_default();
     }
@@ -49,9 +51,13 @@ int main(int argc, char* argv[]) {
 
     init(&pRenderer, &pWindow, &pFont, g, genv);
 
-    main_menu(pRenderer, pWindow, pFont);
+    if (!load_from_cmd) {
+        g = main_menu(pRenderer, pWindow, pFont);
+    }
 
-    // game_loop(pRenderer, pWindow, genv, g, fps);
+    if (g != NULL) {
+        game_loop(pRenderer, pWindow, genv, g, fps);
+    }
 
     quit(genv);
     SDL_end(pRenderer, pWindow);

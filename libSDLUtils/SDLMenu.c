@@ -27,7 +27,24 @@ static void draw_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, SDL_Texture*
     for (int i = 0; i < nbItem; i++) {
         SDL_RenderDrawRect(pRenderer, &rItem);
         SDL_RenderFillRect(pRenderer, &rItem);
-        SDL_RenderCopy(pRenderer, items[i], NULL, &rItem);
+
+        SDL_Rect text;
+        SDL_QueryTexture(items[i], NULL, NULL, &text.w, &text.h);
+        if (text.w < rItem.w) {
+            text.x = rItem.w / 2;
+        } else {
+            text.w = rItem.w;
+            text.x = rItem.x;
+        }
+
+        if (text.h < rItem.h) {
+            text.y = rItem.h / 2;
+        } else {
+            text.h = rItem.h;
+            text.y = rItem.y;
+        }
+
+        SDL_RenderCopy(pRenderer, items[i], NULL, &text);
 
         rItem.y += item_height + 10;
     }
@@ -59,9 +76,42 @@ static SDL_Texture** make_all_text_texture(SDL_Renderer* pRenderer, char* text[]
     return tab;
 }
 
-static bool menu_process(SDL_Event event, SDL_Window* pWindow) {
+static bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game* g) {
+    int mouse_x, mouse_y;
+    SDL_GetMouseState(&mouse_x, &mouse_y);
+    int w, h;
+    SDL_GetWindowSize(pWindow, &w, &h);
+
     switch (event.type) {
         case SDL_QUIT:
+            *g = NULL;
+            return false;
+            break;
+        case SDL_MOUSEBUTTONDOWN:
+            if (event.button.button == (SDL_BUTTON_LEFT)) {
+                if (mouse_x > 30 && mouse_x < w - 30 && mouse_y > 30 && mouse_y < h - 30) {
+                    mouse_y -= 30;
+                    int item_height = ((h - 60) - nbItem * 10) / nbItem;
+                    int case_x = mouse_y / (item_height + 5);
+                    if (case_x >= nbItem) {
+                        case_x--;
+                    }
+                    switch (case_x) {
+                        case 0:
+                            *g = game_default();
+                            break;
+                        case 1:
+                            *g = game_default();  // todo load
+                            break;
+                        case 2:
+                            *g = NULL;
+
+                        default:
+                            break;
+                    }
+                    fprintf(stderr, "Left clic, button: %d\n", case_x);
+                }
+            }
             return false;
             break;
 
@@ -72,18 +122,28 @@ static bool menu_process(SDL_Event event, SDL_Window* pWindow) {
     return true;
 }
 
+static void clean_texture_tab(SDL_Texture* tab[], int nbItem) {
+    for (int i = 0; i < nbItem; i++) {
+        SDL_DestroyTexture(tab[i]);
+    }
+    free(tab);
+}
+
 game main_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, TTF_Font* pFont) {
     bool run = true;
-    char* items[] = {"New game", "Settings", "Quit!"};
+    char* items[] = {"New game", " Load ", " Quit "};
     SDL_Texture** items_texture = make_all_text_texture(pRenderer, items, 3, pFont);
     SDL_Event event;
+    game g;
 
     while (run) {
         draw_menu(pRenderer, pWindow, items_texture, 3);
         while (SDL_PollEvent(&event)) {  // process input
-            run = menu_process(event, pWindow);
+            run = menu_process(event, pWindow, 3, &g);
         }
     }
 
-    return game_default();
+    clean_texture_tab(items_texture, 3);
+
+    return g;
 }
