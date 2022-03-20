@@ -1,0 +1,22 @@
+/**
+ * @file SDLMenu.h
+ * @author your name (you@domain.com)
+ * @brief
+ * @version 0.1
+ * @date 2022-03-19
+ *
+ * @copyright Copyright (c) 2022
+ *
+ */
+
+#ifndef __SDLMENU_H__
+#define __SDLMENU_H__
+
+#include <SDL2/SDL.h>
+#include <stdbool.h>
+
+#include "../libgame/game.h"
+#include "env.h"
+
+game main_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, TTF_Font* pFont);
+#endif

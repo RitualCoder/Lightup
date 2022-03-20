@@ -271,13 +271,12 @@ bool process(SDL_Event event, SDL_Window* pWindow, game_env genv, game g) {
     SDL_GetWindowSize(pWindow, &genv->windows_width, &genv->window_height);
     if (genv->window_height < genv->windows_width) {
         genv->sprite_size = (genv->window_height - 60) / genv->nb_cols;
-    }
-    else{
+    } else {
         genv->sprite_size = (genv->windows_width - 60) / genv->nb_rows;
     }
     genv->button = SDL_GetMouseState(&genv->mouse_x, &genv->mouse_y);
     SDL_MouseToCase(genv);
-    
+
     switch (event.type) {
         case SDL_QUIT:
             return false;
@@ -286,19 +285,18 @@ bool process(SDL_Event event, SDL_Window* pWindow, game_env genv, game g) {
             break;
     }
 
-    if (event.type == SDL_MOUSEBUTTONDOWN){
-        if (event.button.button == (SDL_BUTTON_LEFT)){
+    if (event.type == SDL_MOUSEBUTTONDOWN) {
+        if (event.button.button == (SDL_BUTTON_LEFT)) {
             game_play_move(g, genv->case_y, genv->case_x, S_LIGHTBULB);
         }
-        if (event.button.button == (SDL_BUTTON_RIGHT)){
+        if (event.button.button == (SDL_BUTTON_RIGHT)) {
             game_play_move(g, genv->case_y, genv->case_x, S_MARK);
         }
-    }
-    else if (event.type == SDL_KEYDOWN){
-        if (event.key.keysym.sym == SDLK_z){
+    } else if (event.type == SDL_KEYDOWN) {
+        if (event.key.keysym.sym == SDLK_z) {
             game_undo(g);
         }
-        if (event.key.keysym.sym == SDLK_y){
+        if (event.key.keysym.sym == SDLK_y) {
             game_redo(g);
         }
     }
@@ -319,7 +317,7 @@ void quit(game_env genv) {
     free(genv);
 }
 
-bool init(SDL_Renderer** pRenderer, SDL_Window** pWindow, game g, game_env genv) {
+bool init(SDL_Renderer** pRenderer, SDL_Window** pWindow, TTF_Font** pFont, game g, game_env genv) {
     // init time managment
     gettimeofday(&genv->startTime, NULL);
 
@@ -328,6 +326,13 @@ bool init(SDL_Renderer** pRenderer, SDL_Window** pWindow, game g, game_env genv)
 
     // window init
     SDL_initAndSetName(pRenderer, pWindow);
+
+    // load font
+    if (TTF_Init() == -1) {
+        printf("[Error] TTF_Init: %s\n", TTF_GetError());
+        exit(2);
+    }
+    *pFont = TTF_OpenFont("./font/LiberationSerif-Regular.ttf", 1000);
 
     // mouse
     SDL_PumpEvents();

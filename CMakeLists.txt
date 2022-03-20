@@ -48,8 +48,11 @@ target_link_libraries(game_sdl SDLUtils game ${SDL2_ALL_LIBS})
 #on ajoute les tests
 add_subdirectory(test)
 
-#on copire les images
+#on copie les images
 add_subdirectory(img)
+
+#on copie les font
+add_subdirectory(font)
 
 #On copie les jeux de test dans le dossier der test
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/game_save/default.txt DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/test)

@@ -13,6 +13,7 @@
 #define __SDLUTILS_H__
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdbool.h>
 
 #include "../libgame/game.h"
@@ -108,6 +109,6 @@ void loadWallTexture(game_env genv, SDL_Renderer* pRenderer);
 
 void quit(game_env genv);
 
-bool init(SDL_Renderer** pRenderer, SDL_Window** pWindow, game g, game_env genv);
+bool init(SDL_Renderer** pRenderer, SDL_Window** pWindow, TTF_Font** pFont, game g, game_env genv);
 
 #endif
