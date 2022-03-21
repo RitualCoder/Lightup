@@ -81,11 +81,12 @@ static bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game*
     SDL_GetMouseState(&mouse_x, &mouse_y);
     int w, h;
     SDL_GetWindowSize(pWindow, &w, &h);
+    bool run = true;
 
     switch (event.type) {
         case SDL_QUIT:
             *g = NULL;
-            return false;
+            run = false;
             break;
         case SDL_MOUSEBUTTONDOWN:
             if (event.button.button == (SDL_BUTTON_LEFT)) {
@@ -105,21 +106,20 @@ static bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game*
                             break;
                         case 2:
                             *g = NULL;
+                            break;
 
                         default:
                             break;
                     }
-                    fprintf(stderr, "Left clic, button: %d\n", case_x);
                 }
             }
-            return false;
+            run = false;
             break;
 
         default:
             break;
     }
-
-    return true;
+    return run;
 }
 
 static void clean_texture_tab(SDL_Texture* tab[], int nbItem) {
@@ -140,6 +140,9 @@ game main_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, TTF_Font* pFont) {
         draw_menu(pRenderer, pWindow, items_texture, 3);
         while (SDL_PollEvent(&event)) {  // process input
             run = menu_process(event, pWindow, 3, &g);
+            if (!run) {
+                break;
+            }
         }
     }
 
