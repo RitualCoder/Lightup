@@ -285,23 +285,23 @@ bool process(SDL_Event event, SDL_Window* pWindow, game_env genv, game g) {
             break;
     }
 
-    if (event.type == SDL_MOUSEBUTTONDOWN){
-        if (event.button.button == (SDL_BUTTON_LEFT)){
-            if (game_is_lightbulb(g, genv->case_y, genv->case_x)){
+    if (event.type == SDL_MOUSEBUTTONDOWN) {
+        if (event.button.button == (SDL_BUTTON_LEFT)) {
+            if (game_is_lightbulb(g, genv->case_y, genv->case_x)) {
                 game_play_move(g, genv->case_y, genv->case_x, S_BLANK);
-            }
-            else {
+            } else {
                 game_play_move(g, genv->case_y, genv->case_x, S_LIGHTBULB);
             }
         }
-        if (event.button.button == (SDL_BUTTON_RIGHT)){
-            if (game_is_marked(g, genv->case_y, genv->case_x)){
+        if (event.button.button == (SDL_BUTTON_RIGHT)) {
+            if (game_is_marked(g, genv->case_y, genv->case_x)) {
                 game_play_move(g, genv->case_y, genv->case_x, S_BLANK);
-            }
-            else {
+            } else {
                 game_play_move(g, genv->case_y, genv->case_x, S_MARK);
             }
-    } else if (event.type == SDL_KEYDOWN) {
+        }
+    }
+    if (event.type == SDL_KEYDOWN) {
         if (event.key.keysym.sym == SDLK_z) {
             game_undo(g);
         }
