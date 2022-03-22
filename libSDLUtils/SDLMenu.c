@@ -4,6 +4,7 @@
 
 #include "../libgame/game.h"
 #include "../libgame/game_aux.h"
+#include "../libgame/game_tools.h"
 #include "SDLUtils.h"
 #include "env.h"
 
@@ -134,7 +135,47 @@ bool level_precesse(SDL_Event event, SDL_Window* pWindow, game_env genv, game* g
         if (event.button.button == SDL_BUTTON_LEFT) {
             if (genv->case_x % 2 == 0 && genv->case_y % 2 == 0) {
                 int levelID = genv->case_x / 2 + (genv->case_y / 2) * 3;
-                fprintf(stderr, "Level: %d\n", levelID + 1);
+
+                switch (levelID) {
+                    case 0:
+                        *g = game_load("levels/level1.txt");
+                        return false;
+                        break;
+                    case 1:
+                        *g = game_load("levels/level2.txt");
+                        return false;
+                        break;
+                    case 2:
+                        *g = game_load("levels/level3.txt");
+                        return false;
+                        break;
+                    case 3:
+                        *g = game_load("levels/level4.txt");
+                        return false;
+                        break;
+                    case 4:
+                        *g = game_load("levels/level5.txt");
+                        return false;
+                        break;
+                    case 5:
+                        *g = game_load("levels/level6.txt");
+                        return false;
+                        break;
+                    case 6:
+                        *g = game_load("levels/level7.txt");
+                        return false;
+                        break;
+                    case 7:
+                        *g = game_load("levels/level8.txt");
+                        return false;
+                        break;
+                    case 8:
+                        *g = game_load("levels/level9.txt");
+                        return false;
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }
@@ -143,8 +184,7 @@ bool level_precesse(SDL_Event event, SDL_Window* pWindow, game_env genv, game* g
 
 game level_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv) {
     bool level_run = true;
-    char* levels[] = {"Level 1", "Level 2", "Level 3", "Level 4", "Level 5",
-                      "Level 6", "Level 7", "Level 8", "Level 9"};
+    char* levels[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
     SDL_Texture** levels_tex = make_all_text_texture(pRenderer, levels, 9, genv);
     SDL_Event event;
     game g;

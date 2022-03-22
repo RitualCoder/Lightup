@@ -15,6 +15,7 @@
 int game_loop(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv, game g, double fps) {
     bool run = true;
     SDL_Event event;
+    update_genv(genv, g);
 
     while (run) {
         // fps start frame

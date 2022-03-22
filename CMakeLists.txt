@@ -54,6 +54,9 @@ add_subdirectory(img)
 #on copie les font
 add_subdirectory(font)
 
+#on copie les niveaux
+add_subdirectory(levels)
+
 #On copie les jeux de test dans le dossier der test
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/game_save/default.txt DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/test)
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/game_save/default_solution.txt DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/test)

@@ -113,4 +113,6 @@ bool init(SDL_Renderer** pRenderer, SDL_Window** pWindow, game g, game_env genv)
 
 void draw_texture_at_pos(SDL_Texture* tex, SDL_Renderer* pRenderer, game_env genv, int y, int x);
 
+void update_genv(game_env genv, game g);
+
 #endif

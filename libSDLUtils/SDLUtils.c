@@ -358,3 +358,8 @@ bool init(SDL_Renderer** pRenderer, SDL_Window** pWindow, game g, game_env genv)
 
     return run;
 }
+
+void update_genv(game_env genv,game g ){
+    genv->nb_cols = game_nb_cols(g);
+    genv->nb_rows = game_nb_rows(g);
+}
