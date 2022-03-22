@@ -12,8 +12,8 @@ static void draw_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, SDL_Texture*
     int w, h;
     SDL_GetWindowSize(pWindow, &w, &h);
 
-    int item_height = ((h - 60) - nbItem * 10) / nbItem;
-    int item_width = (w - 60);
+    int item_height = ((h - 60) - nbItem * 100) / nbItem;
+    int item_width = (w - 500);
 
     SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
     SDL_RenderClear(pRenderer);
@@ -23,8 +23,8 @@ static void draw_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, SDL_Texture*
     SDL_Rect rItem;
     rItem.w = item_width;
     rItem.h = item_height;
-    rItem.x = 30;
-    rItem.y = 30;
+    rItem.x = 250;
+    rItem.y = 160;
     for (int i = 0; i < nbItem; i++) {
         SDL_RenderDrawRect(pRenderer, &rItem);
         SDL_RenderFillRect(pRenderer, &rItem);
@@ -34,20 +34,20 @@ static void draw_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, SDL_Texture*
         if (text.w < rItem.w) {
             text.x = rItem.w / 2;
         } else {
-            text.w = rItem.w;
-            text.x = rItem.x;
+            text.w = rItem.w - 120;
+            text.x = rItem.x + 60;
         }
 
         if (text.h < rItem.h) {
             text.y = rItem.h / 2;
         } else {
-            text.h = rItem.h;
-            text.y = rItem.y;
+            text.h = rItem.h - 40;
+            text.y = rItem.y + 20;
         }
 
         SDL_RenderCopy(pRenderer, items[i], NULL, &text);
 
-        rItem.y += item_height + 10;
+        rItem.y += item_height + 20;
     }
 
     SDL_RenderPresent(pRenderer);
@@ -99,7 +99,7 @@ static void SDL_Draw_level(game_env genv, SDL_Renderer* pRenderer, SDL_Texture* 
         for (int y = 0; y < genv->nb_rows; y++) {
             if (x % 2 == 0 && y % 2 == 0) {
                 SDL_DrawCaseCord(genv, pRenderer, y, x);
-                draw_texture_at_pos(level_tex[levelIndex], pRenderer, genv, y, x);
+                draw_number_level(level_tex[levelIndex], pRenderer, genv, y, x);
                 levelIndex++;
             }
         }
@@ -216,6 +216,51 @@ static bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game*
             *g = NULL;
             run = false;
             break;
+        default:
+            break;
+    }
+    if (event.type == SDL_MOUSEBUTTONDOWN) {
+        if (event.button.button == (SDL_BUTTON_LEFT)) {  // NEW PROCESS (PAS UNIVERSEL QUE POUR 3 ITEM)
+            int case_x;
+            int start_x = 250;
+            int start_y = 160;
+            int item_height = ((h - 60) - nbItem * 100) / nbItem;
+            if ((mouse_x > start_x) && (mouse_x < (w - start_x)) && (mouse_y > start_y) && (mouse_y < (h - start_y))){
+                if (mouse_y > (start_y) && mouse_y < (start_y + item_height)){
+                    case_x = 1;
+                }
+                if (mouse_y > (start_y + item_height + 20) && mouse_y < (start_y + item_height + 100)){
+                    case_x = 2;
+                }
+                if (mouse_y > (start_y + item_height + 120) && mouse_y < (start_y + item_height + 200)){
+                    case_x = 3;
+                }
+            }
+            switch (case_x){
+                case 1:
+                    run = false;
+                    *g = game_default();
+                    break;
+                case 2:
+                    run = false;
+                    *g = level_menu(pRenderer, pWindow, genv);
+                    break;
+                case 3:
+                    printf ("exit\n");
+                    *g = NULL;
+                    run = false;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+    /* switch (event.type) {
+        case SDL_QUIT:
+            *g = NULL;
+            run = false;
+            break;
         case SDL_MOUSEBUTTONDOWN:
             if (event.button.button == (SDL_BUTTON_LEFT)) {
                 if (mouse_x > 30 && mouse_x < w - 30 && mouse_y > 30 && mouse_y < h - 30) {
@@ -245,8 +290,8 @@ static bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game*
             break;
 
         default:
-            break;
-    }
+            break; 
+    }*/
     return run;
 }
 
@@ -259,7 +304,7 @@ static void clean_texture_tab(SDL_Texture* tab[], int nbItem) {
 
 game main_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv) {
     bool run = true;
-    char* items[] = {"New game", " Load ", " Quit "};
+    char* items[] = {"NEW GAME", "   LOAD   ", "    QUIT    "}; // spaces are for not distorting the font
     SDL_Texture** items_texture = make_all_text_texture(pRenderer, items, 3, genv);
     SDL_Event event;
     game g;

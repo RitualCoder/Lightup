@@ -150,6 +150,19 @@ void draw_texture_at_pos(SDL_Texture* tex, SDL_Renderer* pRenderer, game_env gen
     SDL_RenderCopy(pRenderer, tex, NULL, &pos);
 }
 
+void draw_number_level(SDL_Texture* tex, SDL_Renderer* pRenderer, game_env genv, int y, int x){
+    int start_y = genv->windows_width / 2 - (genv->sprite_size * genv->nb_rows) / 2;
+    int start_x = genv->window_height / 2 - (genv->sprite_size * genv->nb_cols) / 2;
+
+    SDL_Rect pos;
+    pos.x = start_y + y * genv->sprite_size + 20;
+    pos.y = start_x + x * genv->sprite_size + 20;
+    pos.w = genv->sprite_size - 35;
+    pos.h = genv->sprite_size - 40;
+
+    SDL_RenderCopy(pRenderer, tex, NULL, &pos);
+}
+
 void drawLighted(game g, game_env genv, SDL_Renderer* pRenderer) {
     int start_x = genv->windows_width / 2 - (genv->sprite_size * genv->nb_rows) / 2;
     int start_y = genv->window_height / 2 - (genv->sprite_size * genv->nb_cols) / 2;
@@ -341,7 +354,7 @@ bool init(SDL_Renderer** pRenderer, SDL_Window** pWindow, game g, game_env genv)
         printf("[Error] TTF_Init: %s\n", TTF_GetError());
         exit(2);
     }
-    genv->pFont = TTF_OpenFont("./font/LiberationSerif-Regular.ttf", 1000);
+    genv->pFont = TTF_OpenFont("./font/04B_20__.ttf", 1000);
 
     // mouse
     SDL_PumpEvents();
