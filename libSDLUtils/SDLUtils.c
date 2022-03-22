@@ -284,12 +284,13 @@ bool process(SDL_Event event, SDL_Window* pWindow, game_env genv, game g) {
     SDL_GetWindowSize(pWindow, &genv->windows_width, &genv->window_height);
     if (genv->window_height < genv->windows_width) {
         genv->sprite_size = (genv->window_height - 60) / genv->nb_cols;
-    } else {
+    }
+    else{
         genv->sprite_size = (genv->windows_width - 60) / genv->nb_rows;
     }
     genv->button = SDL_GetMouseState(&genv->mouse_x, &genv->mouse_y);
     SDL_MouseToCase(genv);
-
+    
     switch (event.type) {
         case SDL_QUIT:
             return false;
@@ -298,27 +299,33 @@ bool process(SDL_Event event, SDL_Window* pWindow, game_env genv, game g) {
             break;
     }
 
-    if (event.type == SDL_MOUSEBUTTONDOWN) {
-        if (event.button.button == (SDL_BUTTON_LEFT)) {
-            if (game_is_lightbulb(g, genv->case_y, genv->case_x)) {
-                game_play_move(g, genv->case_y, genv->case_x, S_BLANK);
-            } else {
-                game_play_move(g, genv->case_y, genv->case_x, S_LIGHTBULB);
+    if (event.type == SDL_MOUSEBUTTONDOWN){
+        if (game_check_move(g, genv->case_y, genv->case_x, S_LIGHTBULB)){ // Check if the move on the grid is legit for a lightbulb
+            if (event.button.button == (SDL_BUTTON_LEFT)){  // if right click on the mouse put a lightbulb
+                if (game_is_lightbulb(g, genv->case_y, genv->case_x)){
+                    game_play_move(g, genv->case_y, genv->case_x, S_BLANK);
+                }
+                else {
+                    game_play_move(g, genv->case_y, genv->case_x, S_LIGHTBULB);
+                }
             }
         }
-        if (event.button.button == (SDL_BUTTON_RIGHT)) {
-            if (game_is_marked(g, genv->case_y, genv->case_x)) {
-                game_play_move(g, genv->case_y, genv->case_x, S_BLANK);
-            } else {
-                game_play_move(g, genv->case_y, genv->case_x, S_MARK);
+        if (game_check_move(g, genv->case_y, genv->case_x, S_MARK)){  // Check if the move on the grid is legit for a mark
+            if (event.button.button == (SDL_BUTTON_RIGHT)){  // if right click on the mouse put a mark
+                if (game_is_marked(g, genv->case_y, genv->case_x)){
+                    game_play_move(g, genv->case_y, genv->case_x, S_BLANK);
+                }
+                else {
+                    game_play_move(g, genv->case_y, genv->case_x, S_MARK);
+                }
             }
         }
     }
-    if (event.type == SDL_KEYDOWN) {
-        if (event.key.keysym.sym == SDLK_z) {
+    else if (event.type == SDL_KEYDOWN){
+        if (event.key.keysym.sym == SDLK_z){
             game_undo(g);
         }
-        if (event.key.keysym.sym == SDLK_y) {
+        if (event.key.keysym.sym == SDLK_y){
             game_redo(g);
         }
     }
