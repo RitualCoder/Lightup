@@ -12,8 +12,8 @@
 #ifndef __ENV_H__
 #define __ENV_H__
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <sys/time.h>
-// TODO, load texture!
 /**
  * @brief
  *
@@ -36,6 +36,8 @@ struct envS {
 
     SDL_Texture* lightbulb;
     SDL_Texture* mark;
+
+    TTF_Font* pFont;
 };
 
 typedef struct envS* game_env;

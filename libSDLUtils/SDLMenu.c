@@ -65,18 +65,106 @@ static SDL_Texture* text_at_texture(SDL_Renderer* pRenderer, char* text, TTF_Fon
     return texture;
 }
 
-static SDL_Texture** make_all_text_texture(SDL_Renderer* pRenderer, char* text[], int nbtext, TTF_Font* pFont) {
+static SDL_Texture** make_all_text_texture(SDL_Renderer* pRenderer, char* text[], int nbtext, game_env genv) {
     SDL_Texture** tab = malloc(sizeof(SDL_Texture*) * nbtext);
 
     for (int i = 0; i < nbtext; i++) {
-        SDL_Texture* texture = text_at_texture(pRenderer, text[i], pFont);
+        SDL_Texture* texture = text_at_texture(pRenderer, text[i], genv->pFont);
         tab[i] = texture;
     }
 
     return tab;
 }
+void SDL_DrawCaseCord(game_env genv, SDL_Renderer* pRenderer, int x, int y) {
+    int start_x = genv->windows_width / 2 - (genv->sprite_size * genv->nb_rows) / 2;
+    int start_y = genv->window_height / 2 - (genv->sprite_size * genv->nb_cols) / 2;
 
-static bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game* g) {
+    // creation of texture (black rectangle in this case)
+    SDL_Rect rect;
+    rect.h = genv->sprite_size;
+    rect.w = genv->sprite_size;
+    rect.x = start_x + genv->sprite_size * x;
+    rect.y = start_y + genv->sprite_size * y;
+
+    // draw and fill rectangle
+    SDL_SetRenderDrawColor(pRenderer, 0, 0, 0, 128);
+    SDL_RenderDrawRect(pRenderer, &rect);
+    SDL_RenderFillRect(pRenderer, &rect);
+}
+
+static void SDL_Draw_level(game_env genv, SDL_Renderer* pRenderer, SDL_Texture* level_tex[], int nbLevel) {
+    int levelIndex = 0;
+    for (int x = 0; x < genv->nb_cols; x++) {
+        for (int y = 0; y < genv->nb_rows; y++) {
+            if (x % 2 == 0 && y % 2 == 0) {
+                SDL_DrawCaseCord(genv, pRenderer, y, x);
+                draw_texture_at_pos(level_tex[levelIndex], pRenderer, genv, y, x);
+                levelIndex++;
+            }
+        }
+    }
+}
+
+static void render_level_menu(game_env genv, SDL_Renderer* pRenderer, SDL_Texture* level_tex[], int nbLevel) {
+    SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
+    int ret = SDL_RenderClear(pRenderer);
+    if (ret != 0) {
+        SDL_printError(true);
+    }
+
+    SDL_Draw_level(genv, pRenderer, level_tex, nbLevel);
+
+    SDL_RenderPresent(pRenderer);
+}
+
+bool level_precesse(SDL_Event event, SDL_Window* pWindow, game_env genv, game* g) {
+    SDL_GetWindowSize(pWindow, &genv->windows_width, &genv->window_height);
+    if (genv->window_height < genv->windows_width) {
+        genv->sprite_size = (genv->window_height - 60) / genv->nb_cols;
+    } else {
+        genv->sprite_size = (genv->windows_width - 60) / genv->nb_rows;
+    }
+    genv->button = SDL_GetMouseState(&genv->mouse_x, &genv->mouse_y);
+    SDL_MouseToCase(genv);
+
+    if (event.type == SDL_QUIT) {
+        *g = NULL;
+        return false;
+    } else if (event.type == SDL_MOUSEBUTTONDOWN) {
+        if (event.button.button == SDL_BUTTON_LEFT) {
+            if (genv->case_x % 2 == 0 && genv->case_y % 2 == 0) {
+                int levelID = genv->case_x / 2 + (genv->case_y / 2) * 3;
+                fprintf(stderr, "Level: %d\n", levelID + 1);
+            }
+        }
+    }
+    return true;
+}
+
+game level_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv) {
+    bool level_run = true;
+    char* levels[] = {"Level 1", "Level 2", "Level 3", "Level 4", "Level 5",
+                      "Level 6", "Level 7", "Level 8", "Level 9"};
+    SDL_Texture** levels_tex = make_all_text_texture(pRenderer, levels, 9, genv);
+    SDL_Event event;
+    game g;
+    genv->nb_cols = 5;
+    genv->nb_rows = 5;
+
+    while (level_run) {
+        render_level_menu(genv, pRenderer, levels_tex, 9);
+        while (SDL_PollEvent(&event)) {  // process input
+            level_run = level_precesse(event, pWindow, genv, &g);
+            if (!level_run) {
+                break;
+            }
+        }
+    }
+    return g;
+}
+
+static bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game* g, SDL_Renderer* pRenderer,
+                         game_env genv) {
     int mouse_x, mouse_y;
     SDL_GetMouseState(&mouse_x, &mouse_y);
     int w, h;
@@ -102,7 +190,7 @@ static bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game*
                             *g = game_default();
                             break;
                         case 1:
-                            *g = game_default();  // todo load
+                            *g = level_menu(pRenderer, pWindow, genv);
                             break;
                         case 2:
                             *g = NULL;
@@ -129,17 +217,17 @@ static void clean_texture_tab(SDL_Texture* tab[], int nbItem) {
     free(tab);
 }
 
-game main_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, TTF_Font* pFont) {
+game main_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv) {
     bool run = true;
     char* items[] = {"New game", " Load ", " Quit "};
-    SDL_Texture** items_texture = make_all_text_texture(pRenderer, items, 3, pFont);
+    SDL_Texture** items_texture = make_all_text_texture(pRenderer, items, 3, genv);
     SDL_Event event;
     game g;
 
     while (run) {
         draw_menu(pRenderer, pWindow, items_texture, 3);
         while (SDL_PollEvent(&event)) {  // process input
-            run = menu_process(event, pWindow, 3, &g);
+            run = menu_process(event, pWindow, 3, &g, pRenderer, genv);
             if (!run) {
                 break;
             }

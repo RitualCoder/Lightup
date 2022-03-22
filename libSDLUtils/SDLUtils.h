@@ -109,6 +109,8 @@ void loadWallTexture(game_env genv, SDL_Renderer* pRenderer);
 
 void quit(game_env genv);
 
-bool init(SDL_Renderer** pRenderer, SDL_Window** pWindow, TTF_Font** pFont, game g, game_env genv);
+bool init(SDL_Renderer** pRenderer, SDL_Window** pWindow, game g, game_env genv);
+
+void draw_texture_at_pos(SDL_Texture* tex, SDL_Renderer* pRenderer, game_env genv, int y, int x);
 
 #endif

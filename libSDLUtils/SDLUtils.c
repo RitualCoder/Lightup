@@ -137,7 +137,7 @@ void SDL_DrawCase(game_env genv, SDL_Renderer* pRenderer) {
     SDL_SetRenderDrawBlendMode(pRenderer, SDL_BLENDMODE_NONE);  // deactivate blend mode
 }
 
-static void draw_texture_at_pos(SDL_Texture* tex, SDL_Renderer* pRenderer, game_env genv, int y, int x) {
+void draw_texture_at_pos(SDL_Texture* tex, SDL_Renderer* pRenderer, game_env genv, int y, int x) {
     int start_y = genv->windows_width / 2 - (genv->sprite_size * genv->nb_rows) / 2;
     int start_x = genv->window_height / 2 - (genv->sprite_size * genv->nb_cols) / 2;
 
@@ -326,7 +326,7 @@ void quit(game_env genv) {
     free(genv);
 }
 
-bool init(SDL_Renderer** pRenderer, SDL_Window** pWindow, TTF_Font** pFont, game g, game_env genv) {
+bool init(SDL_Renderer** pRenderer, SDL_Window** pWindow, game g, game_env genv) {
     // init time managment
     gettimeofday(&genv->startTime, NULL);
 
@@ -341,7 +341,7 @@ bool init(SDL_Renderer** pRenderer, SDL_Window** pWindow, TTF_Font** pFont, game
         printf("[Error] TTF_Init: %s\n", TTF_GetError());
         exit(2);
     }
-    *pFont = TTF_OpenFont("./font/LiberationSerif-Regular.ttf", 1000);
+    genv -> pFont = TTF_OpenFont("./font/LiberationSerif-Regular.ttf", 1000);
 
     // mouse
     SDL_PumpEvents();

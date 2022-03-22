@@ -18,5 +18,5 @@
 #include "../libgame/game.h"
 #include "env.h"
 
-game main_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, TTF_Font* pFont);
+game main_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv);
 #endif

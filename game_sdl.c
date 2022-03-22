@@ -46,13 +46,12 @@ int main(int argc, char* argv[]) {
     SDL_Window* pWindow = NULL;
     SDL_Renderer* pRenderer = NULL;
     game_env genv = init_game_environment(g);
-    TTF_Font* pFont;
     double fps = 0;
 
-    init(&pRenderer, &pWindow, &pFont, g, genv);
+    init(&pRenderer, &pWindow, g, genv);
 
     if (!load_from_cmd) {
-        g = main_menu(pRenderer, pWindow, pFont);
+        g = main_menu(pRenderer, pWindow, genv);
     }
 
     if (g != NULL) {
