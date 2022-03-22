@@ -341,7 +341,7 @@ bool init(SDL_Renderer** pRenderer, SDL_Window** pWindow, game g, game_env genv)
         printf("[Error] TTF_Init: %s\n", TTF_GetError());
         exit(2);
     }
-    genv -> pFont = TTF_OpenFont("./font/LiberationSerif-Regular.ttf", 1000);
+    genv->pFont = TTF_OpenFont("./font/LiberationSerif-Regular.ttf", 1000);
 
     // mouse
     SDL_PumpEvents();
@@ -359,7 +359,7 @@ bool init(SDL_Renderer** pRenderer, SDL_Window** pWindow, game g, game_env genv)
     return run;
 }
 
-void update_genv(game_env genv,game g ){
+void update_genv(game_env genv, game g) {
     genv->nb_cols = game_nb_cols(g);
     genv->nb_rows = game_nb_rows(g);
 }

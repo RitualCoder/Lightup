@@ -22,7 +22,7 @@ int test_game_solve() {
     }
     game_delete(g);
     g = game_load("3x3.txt");
-    if(game_nb_solutions(g)!= 4){
+    if (game_nb_solutions(g) != 4) {
         retVal = EXIT_FAILURE;
     }
     game_delete(g);

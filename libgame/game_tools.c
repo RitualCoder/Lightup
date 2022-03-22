@@ -137,7 +137,7 @@ void game_save(cgame g, char* filename) { game_save_int(g, filename, false); }
 static bool _checkErr(game g) {
     for (int x = g->nb_cols - 1; x >= 0; x--) {
         for (int y = g->nb_rows - 1; y >= 0; y--) {
-            if( game_has_error(g, x, y)){
+            if (game_has_error(g, x, y)) {
                 return true;
             }
         }
