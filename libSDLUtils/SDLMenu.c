@@ -134,6 +134,7 @@ bool level_precesse(SDL_Event event, SDL_Window* pWindow, game_env genv, game* g
 
     if (event.type == SDL_QUIT) {
         *g = NULL;
+        genv->state = "exit";
         return false;
     } else if (event.type == SDL_MOUSEBUTTONDOWN) {
         if (event.button.button == SDL_BUTTON_LEFT) {
@@ -234,6 +235,7 @@ static bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game*
     switch (event.type) {
         case SDL_QUIT:
             *g = NULL;
+            genv->state = "exit";
             run = false;
             break;
         default:

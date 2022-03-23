@@ -294,6 +294,7 @@ bool process(SDL_Event event, SDL_Window* pWindow, game_env genv, game g) {
     
     switch (event.type) {
         case SDL_QUIT:
+            genv->state = "exit";
             return false;
 
         default:
@@ -331,6 +332,9 @@ bool process(SDL_Event event, SDL_Window* pWindow, game_env genv, game g) {
         }
         if (event.key.keysym.sym == SDLK_s){
             game_solve(g);
+        }
+        if (event.key.keysym.sym == SDLK_w){
+            game_save(g, "sdl_game_save.txt");
         }
     }
 #ifdef DEBUG
