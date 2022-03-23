@@ -29,7 +29,7 @@
  *
  * @return game_env : the game environement
  */
-game_env init_game_environment(game g);
+game_env init_game_environment();
 
 /**
  * @brief Print SDL erre and de-init if necessary

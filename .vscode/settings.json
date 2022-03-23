@@ -11,7 +11,8 @@
     "limits": "c",
     "algorithm": "c",
     "game_ext.h": "c",
-    "game_tools.h": "c"
+    "game_tools.h": "c",
+    "game.h": "c"
   },
   "C_Cpp.errorSquiggles": "Disabled"
 }

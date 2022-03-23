@@ -14,13 +14,13 @@ static double deltaTime(struct timeval start, struct timeval end) {
     return (end.tv_sec - end.tv_sec) * 1000.0 + (end.tv_usec - start.tv_usec) / 1000.0;
 }
 
-game_env init_game_environment(game g) {
+game_env init_game_environment() {
     game_env genv = malloc(sizeof(struct envS));
     genv->window_height = WINDOW_LENGHT;
     genv->windows_width = WINDOW_HEIGHT;
-    genv->nb_cols = game_nb_cols(g);
-    genv->nb_rows = game_nb_rows(g);
     genv->sprite_size = SPRITE_SIZE;
+    genv -> state = malloc(sizeof(char)*12);
+    genv -> state = "main_menu";
     return genv;
 }
 

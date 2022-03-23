@@ -143,38 +143,46 @@ bool level_precesse(SDL_Event event, SDL_Window* pWindow, game_env genv, game* g
                 switch (levelID) {
                     case 0:
                         *g = game_load("levels/level1.txt");
+                        genv->state = "game";
                         return false;
                         break;
                     case 1:
                         *g = game_load("levels/level2.txt");
+                        genv->state = "game";
                         return false;
                         break;
                     case 2:
                         *g = game_load("levels/level3.txt");
+                        genv->state = "game";
                         return false;
                         break;
                     case 3:
                         *g = game_load("levels/level4.txt");
+                        genv->state = "game";
                         return false;
                         break;
                     case 4:
                         *g = game_load("levels/level5.txt");
+                        genv->state = "game";
                         return false;
                         break;
                     case 5:
                         *g = game_load("levels/level6.txt");
+                        genv->state = "game";
                         return false;
                         break;
                     case 6:
                         *g = game_load("levels/level7.txt");
+                        genv->state = "game";
                         return false;
                         break;
                     case 7:
                         *g = game_load("levels/level8.txt");
+                        genv->state = "game";
                         return false;
                         break;
                     case 8:
-                        *g = game_load("levels/level9.txt");
+                        genv->state = "main_menu";
                         return false;
                         break;
                     default:
@@ -204,6 +212,7 @@ game level_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv) {
             }
         }
     }
+    clean_texture_tab(levels_tex, 9);
     return g;
 }
 
@@ -244,13 +253,16 @@ static bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game*
                 case 1:
                     run = false;
                     *g = game_default();
+                    genv->state = "game";
                     break;
                 case 2:
                     run = false;
-                    *g = level_menu(pRenderer, pWindow, genv);
+                    *g = NULL;
+                    genv->state = "level_sel";
                     break;
                 case 3:
                     printf ("exit\n");
+                    genv->state = "exit";
                     *g = NULL;
                     run = false;
                     break;

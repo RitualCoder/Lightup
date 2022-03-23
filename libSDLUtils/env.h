@@ -38,6 +38,8 @@ struct envS {
     SDL_Texture* mark;
 
     TTF_Font* pFont;
+
+    char* state;
 };
 
 typedef struct envS* game_env;

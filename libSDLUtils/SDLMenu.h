@@ -22,4 +22,5 @@
 #define MENU_Y 160
 
 game main_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv);
+game level_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv);
 #endif
