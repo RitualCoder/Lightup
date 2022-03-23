@@ -13,8 +13,8 @@
 #include "libgame/game_tools.h"
 
 const SDL_MessageBoxButtonData buttons[] = {
-        { /* .flags, .buttonid, .text */        0, 0, "no" },
-        { SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "yes" },
+        { /* .flags, .buttonid, .text */        0, 0, "menu" },
+        { SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "retry" },
         { SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 2, "exit" },
 };
 
@@ -50,6 +50,11 @@ int game_loop(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv, game 
             if (SDL_ShowMessageBox(&messageboxdata, &buttonid) < 0) {
                 SDL_Log("error displaying message box");
             }
+
+            if (buttonid == 1) {
+                SDL_Log("Retry");
+                game_restart(g);
+            } 
             if (buttonid == 2) {
                 SDL_Log("EXIT");
                 run = false;
