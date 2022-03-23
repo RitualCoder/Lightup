@@ -38,6 +38,8 @@ struct envS {
     SDL_Texture* lightbulb;
     SDL_Texture* mark;
 
+    SDL_Texture* back;
+
     TTF_Font* pFont;
 
     char* state;

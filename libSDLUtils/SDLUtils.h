@@ -78,6 +78,14 @@ void SDL_MouseToCase(game_env genv);
 void SDL_DrawCase(game_env genv, SDL_Renderer* pRenderer);
 
 /**
+ * @brief Draw back button top left corner
+ *
+ * @param genv game environment
+ * @param pRenderer a pointer for the Renderer
+ */
+static void SDL_Draw_back(game_env genv, SDL_Renderer* pRenderer);
+
+/**
  * @brief print some debug information on stdout
  *
  * @param pRenderer the game renderer

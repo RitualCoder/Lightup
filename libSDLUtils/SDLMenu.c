@@ -1,4 +1,6 @@
+#include "SDLUtils.h"
 #include "SDLMenu.h"
+
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
@@ -7,10 +9,8 @@
 #include "../libgame/game.h"
 #include "../libgame/game_aux.h"
 #include "../libgame/game_tools.h"
-#include "SDLUtils.h"
+
 #include "env.h"
-
-
 
 static void draw_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, SDL_Texture* items[], int nbItem) {
     int w, h;
@@ -99,6 +99,7 @@ void SDL_DrawCaseCord(game_env genv, SDL_Renderer* pRenderer, int x, int y) {
 
 static void SDL_Draw_level(game_env genv, SDL_Renderer* pRenderer, SDL_Texture* level_tex[], int nbLevel) {
     int levelIndex = 0;
+    
     for (int x = 0; x < genv->nb_cols; x++) {
         for (int y = 0; y < genv->nb_rows; y++) {
             if (x % 2 == 0 && y % 2 == 0) {
@@ -110,6 +111,22 @@ static void SDL_Draw_level(game_env genv, SDL_Renderer* pRenderer, SDL_Texture* 
     }
 }
 
+static void SDL_Draw_back2(game_env genv, SDL_Renderer* pRenderer){
+    SDL_Color color = {0, 0, 0, 255};
+    SDL_Surface* back_x = TTF_RenderText_Blended(genv->pFont, "< back", color);
+    genv->back =  SDL_CreateTextureFromSurface(pRenderer, back_x);   
+    SDL_FreeSurface(back_x);
+    SDL_Rect rect;
+    SDL_QueryTexture(genv->back, NULL, NULL, &rect.w, &rect.h); // TROUVER COEFFICIENT
+    rect.h = 20;
+    rect.w = 60;
+    rect.x = 10;
+    rect.y = 10;
+    SDL_RenderCopy(pRenderer, genv->back, NULL, &rect);
+    SDL_DestroyTexture(genv->back);
+}
+
+
 static void render_level_menu(game_env genv, SDL_Renderer* pRenderer, SDL_Texture* level_tex[], int nbLevel) {
     SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
     int ret = SDL_RenderClear(pRenderer);
@@ -118,11 +135,12 @@ static void render_level_menu(game_env genv, SDL_Renderer* pRenderer, SDL_Textur
     }
 
     SDL_Draw_level(genv, pRenderer, level_tex, nbLevel);
+    SDL_Draw_back2(genv, pRenderer);
 
     SDL_RenderPresent(pRenderer);
 }
 
-bool level_precesse(SDL_Event event, SDL_Window* pWindow, game_env genv, game* g) {
+bool level_process(SDL_Event event, SDL_Window* pWindow, game_env genv, game* g) {
     SDL_GetWindowSize(pWindow, &genv->windows_width, &genv->window_height);
     if (genv->window_height < genv->windows_width) {
         genv->sprite_size = (genv->window_height - 60) / genv->nb_cols;
@@ -138,6 +156,10 @@ bool level_precesse(SDL_Event event, SDL_Window* pWindow, game_env genv, game* g
         return false;
     } else if (event.type == SDL_MOUSEBUTTONDOWN) {
         if (event.button.button == SDL_BUTTON_LEFT) {
+            if (genv->mouse_x > 10 && genv->mouse_x < 70 && genv->mouse_y > 10 && genv->mouse_y < 30){
+                genv->state = "main_menu";
+                return false;
+            }
             if (genv->case_x % 2 == 0 && genv->case_y % 2 == 0) {
                 int levelID = genv->case_x / 2 + (genv->case_y / 2) * 3;
 
@@ -183,7 +205,8 @@ bool level_precesse(SDL_Event event, SDL_Window* pWindow, game_env genv, game* g
                         return false;
                         break;
                     case 8:
-                        genv->state = "main_menu";
+                        *g = game_load("levels/level9.txt");
+                        genv->state = "game";
                         return false;
                         break;
                     default:
@@ -204,7 +227,7 @@ static void clean_texture_tab(SDL_Texture* tab[], int nbItem) {
 
 game level_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv) {
     bool level_run = true;
-    char* levels[] = {"1", "2", "3", "4", "5", "6", "7", "8", "back"};
+    char* levels[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
     SDL_Texture** levels_tex = make_all_text_texture(pRenderer, levels, 9, genv);
     SDL_Event event;
     game g;
@@ -214,7 +237,7 @@ game level_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv) {
     while (level_run) {
         render_level_menu(genv, pRenderer, levels_tex, 9);
         while (SDL_PollEvent(&event)) {  // process input
-            level_run = level_precesse(event, pWindow, genv, &g);
+            level_run = level_process(event, pWindow, genv, &g);
             if (!level_run) {
                 break;
             }

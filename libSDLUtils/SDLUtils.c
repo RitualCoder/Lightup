@@ -1,4 +1,5 @@
 #include "SDLUtils.h"
+#include "SDLMenu.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -23,6 +24,21 @@ game_env init_game_environment() {
     genv -> state = malloc(sizeof(char)*12);
     genv -> state = "main_menu";
     return genv;
+}
+
+static void SDL_Draw_back(game_env genv, SDL_Renderer* pRenderer){
+    SDL_Color color = {0, 0, 0, 255};
+    SDL_Surface* back_x = TTF_RenderText_Blended(genv->pFont, "< back", color);
+    genv->back =  SDL_CreateTextureFromSurface(pRenderer, back_x);   
+    SDL_FreeSurface(back_x);
+    SDL_Rect rect;
+    SDL_QueryTexture(genv->back, NULL, NULL, &rect.w, &rect.h); // TROUVER COEFFICIENT
+    rect.h = 20;
+    rect.w = 60;
+    rect.x = 10;
+    rect.y = 10;
+    SDL_RenderCopy(pRenderer, genv->back, NULL, &rect);
+    SDL_DestroyTexture(genv->back);
 }
 
 void SDL_printError(bool init) {
@@ -97,6 +113,8 @@ void SDL_drawGrid(game_env genv, SDL_Renderer* pRenderer) {
         SDL_RenderDrawLine(pRenderer, start_x, i * genv->sprite_size + start_y, end_x, i * genv->sprite_size + start_y);
     }
 }
+
+
 
 void SDL_MouseToCase(game_env genv) {
     int start_x = genv->windows_width / 2 - (genv->sprite_size * genv->nb_rows) / 2;
@@ -273,6 +291,7 @@ void render(game_env genv, SDL_Renderer* pRenderer, double fps, game g) {
 
     SDL_drawGrid(genv, pRenderer);
     SDL_DrawCase(genv, pRenderer);
+    SDL_Draw_back(genv, pRenderer);
 
     SDL_RenderPresent(pRenderer);
 
@@ -306,8 +325,13 @@ bool process(SDL_Event event, SDL_Window* pWindow, game_env genv, game g) {
     }
 
     if (event.type == SDL_MOUSEBUTTONDOWN){
-        if (game_check_move(g, genv->case_y, genv->case_x, S_LIGHTBULB)){ // Check if the move on the grid is legit for a lightbulb
-            if (event.button.button == (SDL_BUTTON_LEFT)){  // if right click on the mouse put a lightbulb
+        if (event.button.button == (SDL_BUTTON_LEFT)){
+            if (genv->mouse_x > 10 && genv->mouse_x < 70 && genv->mouse_y > 10 && genv->mouse_y < 30){
+                genv->state = "main_menu";
+                return false;
+            }
+            if (game_check_move(g, genv->case_y, genv->case_x, S_LIGHTBULB)){ // Check if the move on the grid is legit for a lightbulb
+            
                 if (game_is_lightbulb(g, genv->case_y, genv->case_x)){
                     game_play_move(g, genv->case_y, genv->case_x, S_BLANK);
                 }
