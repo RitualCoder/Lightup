@@ -10,7 +10,8 @@
     "random": "c",
     "limits": "c",
     "algorithm": "c",
-    "game_ext.h": "c"
+    "game_ext.h": "c",
+    "game_tools.h": "c"
   },
   "C_Cpp.errorSquiggles": "Disabled"
 }

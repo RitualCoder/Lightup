@@ -12,7 +12,26 @@
 #include "libgame/game_aux.h"
 #include "libgame/game_tools.h"
 
+const SDL_MessageBoxButtonData buttons[] = {
+        { /* .flags, .buttonid, .text */        0, 0, "no" },
+        { SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "yes" },
+        { SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 2, "exit" },
+};
+
+const SDL_MessageBoxData messageboxdata = {
+        SDL_MESSAGEBOX_INFORMATION, /* .flags */
+        NULL, /* .window */
+        "You win !", /* .title */
+        "select a button", /* .message */
+        SDL_arraysize(buttons), /* .numbuttons */
+        buttons, /* .buttons */
+        NULL /* .colorScheme */
+};
+
+
+
 int game_loop(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv, game g, double fps) {
+    int buttonid;
     bool run = true;
     SDL_Event event;
     update_genv(genv, g);
@@ -27,6 +46,18 @@ int game_loop(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv, game 
 
         // game logic
         render(genv, pRenderer, fps, g);
+        if (game_is_over(g)){
+            if (SDL_ShowMessageBox(&messageboxdata, &buttonid) < 0) {
+                SDL_Log("error displaying message box");
+            }
+            if (buttonid == 2) {
+                SDL_Log("EXIT");
+                run = false;
+            } 
+            else {
+                SDL_Log("selection was %s", buttons[buttonid].text);
+            }
+        }
     }
 
     return 0;

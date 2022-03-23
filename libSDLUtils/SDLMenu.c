@@ -1,3 +1,5 @@
+#include "SDLMenu.h"
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <stdbool.h>
@@ -7,6 +9,8 @@
 #include "../libgame/game_tools.h"
 #include "SDLUtils.h"
 #include "env.h"
+
+
 
 static void draw_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, SDL_Texture* items[], int nbItem) {
     int w, h;
@@ -23,8 +27,8 @@ static void draw_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, SDL_Texture*
     SDL_Rect rItem;
     rItem.w = item_width;
     rItem.h = item_height;
-    rItem.x = 250;
-    rItem.y = 160;
+    rItem.x = MENU_X;
+    rItem.y = MENU_Y;
     for (int i = 0; i < nbItem; i++) {
         SDL_RenderDrawRect(pRenderer, &rItem);
         SDL_RenderFillRect(pRenderer, &rItem);
@@ -184,7 +188,7 @@ bool level_precesse(SDL_Event event, SDL_Window* pWindow, game_env genv, game* g
 
 game level_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv) {
     bool level_run = true;
-    char* levels[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
+    char* levels[] = {"1", "2", "3", "4", "5", "6", "7", "8", "back"};
     SDL_Texture** levels_tex = make_all_text_texture(pRenderer, levels, 9, genv);
     SDL_Event event;
     game g;
