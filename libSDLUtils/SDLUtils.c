@@ -54,6 +54,7 @@ void SDL_initAndSetName(SDL_Renderer** pRenderer, SDL_Window** pWindow) {
 }
 
 void loadWallTexture(game_env genv, SDL_Renderer* pRenderer) {
+    genv->wall0 = IMG_LoadTexture(pRenderer, "./img/wall0.png");
     genv->wall1 = IMG_LoadTexture(pRenderer, "./img/wall1.png");
     genv->wall2 = IMG_LoadTexture(pRenderer, "./img/wall2.png");
     genv->wall3 = IMG_LoadTexture(pRenderer, "./img/wall3.png");
@@ -63,7 +64,7 @@ void loadWallTexture(game_env genv, SDL_Renderer* pRenderer) {
     genv->lightbulb = IMG_LoadTexture(pRenderer, "./img/lightbulb.png");
     genv->mark = IMG_LoadTexture(pRenderer, "./img/mark.png");
 
-    if (genv->wall1 == NULL || genv->wall2 == NULL || genv->wall3 == NULL || genv->wall4 == NULL ||
+    if (genv->wall0 == NULL || genv->wall1 == NULL || genv->wall2 == NULL || genv->wall3 == NULL || genv->wall4 == NULL ||
         genv->wallu == NULL || genv->lightbulb == NULL || genv->mark == NULL) {
         SDL_printError(true);
     }
@@ -218,6 +219,9 @@ void SDL_DrawGame(game g, game_env genv, SDL_Renderer* pRenderer) {
                 switch (val) {
                     case (-1):
                         draw = genv->wallu;
+                        break;
+                    case (0):
+                        draw = genv->wall0;
                         break;
                     case (1):
                         draw = genv->wall1;

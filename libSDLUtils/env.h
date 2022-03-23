@@ -29,6 +29,7 @@ struct envS {
     Uint32 button;
 
     SDL_Texture* wallu;
+    SDL_Texture* wall0;
     SDL_Texture* wall1;
     SDL_Texture* wall2;
     SDL_Texture* wall3;
