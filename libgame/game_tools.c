@@ -152,7 +152,6 @@ static bool genGame(int pos, int size, game g, bool stopAtFirstSolution, int* ge
         *generatedGame = *generatedGame + 1;
         if (game_is_over(g)) {
             *solutionFind = *solutionFind + 1;
-            // game_print(g);
             return true;
         }
 
@@ -198,7 +197,6 @@ bool game_solve(game g) {
     int solutionFound = 0;
 
     if (genGame(0, (g->nb_cols * g->nb_rows), g, true, &generatedGame, &solutionFound)) {
-        printf("Stats:\n    - generated Game: %d", generatedGame);
         return true;
     }
 
@@ -211,7 +209,6 @@ uint game_nb_solutions(cgame g) {
     game workingGame = game_copy(g);
     genGame(0, (g->nb_cols * g->nb_rows), workingGame, false, &generatedGame, &solutionFound);
     game_delete(workingGame);
-    printf("Stats:\n    - generated Game: %d\n ", generatedGame);
 
     return solutionFound;
 }

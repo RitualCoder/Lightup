@@ -194,6 +194,13 @@ bool level_precesse(SDL_Event event, SDL_Window* pWindow, game_env genv, game* g
     return true;
 }
 
+static void clean_texture_tab(SDL_Texture* tab[], int nbItem) {
+    for (int i = 0; i < nbItem; i++) {
+        SDL_DestroyTexture(tab[i]);
+    }
+    free(tab);
+}
+
 game level_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv) {
     bool level_run = true;
     char* levels[] = {"1", "2", "3", "4", "5", "6", "7", "8", "back"};
@@ -309,13 +316,6 @@ static bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game*
             break; 
     }*/
     return run;
-}
-
-static void clean_texture_tab(SDL_Texture* tab[], int nbItem) {
-    for (int i = 0; i < nbItem; i++) {
-        SDL_DestroyTexture(tab[i]);
-    }
-    free(tab);
 }
 
 game main_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv) {

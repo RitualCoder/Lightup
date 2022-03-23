@@ -8,6 +8,7 @@
 
 #include "../libgame/game.h"
 #include "../libgame/game_ext.h"
+#include "../libgame/game_tools.h"
 #include "env.h"
 
 static double deltaTime(struct timeval start, struct timeval end) {
@@ -327,6 +328,9 @@ bool process(SDL_Event event, SDL_Window* pWindow, game_env genv, game g) {
         }
         if (event.key.keysym.sym == SDLK_y){
             game_redo(g);
+        }
+        if (event.key.keysym.sym == SDLK_s){
+            game_solve(g);
         }
     }
 #ifdef DEBUG
