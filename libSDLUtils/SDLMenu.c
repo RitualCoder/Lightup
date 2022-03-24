@@ -1,6 +1,4 @@
-#include "SDLUtils.h"
 #include "SDLMenu.h"
-
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
@@ -9,7 +7,7 @@
 #include "../libgame/game.h"
 #include "../libgame/game_aux.h"
 #include "../libgame/game_tools.h"
-
+#include "SDLUtils.h"
 #include "env.h"
 
 static void draw_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, SDL_Texture* items[], int nbItem) {
@@ -99,7 +97,7 @@ void SDL_DrawCaseCord(game_env genv, SDL_Renderer* pRenderer, int x, int y) {
 
 static void SDL_Draw_level(game_env genv, SDL_Renderer* pRenderer, SDL_Texture* level_tex[], int nbLevel) {
     int levelIndex = 0;
-    
+
     for (int x = 0; x < genv->nb_cols; x++) {
         for (int y = 0; y < genv->nb_rows; y++) {
             if (x % 2 == 0 && y % 2 == 0) {
@@ -110,7 +108,6 @@ static void SDL_Draw_level(game_env genv, SDL_Renderer* pRenderer, SDL_Texture* 
         }
     }
 }
-
 
 static void render_level_menu(game_env genv, SDL_Renderer* pRenderer, SDL_Texture* level_tex[], int nbLevel) {
     SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
@@ -141,7 +138,7 @@ bool level_process(SDL_Event event, SDL_Window* pWindow, game_env genv, game* g)
         return false;
     } else if (event.type == SDL_MOUSEBUTTONDOWN) {
         if (event.button.button == SDL_BUTTON_LEFT) {
-            if (genv->mouse_x > 10 && genv->mouse_x < 70 && genv->mouse_y > 10 && genv->mouse_y < 30){
+            if (genv->mouse_x > 10 && genv->mouse_x < 70 && genv->mouse_y > 10 && genv->mouse_y < 30) {
                 genv->state = "main_menu";
                 return false;
             }
@@ -255,18 +252,18 @@ static bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game*
             int start_x = 250;
             int start_y = 160;
             int item_height = ((h - 60) - nbItem * 100) / nbItem;
-            if ((mouse_x > start_x) && (mouse_x < (w - start_x)) && (mouse_y > start_y) && (mouse_y < (h - start_y))){
-                if (mouse_y > (start_y) && mouse_y < (start_y + item_height)){
+            if ((mouse_x > start_x) && (mouse_x < (w - start_x)) && (mouse_y > start_y) && (mouse_y < (h - start_y))) {
+                if (mouse_y > (start_y) && mouse_y < (start_y + item_height)) {
                     case_x = 1;
                 }
-                if (mouse_y > (start_y + item_height + 20) && mouse_y < (start_y + item_height + 100)){
+                if (mouse_y > (start_y + item_height + 20) && mouse_y < (start_y + item_height + 100)) {
                     case_x = 2;
                 }
-                if (mouse_y > (start_y + item_height + 120) && mouse_y < (start_y + item_height + 200)){
+                if (mouse_y > (start_y + item_height + 120) && mouse_y < (start_y + item_height + 200)) {
                     case_x = 3;
                 }
             }
-            switch (case_x){
+            switch (case_x) {
                 case 1:
                     run = false;
                     *g = game_default();
@@ -278,7 +275,7 @@ static bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game*
                     genv->state = "level_sel";
                     break;
                 case 3:
-                    printf ("exit\n");
+                    printf("exit\n");
                     genv->state = "exit";
                     *g = NULL;
                     run = false;
@@ -323,14 +320,14 @@ static bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game*
             break;
 
         default:
-            break; 
+            break;
     }*/
     return run;
 }
 
 game main_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv) {
     bool run = true;
-    char* items[] = {"NEW GAME", "   LOAD   ", "    QUIT    "}; // spaces are for not distorting the font
+    char* items[] = {"NEW GAME", "   LOAD   ", "    QUIT    "};  // spaces are for not distorting the font
     SDL_Texture** items_texture = make_all_text_texture(pRenderer, items, 3, genv);
     SDL_Event event;
     game g;

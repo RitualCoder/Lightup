@@ -41,7 +41,7 @@ int game_loop(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv, game 
 
         while (SDL_PollEvent(&event)) {  // process input
             run = process(event, pWindow, genv, g);
-            if(!run){
+            if (!run) {
                 break;
             }
         }

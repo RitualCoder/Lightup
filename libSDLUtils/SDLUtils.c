@@ -316,7 +316,7 @@ bool process(SDL_Event event, SDL_Window* pWindow, game_env genv, game g) {
     switch (event.type) {
         case SDL_QUIT:
             genv->state = "exit";
-            ret=false;
+            ret = false;
             break;
 
         default:
@@ -327,7 +327,7 @@ bool process(SDL_Event event, SDL_Window* pWindow, game_env genv, game g) {
         if (event.button.button == (SDL_BUTTON_LEFT)) {
             if (genv->mouse_x > 10 && genv->mouse_x < 70 && genv->mouse_y > 10 && genv->mouse_y < 30) {
                 genv->state = "level_sel";
-                ret=false;
+                ret = false;
             }
             if (game_check_move(g, genv->case_y, genv->case_x,
                                 S_LIGHTBULB)) {  // Check if the move on the grid is legit for a lightbulb
