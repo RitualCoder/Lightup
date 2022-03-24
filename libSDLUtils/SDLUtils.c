@@ -65,6 +65,7 @@ void SDL_initAndSetName(SDL_Renderer** pRenderer, SDL_Window** pWindow) {
     if (*pRenderer == NULL) {
         SDL_printError(true);
     }
+    SDL_SetWindowMinimumSize(*pWindow, 400, 300);
     // Init Image
     IMG_Init(IMG_INIT_PNG);
 }
