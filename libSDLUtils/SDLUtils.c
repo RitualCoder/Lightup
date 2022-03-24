@@ -362,6 +362,10 @@ bool process(SDL_Event event, SDL_Window* pWindow, game_env genv, game g) {
         if (event.key.keysym.sym == SDLK_w) {
             game_save(g, "sdl_game_save.txt");
         }
+        if (event.key.keysym.sym == SDLK_ESCAPE) {
+            genv->state = "main_menu";
+            ret = false;
+        }
     }
 #ifdef DEBUG
     SDL_Log("Mouse coordinate x: %d, y: %d\n", genv->mouse_x, genv->mouse_y);

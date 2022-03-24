@@ -123,6 +123,7 @@ static void render_level_menu(game_env genv, SDL_Renderer* pRenderer, SDL_Textur
 }
 
 bool level_process(SDL_Event event, SDL_Window* pWindow, game_env genv, game* g) {
+    bool run = true;
     SDL_GetWindowSize(pWindow, &genv->windows_width, &genv->window_height);
     if (genv->window_height < genv->windows_width) {
         genv->sprite_size = (genv->window_height - 60) / genv->nb_cols;
@@ -136,11 +137,12 @@ bool level_process(SDL_Event event, SDL_Window* pWindow, game_env genv, game* g)
         *g = NULL;
         genv->state = "exit";
         return false;
-    } else if (event.type == SDL_MOUSEBUTTONDOWN) {
+    } 
+    if (event.type == SDL_MOUSEBUTTONDOWN) {
         if (event.button.button == SDL_BUTTON_LEFT) {
             if (genv->mouse_x > 10 && genv->mouse_x < 70 && genv->mouse_y > 10 && genv->mouse_y < 30) {
                 genv->state = "main_menu";
-                return false;
+                run = false;
             }
             if (genv->case_x % 2 == 0 && genv->case_y % 2 == 0) {
                 int levelID = genv->case_x / 2 + (genv->case_y / 2) * 3;
@@ -149,47 +151,47 @@ bool level_process(SDL_Event event, SDL_Window* pWindow, game_env genv, game* g)
                     case 0:
                         *g = game_load("levels/level1.txt");
                         genv->state = "game";
-                        return false;
+                        run =  false;
                         break;
                     case 1:
                         *g = game_load("levels/level2.txt");
                         genv->state = "game";
-                        return false;
+                        run =  false;
                         break;
                     case 2:
                         *g = game_load("levels/level3.txt");
                         genv->state = "game";
-                        return false;
+                        run = false;
                         break;
                     case 3:
                         *g = game_load("levels/level4.txt");
                         genv->state = "game";
-                        return false;
+                        run = false;
                         break;
                     case 4:
                         *g = game_load("levels/level5.txt");
                         genv->state = "game";
-                        return false;
+                        run = false;
                         break;
                     case 5:
                         *g = game_load("levels/level6.txt");
                         genv->state = "game";
-                        return false;
+                        run = false;
                         break;
                     case 6:
                         *g = game_load("levels/level7.txt");
                         genv->state = "game";
-                        return false;
+                        run = false;
                         break;
                     case 7:
                         *g = game_load("levels/level8.txt");
                         genv->state = "game";
-                        return false;
+                        run = false;
                         break;
                     case 8:
                         *g = game_load("levels/level9.txt");
                         genv->state = "game";
-                        return false;
+                        run = false;
                         break;
                     default:
                         break;
@@ -197,7 +199,14 @@ bool level_process(SDL_Event event, SDL_Window* pWindow, game_env genv, game* g)
             }
         }
     }
-    return true;
+    else if (event.type == SDL_KEYDOWN){
+        if (event.key.keysym.sym == SDLK_ESCAPE){
+            *g = NULL;
+            genv->state = "main_menu";
+            run = false;
+        }
+    }
+    return run;
 }
 
 static void clean_texture_tab(SDL_Texture* tab[], int nbItem) {
@@ -249,8 +258,8 @@ static bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game*
     if (event.type == SDL_MOUSEBUTTONDOWN) {
         if (event.button.button == (SDL_BUTTON_LEFT)) {  // NEW PROCESS (PAS UNIVERSEL QUE POUR 3 ITEM)
             int case_x;
-            int start_x = 250;
-            int start_y = 160;
+            int start_x = MENU_X;
+            int start_y = MENU_Y;
             int item_height = ((h - 60) - nbItem * 100) / nbItem;
             if ((mouse_x > start_x) && (mouse_x < (w - start_x)) && (mouse_y > start_y) && (mouse_y < (h - start_y))) {
                 if (mouse_y > (start_y) && mouse_y < (start_y + item_height)) {
@@ -275,7 +284,6 @@ static bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game*
                     genv->state = "level_sel";
                     break;
                 case 3:
-                    printf("exit\n");
                     genv->state = "exit";
                     *g = NULL;
                     run = false;
@@ -284,6 +292,13 @@ static bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game*
                 default:
                     break;
             }
+        }
+    }
+    else if (event.type == SDL_KEYDOWN){
+        if (event.key.keysym.sym == SDLK_ESCAPE){
+            run = false;
+            genv->state = "exit";
+            *g = NULL;
         }
     }
     /* switch (event.type) {
