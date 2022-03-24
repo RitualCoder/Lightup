@@ -12,7 +12,9 @@
     "algorithm": "c",
     "game_ext.h": "c",
     "game_tools.h": "c",
-    "game.h": "c"
+    "game.h": "c",
+    "*.tcc": "c",
+    "ios": "c"
   },
   "C_Cpp.errorSquiggles": "Disabled"
 }
