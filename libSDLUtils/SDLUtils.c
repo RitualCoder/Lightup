@@ -1,5 +1,4 @@
 #include "SDLUtils.h"
-#include "SDLMenu.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -10,6 +9,7 @@
 #include "../libgame/game.h"
 #include "../libgame/game_ext.h"
 #include "../libgame/game_tools.h"
+#include "SDLMenu.h"
 #include "env.h"
 
 static double deltaTime(struct timeval start, struct timeval end) {
@@ -21,18 +21,18 @@ game_env init_game_environment() {
     genv->window_height = WINDOW_LENGHT;
     genv->windows_width = WINDOW_HEIGHT;
     genv->sprite_size = SPRITE_SIZE;
-    genv -> state = malloc(sizeof(char)*12);
-    genv -> state = "main_menu";
+    genv->state = malloc(sizeof(char) * 12);
+    genv->state = "main_menu";
     return genv;
 }
 
-static void SDL_Draw_back(game_env genv, SDL_Renderer* pRenderer){
+void SDL_Draw_back(game_env genv, SDL_Renderer* pRenderer) {
     SDL_Color color = {0, 0, 0, 255};
     SDL_Surface* back_x = TTF_RenderText_Blended(genv->pFont, "< back", color);
-    genv->back =  SDL_CreateTextureFromSurface(pRenderer, back_x);   
+    genv->back = SDL_CreateTextureFromSurface(pRenderer, back_x);
     SDL_FreeSurface(back_x);
     SDL_Rect rect;
-    SDL_QueryTexture(genv->back, NULL, NULL, &rect.w, &rect.h); // TROUVER COEFFICIENT
+    SDL_QueryTexture(genv->back, NULL, NULL, &rect.w, &rect.h);  // TROUVER COEFFICIENT
     rect.h = 20;
     rect.w = 60;
     rect.x = 10;
@@ -80,8 +80,8 @@ void loadWallTexture(game_env genv, SDL_Renderer* pRenderer) {
     genv->lightbulb = IMG_LoadTexture(pRenderer, "./img/lightbulb.png");
     genv->mark = IMG_LoadTexture(pRenderer, "./img/mark.png");
 
-    if (genv->wall0 == NULL || genv->wall1 == NULL || genv->wall2 == NULL || genv->wall3 == NULL || genv->wall4 == NULL ||
-        genv->wallu == NULL || genv->lightbulb == NULL || genv->mark == NULL) {
+    if (genv->wall0 == NULL || genv->wall1 == NULL || genv->wall2 == NULL || genv->wall3 == NULL ||
+        genv->wall4 == NULL || genv->wallu == NULL || genv->lightbulb == NULL || genv->mark == NULL) {
         SDL_printError(true);
     }
 }
@@ -113,8 +113,6 @@ void SDL_drawGrid(game_env genv, SDL_Renderer* pRenderer) {
         SDL_RenderDrawLine(pRenderer, start_x, i * genv->sprite_size + start_y, end_x, i * genv->sprite_size + start_y);
     }
 }
-
-
 
 void SDL_MouseToCase(game_env genv) {
     int start_x = genv->windows_width / 2 - (genv->sprite_size * genv->nb_rows) / 2;
@@ -170,7 +168,7 @@ void draw_texture_at_pos(SDL_Texture* tex, SDL_Renderer* pRenderer, game_env gen
     SDL_RenderCopy(pRenderer, tex, NULL, &pos);
 }
 
-void draw_number_level(SDL_Texture* tex, SDL_Renderer* pRenderer, game_env genv, int y, int x){
+void draw_number_level(SDL_Texture* tex, SDL_Renderer* pRenderer, game_env genv, int y, int x) {
     int start_y = genv->windows_width / 2 - (genv->sprite_size * genv->nb_rows) / 2;
     int start_x = genv->window_height / 2 - (genv->sprite_size * genv->nb_cols) / 2;
 
@@ -305,69 +303,63 @@ void render(game_env genv, SDL_Renderer* pRenderer, double fps, game g) {
 }
 
 bool process(SDL_Event event, SDL_Window* pWindow, game_env genv, game g) {
+    bool ret = true;
     SDL_GetWindowSize(pWindow, &genv->windows_width, &genv->window_height);
     if (genv->window_height < genv->windows_width) {
         genv->sprite_size = (genv->window_height - 60) / genv->nb_cols;
-    }
-    else{
+    } else {
         genv->sprite_size = (genv->windows_width - 60) / genv->nb_rows;
     }
     genv->button = SDL_GetMouseState(&genv->mouse_x, &genv->mouse_y);
     SDL_MouseToCase(genv);
-    
+
     switch (event.type) {
         case SDL_QUIT:
             genv->state = "exit";
-            return false;
+            ret=false;
+            break;
 
         default:
             break;
     }
 
-    if (event.type == SDL_MOUSEBUTTONDOWN){
-        if (event.button.button == (SDL_BUTTON_LEFT)){
-            if (genv->mouse_x > 10 && genv->mouse_x < 70 && genv->mouse_y > 10 && genv->mouse_y < 30){
-                if (strcmp(genv->state, "game") == 0 ){
-                    genv->state = "level_sel";
-                    return false;
-                }
-                else {
-                    genv->state = "main_menu";
-                    return false;
-                }
+    if (event.type == SDL_MOUSEBUTTONDOWN) {
+        if (event.button.button == (SDL_BUTTON_LEFT)) {
+            if (genv->mouse_x > 10 && genv->mouse_x < 70 && genv->mouse_y > 10 && genv->mouse_y < 30) {
+                genv->state = "level_sel";
+                ret=false;
             }
-            if (game_check_move(g, genv->case_y, genv->case_x, S_LIGHTBULB)){ // Check if the move on the grid is legit for a lightbulb
-            
-                if (game_is_lightbulb(g, genv->case_y, genv->case_x)){
+            if (game_check_move(g, genv->case_y, genv->case_x,
+                                S_LIGHTBULB)) {  // Check if the move on the grid is legit for a lightbulb
+
+                if (game_is_lightbulb(g, genv->case_y, genv->case_x)) {
                     game_play_move(g, genv->case_y, genv->case_x, S_BLANK);
-                }
-                else {
+                } else {
                     game_play_move(g, genv->case_y, genv->case_x, S_LIGHTBULB);
                 }
             }
         }
-        if (game_check_move(g, genv->case_y, genv->case_x, S_MARK)){  // Check if the move on the grid is legit for a mark
-            if (event.button.button == (SDL_BUTTON_RIGHT)){  // if right click on the mouse put a mark
-                if (game_is_marked(g, genv->case_y, genv->case_x)){
+        if (game_check_move(g, genv->case_y, genv->case_x,
+                            S_MARK)) {                        // Check if the move on the grid is legit for a mark
+            if (event.button.button == (SDL_BUTTON_RIGHT)) {  // if right click on the mouse put a mark
+                if (game_is_marked(g, genv->case_y, genv->case_x)) {
                     game_play_move(g, genv->case_y, genv->case_x, S_BLANK);
-                }
-                else {
+                } else {
                     game_play_move(g, genv->case_y, genv->case_x, S_MARK);
                 }
             }
         }
-    }
-    else if (event.type == SDL_KEYDOWN){
-        if (event.key.keysym.sym == SDLK_z){
+    } else if (event.type == SDL_KEYDOWN) {
+        if (event.key.keysym.sym == SDLK_z) {
             game_undo(g);
         }
-        if (event.key.keysym.sym == SDLK_y){
+        if (event.key.keysym.sym == SDLK_y) {
             game_redo(g);
         }
-        if (event.key.keysym.sym == SDLK_s){
+        if (event.key.keysym.sym == SDLK_s) {
             game_solve(g);
         }
-        if (event.key.keysym.sym == SDLK_w){
+        if (event.key.keysym.sym == SDLK_w) {
             game_save(g, "sdl_game_save.txt");
         }
     }
@@ -375,7 +367,7 @@ bool process(SDL_Event event, SDL_Window* pWindow, game_env genv, game g) {
     SDL_Log("Mouse coordinate x: %d, y: %d\n", genv->mouse_x, genv->mouse_y);
     SDL_Log("case coordinate x: %d, y: %d\n", genv->case_x, genv->case_y);
 #endif
-    return true;
+    return ret;
 }
 
 void quit(game_env genv) {

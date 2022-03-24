@@ -111,21 +111,6 @@ static void SDL_Draw_level(game_env genv, SDL_Renderer* pRenderer, SDL_Texture* 
     }
 }
 
-static void SDL_Draw_back2(game_env genv, SDL_Renderer* pRenderer){
-    SDL_Color color = {0, 0, 0, 255};
-    SDL_Surface* back_x = TTF_RenderText_Blended(genv->pFont, "< back", color);
-    genv->back =  SDL_CreateTextureFromSurface(pRenderer, back_x);   
-    SDL_FreeSurface(back_x);
-    SDL_Rect rect;
-    SDL_QueryTexture(genv->back, NULL, NULL, &rect.w, &rect.h); // TROUVER COEFFICIENT
-    rect.h = 20;
-    rect.w = 60;
-    rect.x = 10;
-    rect.y = 10;
-    SDL_RenderCopy(pRenderer, genv->back, NULL, &rect);
-    SDL_DestroyTexture(genv->back);
-}
-
 
 static void render_level_menu(game_env genv, SDL_Renderer* pRenderer, SDL_Texture* level_tex[], int nbLevel) {
     SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
@@ -135,7 +120,7 @@ static void render_level_menu(game_env genv, SDL_Renderer* pRenderer, SDL_Textur
     }
 
     SDL_Draw_level(genv, pRenderer, level_tex, nbLevel);
-    SDL_Draw_back2(genv, pRenderer);
+    SDL_Draw_back(genv, pRenderer);
 
     SDL_RenderPresent(pRenderer);
 }
