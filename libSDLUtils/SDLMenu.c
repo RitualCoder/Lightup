@@ -10,6 +10,8 @@
 #include "SDLUtils.h"
 #include "env.h"
 
+
+
 static void draw_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, SDL_Texture* items[], int nbItem) {
     int w, h;
     SDL_GetWindowSize(pWindow, &w, &h);
@@ -123,6 +125,7 @@ static void render_level_menu(game_env genv, SDL_Renderer* pRenderer, SDL_Textur
 }
 
 bool level_process(SDL_Event event, SDL_Window* pWindow, game_env genv, game* g) {
+    int buttonid;
     bool run = true;
     SDL_GetWindowSize(pWindow, &genv->windows_width, &genv->window_height);
     if (genv->window_height < genv->windows_width) {

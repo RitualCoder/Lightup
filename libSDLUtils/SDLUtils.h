@@ -101,7 +101,7 @@ void printDebug(SDL_Renderer* pRenderer, SDL_Window* pWindow);
  * @param pRenderer
  * @param fps
  */
-void render(game_env genv, SDL_Renderer* pRenderer, double fps, game g);
+void render(game_env genv, SDL_Renderer* pRenderer, SDL_Window* pWindow, double fps, game g);
 
 /**
  * @brief

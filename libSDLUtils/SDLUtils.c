@@ -16,6 +16,24 @@ static double deltaTime(struct timeval start, struct timeval end) {
     return (end.tv_sec - end.tv_sec) * 1000.0 + (end.tv_usec - start.tv_usec) / 1000.0;
 }
 
+const SDL_MessageBoxButtonData buttonsHelp[] = {
+    {/* .flags, .buttonid, .text */ 0, 0, "back"}
+};
+
+const SDL_MessageBoxData messageboxHelp = {
+    SDL_MESSAGEBOX_INFORMATION, /* .flags */
+    NULL,                       /* .window */
+    "HELP",                /* .title */
+    "Left click to put a lightbulb\n"
+    "Right click to put a mark\n"
+    "Tap 's' to solve the grid\n\n"
+    "You must illuminate the entire grid !\n"
+    "Good Luck !",/* .message */
+    SDL_arraysize(buttonsHelp),     /* .numbuttons */
+    buttonsHelp,                    /* .buttons */
+    NULL                        /* .colorScheme */
+};
+
 game_env init_game_environment() {
     game_env genv = malloc(sizeof(struct envS));
     genv->window_height = WINDOW_LENGHT;
@@ -28,17 +46,34 @@ game_env init_game_environment() {
 
 void SDL_Draw_back(game_env genv, SDL_Renderer* pRenderer) {
     SDL_Color color = {0, 0, 0, 255};
-    SDL_Surface* back_x = TTF_RenderText_Blended(genv->pFont, "< back", color);
+    SDL_Surface* back_x = TTF_RenderText_Blended(genv->pFont, "< BACK", color);
     genv->back = SDL_CreateTextureFromSurface(pRenderer, back_x);
     SDL_FreeSurface(back_x);
     SDL_Rect rect;
     SDL_QueryTexture(genv->back, NULL, NULL, &rect.w, &rect.h);  // TROUVER COEFFICIENT
     rect.h = 20;
-    rect.w = 60;
+    rect.w = 70;
     rect.x = 10;
     rect.y = 10;
     SDL_RenderCopy(pRenderer, genv->back, NULL, &rect);
     SDL_DestroyTexture(genv->back);
+}
+
+void SDL_Draw_help(game_env genv, SDL_Renderer* pRenderer, SDL_Window* pWindow) {
+    int w,h;
+    SDL_GetWindowSize(pWindow, &w, &h);
+    SDL_Color color = {0, 0, 0, 255};
+    SDL_Surface* back_x = TTF_RenderText_Blended(genv->pFont, "HELP", color);
+    genv->help = SDL_CreateTextureFromSurface(pRenderer, back_x);
+    SDL_FreeSurface(back_x);
+    SDL_Rect rect;
+    SDL_QueryTexture(genv->help, NULL, NULL, &rect.w, &rect.h);  // TROUVER COEFFICIENT
+    rect.h = 20;
+    rect.w = 60;
+    rect.x = w - 70;
+    rect.y = 10;
+    SDL_RenderCopy(pRenderer, genv->help, NULL, &rect);
+    SDL_DestroyTexture(genv->help);
 }
 
 void SDL_printError(bool init) {
@@ -279,7 +314,7 @@ void printDebug(SDL_Renderer* pRenderer, SDL_Window* pWindow) {
     }
 }
 
-void render(game_env genv, SDL_Renderer* pRenderer, double fps, game g) {
+void render(game_env genv, SDL_Renderer* pRenderer, SDL_Window* pWindow, double fps, game g) {
     SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
     int ret = SDL_RenderClear(pRenderer);
     if (ret != 0) {
@@ -291,6 +326,7 @@ void render(game_env genv, SDL_Renderer* pRenderer, double fps, game g) {
     SDL_drawGrid(genv, pRenderer);
     SDL_DrawCase(genv, pRenderer);
     SDL_Draw_back(genv, pRenderer);
+    SDL_Draw_help(genv, pRenderer, pWindow);
 
     SDL_RenderPresent(pRenderer);
 
@@ -304,6 +340,7 @@ void render(game_env genv, SDL_Renderer* pRenderer, double fps, game g) {
 }
 
 bool process(SDL_Event event, SDL_Window* pWindow, game_env genv, game g) {
+    int buttonid;
     bool ret = true;
     SDL_GetWindowSize(pWindow, &genv->windows_width, &genv->window_height);
     if (genv->window_height < genv->windows_width) {
@@ -327,8 +364,19 @@ bool process(SDL_Event event, SDL_Window* pWindow, game_env genv, game g) {
     if (event.type == SDL_MOUSEBUTTONDOWN) {
         if (event.button.button == (SDL_BUTTON_LEFT)) {
             if (genv->mouse_x > 10 && genv->mouse_x < 70 && genv->mouse_y > 10 && genv->mouse_y < 30) {
-                genv->state = "level_sel";
+                genv->state = "main_menu";
                 ret = false;
+            }
+            if (genv->mouse_x > (800 - 70) && genv->mouse_x < 800 && genv->mouse_y > 10 && genv->mouse_y < 30) {
+                if (SDL_ShowMessageBox(&messageboxHelp, &buttonid) < 0) {
+                    SDL_Log("error displaying message box");
+                }
+                if (buttonid == 0) {
+                    SDL_Log("back");
+                }
+                 else {
+                    SDL_Log("selection was %s", buttonsHelp[buttonid].text);
+                }
             }
             if (game_check_move(g, genv->case_y, genv->case_x,
                                 S_LIGHTBULB)) {  // Check if the move on the grid is legit for a lightbulb

@@ -19,7 +19,7 @@ const SDL_MessageBoxButtonData buttons[] = {
     {SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 2, "exit"},
 };
 
-const SDL_MessageBoxData messageboxdata = {
+const SDL_MessageBoxData messageboxwin = {
     SDL_MESSAGEBOX_INFORMATION, /* .flags */
     NULL,                       /* .window */
     "You win !",                /* .title */
@@ -47,9 +47,9 @@ int game_loop(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv, game 
         }
 
         // game Render
-        render(genv, pRenderer, fps, g);
+        render(genv, pRenderer, pWindow, fps, g);
         if (game_is_over(g)) {
-            if (SDL_ShowMessageBox(&messageboxdata, &buttonid) < 0) {
+            if (SDL_ShowMessageBox(&messageboxwin, &buttonid) < 0) {
                 SDL_Log("error displaying message box");
             }
             if (buttonid == 0) {
