@@ -15,25 +15,6 @@
 static double deltaTime(struct timeval start, struct timeval end) {
     return (end.tv_sec - end.tv_sec) * 1000.0 + (end.tv_usec - start.tv_usec) / 1000.0;
 }
-
-const SDL_MessageBoxButtonData buttonsHelp[] = {
-    {/* .flags, .buttonid, .text */ 0, 0, "back"}
-};
-
-const SDL_MessageBoxData messageboxHelp = {
-    SDL_MESSAGEBOX_INFORMATION, /* .flags */
-    NULL,                       /* .window */
-    "HELP",                /* .title */
-    "Left click to put a lightbulb\n"
-    "Right click to put a mark\n"
-    "Tap 's' to solve the grid\n\n"
-    "You must illuminate the entire grid !\n"
-    "Good Luck !",/* .message */
-    SDL_arraysize(buttonsHelp),     /* .numbuttons */
-    buttonsHelp,                    /* .buttons */
-    NULL                        /* .colorScheme */
-};
-
 game_env init_game_environment() {
     game_env genv = malloc(sizeof(struct envS));
     genv->window_height = WINDOW_LENGHT;
@@ -378,7 +359,6 @@ void render(game_env genv, SDL_Renderer* pRenderer, SDL_Window* pWindow, double 
 }
 
 bool process(SDL_Event event, SDL_Window* pWindow, game_env genv, game g) {
-    int buttonid;
     bool ret = true;
     SDL_GetWindowSize(pWindow, &genv->windows_width, &genv->window_height);
     int w = genv->windows_width;

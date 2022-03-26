@@ -80,6 +80,8 @@ int main(int argc, char* argv[]) {
 
     // init sdl system
     SDL_Window* pWindow = NULL;
+    SDL_SetWindowPosition(pWindow, SDL_WINDOWPOS_CENTERED , SDL_WINDOWPOS_CENTERED);
+
     SDL_Renderer* pRenderer = NULL;
 
     double fps = 0;
