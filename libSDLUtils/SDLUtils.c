@@ -381,10 +381,11 @@ bool process(SDL_Event event, SDL_Window* pWindow, game_env genv, game g) {
     int buttonid;
     bool ret = true;
     SDL_GetWindowSize(pWindow, &genv->windows_width, &genv->window_height);
+    int w = genv->windows_width;
     if (genv->window_height < genv->windows_width) {
-        genv->sprite_size = (genv->window_height - 60) / genv->nb_cols;
+        genv->sprite_size = (genv->window_height - SPACE*3) / genv->nb_cols;
     } else {
-        genv->sprite_size = (genv->windows_width - 60) / genv->nb_rows;
+        genv->sprite_size = (genv->windows_width - SPACE*3) / genv->nb_rows;
     }
     genv->button = SDL_GetMouseState(&genv->mouse_x, &genv->mouse_y);
     SDL_MouseToCase(genv);
@@ -401,11 +402,11 @@ bool process(SDL_Event event, SDL_Window* pWindow, game_env genv, game g) {
 
     if (event.type == SDL_MOUSEBUTTONDOWN) {
         if (event.button.button == (SDL_BUTTON_LEFT)) {
-            if (genv->mouse_x > 10 && genv->mouse_x < 70 && genv->mouse_y > 10 && genv->mouse_y < 30) {
+            if (genv->mouse_x > SPACE/2 && genv->mouse_x < SPACE*4 && genv->mouse_y > SPACE/2 && genv->mouse_y < SPACE*2) {
                 genv->state = "main_menu";
                 ret = false;
             }
-            if (genv->mouse_x > (800 - 70) && genv->mouse_x < 800 && genv->mouse_y > 10 && genv->mouse_y < 30) {
+            if (genv->mouse_x > (w - SPACE*4) && genv->mouse_x < w && genv->mouse_y > SPACE/2 && genv->mouse_y < SPACE*2) {
                 if (SDL_ShowMessageBox(&messageboxHelp, &buttonid) < 0) {
                     SDL_Log("error displaying message box");
                 }

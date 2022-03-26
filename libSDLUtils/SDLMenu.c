@@ -48,7 +48,7 @@ static void draw_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, SDL_Texture*
 
         SDL_RenderCopy(pRenderer, items[i], NULL, &text);
 
-        rItem.y += item_height + 20;
+        rItem.y += item_height + SPACE;
     }
 
     SDL_RenderPresent(pRenderer);
@@ -157,7 +157,7 @@ bool level_process(SDL_Event event, SDL_Window* pWindow, game_env genv, game* g)
     } 
     if (event.type == SDL_MOUSEBUTTONDOWN) {
         if (event.button.button == SDL_BUTTON_LEFT) {
-            if (genv->mouse_x > 10 && genv->mouse_x < 70 && genv->mouse_y > 10 && genv->mouse_y < 30) {
+            if (genv->mouse_x > SPACE/2 && genv->mouse_x < SPACE*4 && genv->mouse_y > SPACE/2 && genv->mouse_y < SPACE*2) {
                 genv->state = "main_menu";
                 run = false;
             }
