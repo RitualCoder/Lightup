@@ -15,9 +15,12 @@
 static void draw_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, SDL_Texture* items[], int nbItem) {
     int w, h;
     SDL_GetWindowSize(pWindow, &w, &h);
+    int mx = w/4;
+    int my = h/4;
 
-    int item_height = ((h - 60) - nbItem * 100) / nbItem;
-    int item_width = (w - 500);
+    //int item_height = ((h - 60) - nbItem * 100) / nbItem;
+    int item_height = (w/(nbItem+6));
+    int item_width = (w/2);
 
     SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
     SDL_RenderClear(pRenderer);
@@ -27,8 +30,8 @@ static void draw_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, SDL_Texture*
     SDL_Rect rItem;
     rItem.w = item_width;
     rItem.h = item_height;
-    rItem.x = MENU_X;
-    rItem.y = MENU_Y;
+    rItem.x = mx;
+    rItem.y = my;
     for (int i = 0; i < nbItem; i++) {
         SDL_RenderDrawRect(pRenderer, &rItem);
         SDL_RenderFillRect(pRenderer, &rItem);
@@ -246,6 +249,8 @@ static bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game*
     SDL_GetMouseState(&mouse_x, &mouse_y);
     int w, h;
     SDL_GetWindowSize(pWindow, &w, &h);
+    int mx = w/4;
+    int my = h/4;
     bool run = true;
 
     switch (event.type) {
@@ -261,16 +266,16 @@ static bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game*
         if (event.button.button == (SDL_BUTTON_LEFT)) {  // NEW PROCESS (PAS UNIVERSEL QUE POUR 3 ITEM)
             int case_x;
             int space = 20;
-            int item_height = ((h - 60) - nbItem * 100) / nbItem;
-            int item_width = (w - 500);
-            if ((mouse_x > MENU_X) && mouse_x < (item_width + MENU_X)) {
-                if (mouse_y > MENU_Y && mouse_y < (MENU_Y + item_height)) {
+            int item_height = (w/(nbItem+6));
+            int item_width = (w/2);
+            if ((mouse_x > mx) && mouse_x < (item_width + mx)) {
+                if (mouse_y > mx && mouse_y < (my + item_height)) {
                     case_x = 1;
                 }
-                if (mouse_y > (MENU_Y + item_height + space) && mouse_y < (MENU_Y + (item_height*2) + space)) {
+                if (mouse_y > (my + item_height + space) && mouse_y < (my + (item_height*2) + space)) {
                     case_x = 2;
                 }
-                if (mouse_y > (MENU_Y + (item_height*2) + (space*2)) && (mouse_y < (MENU_Y + (item_height*3) + (space * 2)))) {
+                if (mouse_y > (my + (item_height*2) + (space*2)) && (mouse_y < (my + (item_height*3) + (space * 2)))) {
                     case_x = 3;
                 }
             }
