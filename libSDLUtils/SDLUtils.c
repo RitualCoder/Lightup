@@ -72,10 +72,13 @@ void SDL_initAndSetName(SDL_Renderer** pRenderer, SDL_Window** pWindow) {
     }
     // window init with name
     *pWindow =
-        SDL_CreateWindow(WINDOW_NAME, 100, 100, WINDOW_HEIGHT, WINDOW_LENGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+        SDL_CreateWindow(WINDOW_NAME, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_HEIGHT, WINDOW_LENGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
     if (*pWindow == NULL) {
         SDL_printError(true);
     }
+
+    //SDL_SetWindowPosition(*pWindow, SDL_WINDOWPOS_CENTERED , SDL_WINDOWPOS_CENTERED);
+
     // Renderer init with gpu and frame limit
     *pRenderer = SDL_CreateRenderer(*pWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);  //
     if (*pRenderer == NULL) {
