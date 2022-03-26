@@ -407,15 +407,14 @@ bool process(SDL_Event event, SDL_Window* pWindow, game_env genv, game g) {
                 ret = false;
             }
             if (genv->mouse_x > (w - SPACE*4) && genv->mouse_x < w && genv->mouse_y > SPACE/2 && genv->mouse_y < SPACE*2) {
-                if (SDL_ShowMessageBox(&messageboxHelp, &buttonid) < 0) {
-                    SDL_Log("error displaying message box");
-                }
-                if (buttonid == 0) {
-                    SDL_Log("back");
-                }
-                 else {
-                    SDL_Log("selection was %s", buttonsHelp[buttonid].text);
-                }
+                SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION,
+                         "HELP",
+                         "Left click to put a lightbulb\n"
+                        "Right click to put a mark\n"
+                        "Tap 's' to solve the grid\n\n"
+                        "You must illuminate the entire grid !\n"
+                        "Good Luck !",
+                         pWindow);
             }
             if (game_check_move(g, genv->case_y, genv->case_x,
                                 S_LIGHTBULB)) {  // Check if the move on the grid is legit for a lightbulb

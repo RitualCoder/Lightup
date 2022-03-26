@@ -19,18 +19,10 @@ const SDL_MessageBoxButtonData buttons[] = {
     {SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 2, "exit"},
 };
 
-const SDL_MessageBoxData messageboxwin = {
-    SDL_MESSAGEBOX_INFORMATION, /* .flags */
-    NULL,                       /* .window */
-    "You win !",                /* .title */
-    "select a button",          /* .message */
-    SDL_arraysize(buttons),     /* .numbuttons */
-    buttons,                    /* .buttons */
-    NULL                        /* .colorScheme */
-};
-
 int game_loop(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv, game g, double fps) {
     int buttonid;
+    SDL_MessageBoxData messageboxwin = {SDL_MESSAGEBOX_INFORMATION, pWindow, "You win !", "select a button",
+                                        SDL_arraysize(buttons),     buttons, NULL};
     bool run = true;
     SDL_Event event;
     update_genv(genv, g);
