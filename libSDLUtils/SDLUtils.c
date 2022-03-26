@@ -205,14 +205,19 @@ void draw_texture_at_pos(SDL_Texture* tex, SDL_Renderer* pRenderer, game_env gen
 }
 
 void draw_number_level(SDL_Texture* tex, SDL_Renderer* pRenderer, game_env genv, int y, int x) {
+    int space = genv->sprite_size/4;
     int start_y = genv->windows_width / 2 - (genv->sprite_size * genv->nb_rows) / 2;
     int start_x = genv->window_height / 2 - (genv->sprite_size * genv->nb_cols) / 2;
 
     SDL_Rect pos;
-    pos.x = start_y + y * genv->sprite_size + 20;
-    pos.y = start_x + x * genv->sprite_size + 20;
-    pos.w = genv->sprite_size - 35;
-    pos.h = genv->sprite_size - 40;
+    pos.x = start_y + y * genv->sprite_size + space;
+    pos.y = start_x + x * genv->sprite_size + space;
+    pos.w = genv->sprite_size - (space*2);
+    pos.h = pos.w;
+    if (pos.w < (space/2)){
+        pos.w = (space/2);
+        pos.h = (space/2);
+    }
 
     SDL_RenderCopy(pRenderer, tex, NULL, &pos);
 }

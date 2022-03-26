@@ -125,7 +125,6 @@ static void render_level_menu(game_env genv, SDL_Renderer* pRenderer, SDL_Textur
 }
 
 bool level_process(SDL_Event event, SDL_Window* pWindow, game_env genv, game* g) {
-    int buttonid;
     bool run = true;
     SDL_GetWindowSize(pWindow, &genv->windows_width, &genv->window_height);
     if (genv->window_height < genv->windows_width) {
@@ -244,7 +243,6 @@ game level_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv) {
 static bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game* g, SDL_Renderer* pRenderer,
                          game_env genv) {
     int mouse_x, mouse_y;
-    int space = 20;
     SDL_GetMouseState(&mouse_x, &mouse_y);
     int w, h;
     SDL_GetWindowSize(pWindow, &w, &h);
@@ -262,6 +260,7 @@ static bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game*
     if (event.type == SDL_MOUSEBUTTONDOWN) {
         if (event.button.button == (SDL_BUTTON_LEFT)) {  // NEW PROCESS (PAS UNIVERSEL QUE POUR 3 ITEM)
             int case_x;
+            int space = 20;
             int item_height = ((h - 60) - nbItem * 100) / nbItem;
             int item_width = (w - 500);
             if ((mouse_x > MENU_X) && mouse_x < (item_width + MENU_X)) {
@@ -304,42 +303,6 @@ static bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game*
             *g = NULL;
         }
     }
-    /* switch (event.type) {
-        case SDL_QUIT:
-            *g = NULL;
-            run = false;
-            break;
-        case SDL_MOUSEBUTTONDOWN:
-            if (event.button.button == (SDL_BUTTON_LEFT)) {
-                if (mouse_x > 30 && mouse_x < w - 30 && mouse_y > 30 && mouse_y < h - 30) {
-                    mouse_y -= 30;
-                    int item_height = ((h - 60) - nbItem * 10) / nbItem;
-                    int case_x = mouse_y / (item_height + 5);
-                    if (case_x >= nbItem) {
-                        case_x--;
-                    }
-                    switch (case_x) {
-                        case 0:
-                            *g = game_default();
-                            break;
-                        case 1:
-                            *g = level_menu(pRenderer, pWindow, genv);
-                            break;
-                        case 2:
-                            *g = NULL;
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-            }
-            run = false;
-            break;
-
-        default:
-            break;
-    }*/
     return run;
 }
 
