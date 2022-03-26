@@ -33,7 +33,6 @@ static void draw_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, SDL_Texture*
     rItem.x = mx;
     rItem.y = my;
     for (int i = 0; i < nbItem; i++) {
-        SDL_RenderDrawRect(pRenderer, &rItem);
         SDL_RenderFillRect(pRenderer, &rItem);
 
         SDL_Rect text;

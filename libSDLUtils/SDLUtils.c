@@ -186,7 +186,6 @@ void SDL_DrawCase(game_env genv, SDL_Renderer* pRenderer) {
     // draw and fill rectangle
     SDL_SetRenderDrawColor(pRenderer, 0, 0, 0, 128);
     SDL_SetRenderDrawBlendMode(pRenderer, SDL_BLENDMODE_BLEND);  // activate blend mode
-    SDL_RenderDrawRect(pRenderer, &rect);
     SDL_RenderFillRect(pRenderer, &rect);
     SDL_SetRenderDrawBlendMode(pRenderer, SDL_BLENDMODE_NONE);  // deactivate blend mode
 }
