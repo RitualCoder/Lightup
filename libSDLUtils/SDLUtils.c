@@ -425,11 +425,14 @@ bool process(SDL_Event event, SDL_Window* pWindow, game_env genv, game g) {
 
 void quit(game_env genv) {
     SDL_DestroyTexture(genv->lightbulb);
+    SDL_DestroyTexture(genv->wall0);
     SDL_DestroyTexture(genv->wall1);
     SDL_DestroyTexture(genv->wall2);
     SDL_DestroyTexture(genv->wall3);
     SDL_DestroyTexture(genv->wall4);
     SDL_DestroyTexture(genv->wallu);
+    SDL_DestroyTexture(genv->back);
+    SDL_DestroyTexture(genv->help);
     free(genv);
 }
 
