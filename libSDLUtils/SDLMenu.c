@@ -61,10 +61,8 @@ static void draw_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, SDL_Texture*
     return;
 }
 
-static SDL_Texture* text_at_texture(SDL_Renderer* pRenderer, char* text, TTF_Font* pFont) {
+static SDL_Texture* text_at_texture(SDL_Renderer* pRenderer, char* text, TTF_Font* pFont, SDL_Color textColor) {
     SDL_Surface* surface;
-    SDL_Color textColor = {255, 255, 255, 0};
-
     surface = TTF_RenderText_Solid(pFont, text, textColor);
     SDL_Texture* texture = SDL_CreateTextureFromSurface(pRenderer, surface);
 
@@ -73,17 +71,17 @@ static SDL_Texture* text_at_texture(SDL_Renderer* pRenderer, char* text, TTF_Fon
     return texture;
 }
 
-static SDL_Texture** make_all_text_texture(SDL_Renderer* pRenderer, char* text[], int nbtext, game_env genv) {
+static SDL_Texture** make_all_text_texture(SDL_Renderer* pRenderer, char* text[], int nbtext, game_env genv, SDL_Color textColor) {
     SDL_Texture** tab = malloc(sizeof(SDL_Texture*) * nbtext);
 
     for (int i = 0; i < nbtext; i++) {
-        SDL_Texture* texture = text_at_texture(pRenderer, text[i], genv->pFont);
+        SDL_Texture* texture = text_at_texture(pRenderer, text[i], genv->pFont, textColor);
         tab[i] = texture;
     }
 
     return tab;
 }
-void SDL_DrawCaseCord(game_env genv, SDL_Renderer* pRenderer, int x, int y) {
+void SDL_DrawCaseCord(game_env genv, SDL_Renderer* pRenderer, int x, int y, bool extremityUP, bool extremityDOWN) {
     int start_x = genv->windows_width / 2 - (genv->sprite_size * genv->nb_rows) / 2;
     int start_y = genv->window_height / 2 - (genv->sprite_size * genv->nb_cols) / 2;
 
@@ -92,7 +90,15 @@ void SDL_DrawCaseCord(game_env genv, SDL_Renderer* pRenderer, int x, int y) {
     rect.h = genv->sprite_size;
     rect.w = genv->sprite_size;
     rect.x = start_x + genv->sprite_size * x;
-    rect.y = start_y + genv->sprite_size * y;
+    if (extremityUP == true){
+        rect.y = start_y + genv->sprite_size * y + SPACE;
+    }
+    else if (extremityDOWN == true) {
+        rect.y = start_y + genv->sprite_size * y - SPACE;
+    }
+    else if ((extremityDOWN == false) && (extremityUP == false)){
+        rect.y = start_y + genv->sprite_size * y;
+    }
 
     // draw and fill rectangle
     SDL_SetRenderDrawColor(pRenderer, 0, 0, 0, 128);
@@ -100,28 +106,40 @@ void SDL_DrawCaseCord(game_env genv, SDL_Renderer* pRenderer, int x, int y) {
     SDL_RenderFillRect(pRenderer, &rect);
 }
 
-static void SDL_Draw_level(game_env genv, SDL_Renderer* pRenderer, SDL_Texture* level_tex[], int nbLevel) {
+static void SDL_Draw_level(game_env genv, SDL_Renderer* pRenderer, SDL_Texture* level_tex[], SDL_Texture* txt[], int nbLevel) {
     int levelIndex = 0;
 
     for (int x = 0; x < genv->nb_cols; x++) {
         for (int y = 0; y < genv->nb_rows; y++) {
             if (x % 2 == 0 && y % 2 == 0) {
-                SDL_DrawCaseCord(genv, pRenderer, y, x);
-                draw_number_level(level_tex[levelIndex], pRenderer, genv, y, x);
+                if (x == 0){
+                    SDL_DrawCaseCord(genv, pRenderer, y, x, true, false);
+                    draw_number_level(level_tex[levelIndex], pRenderer, genv, y, x, true, false);
+                    draw_txt_number_level(txt[levelIndex], pRenderer, genv, y, x, true, false);
+                }
+                else if (x == genv->nb_rows-1){
+                    SDL_DrawCaseCord(genv, pRenderer, y, x, false, true);
+                    draw_number_level(level_tex[levelIndex], pRenderer, genv, y, x, false, true);
+                    draw_txt_number_level(txt[levelIndex], pRenderer, genv, y, x, false, true);
+                }
+                else {
+                    SDL_DrawCaseCord(genv, pRenderer, y, x, false, false);
+                    draw_number_level(level_tex[levelIndex], pRenderer, genv, y, x, false, false);
+                    draw_txt_number_level(txt[levelIndex], pRenderer, genv, y, x, false, false);
+                }
                 levelIndex++;
             }
         }
     }
 }
 
-static void render_level_menu(game_env genv, SDL_Renderer* pRenderer, SDL_Texture* level_tex[], int nbLevel) {
+static void render_level_menu(game_env genv, SDL_Renderer* pRenderer, SDL_Texture* level_tex[], SDL_Texture* txt[], int nbLevel) {
     SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
     int ret = SDL_RenderClear(pRenderer);
     if (ret != 0) {
         SDL_printError(true);
     }
-
-    SDL_Draw_level(genv, pRenderer, level_tex, nbLevel);
+    SDL_Draw_level(genv, pRenderer, level_tex, txt, nbLevel);
     SDL_Draw_back(genv, pRenderer);
 
     SDL_RenderPresent(pRenderer);
@@ -224,14 +242,18 @@ static void clean_texture_tab(SDL_Texture* tab[], int nbItem) {
 game level_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv) {
     bool level_run = true;
     char* levels[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
-    SDL_Texture** levels_tex = make_all_text_texture(pRenderer, levels, 9, genv);
+    char* txt_lvl[] = {"LEVEL 1", "LEVEL 2", "LEVEL 3", "LEVEL 4", "LEVEL 5", "LEVEL 6", "LEVEL 7", "LEVEL 8", "LEVEL 9"};
+    SDL_Color white = WHITE;
+    SDL_Color black = BLACK;
+    SDL_Texture** levels_tex = make_all_text_texture(pRenderer, levels, 9, genv, white);
+    SDL_Texture** txt_lvl_tex = make_all_text_texture(pRenderer, txt_lvl, 9, genv, black);
     SDL_Event event;
     game g;
     genv->nb_cols = 5;
     genv->nb_rows = 5;
 
     while (level_run) {
-        render_level_menu(genv, pRenderer, levels_tex, 9);
+        render_level_menu(genv, pRenderer, levels_tex, txt_lvl_tex, 9);
         while (SDL_PollEvent(&event)) {  // process input
             level_run = level_process(event, pWindow, genv, &g);
             if (!level_run) {
@@ -240,6 +262,7 @@ game level_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv) {
         }
     }
     clean_texture_tab(levels_tex, 9);
+    clean_texture_tab(txt_lvl_tex,9);
     return g;
 }
 
@@ -268,7 +291,7 @@ static bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game*
             int item_height = (w/(nbItem+6));
             int item_width = (w/2);
             if ((mouse_x > mx) && mouse_x < (item_width + mx)) {
-                if (mouse_y > mx && mouse_y < (my + item_height)) {
+                if (mouse_y > my && mouse_y < (my + item_height)) {
                     case_x = 1;
                 }
                 if (mouse_y > (my + item_height + SPACE) && mouse_y < (my + (item_height*2) + SPACE)) {
@@ -313,7 +336,8 @@ static bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game*
 game main_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv) {
     bool run = true;
     char* items[] = {"NEW GAME", "   LOAD   ", "    QUIT    "};  // spaces are for not distorting the font
-    SDL_Texture** items_texture = make_all_text_texture(pRenderer, items, 3, genv);
+    SDL_Color white = WHITE;
+    SDL_Texture** items_texture = make_all_text_texture(pRenderer, items, 3, genv, white);
     SDL_Event event;
     game g;
 

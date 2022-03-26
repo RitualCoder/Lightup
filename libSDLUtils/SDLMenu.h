@@ -18,6 +18,9 @@
 #include "../libgame/game.h"
 #include "env.h"
 
+
+#define WHITE {255,255,255,0}
+#define BLACK {0,0,0,0}
 #define MENU_X 250
 #define MENU_Y 160
 

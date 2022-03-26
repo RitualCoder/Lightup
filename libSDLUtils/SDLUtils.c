@@ -204,16 +204,50 @@ void draw_texture_at_pos(SDL_Texture* tex, SDL_Renderer* pRenderer, game_env gen
     SDL_RenderCopy(pRenderer, tex, NULL, &pos);
 }
 
-void draw_number_level(SDL_Texture* tex, SDL_Renderer* pRenderer, game_env genv, int y, int x) {
+void draw_number_level(SDL_Texture* tex, SDL_Renderer* pRenderer, game_env genv, int y, int x, bool extremityUP, bool extremityDOWN) {
     int space = genv->sprite_size/4;
     int start_y = genv->windows_width / 2 - (genv->sprite_size * genv->nb_rows) / 2;
     int start_x = genv->window_height / 2 - (genv->sprite_size * genv->nb_cols) / 2;
 
     SDL_Rect pos;
     pos.x = start_y + y * genv->sprite_size + space;
-    pos.y = start_x + x * genv->sprite_size + space;
+    if (extremityUP){
+        pos.y = start_x + x * genv->sprite_size + space + SPACE;
+    }
+    else if (extremityDOWN){
+        pos.y = start_x + x * genv->sprite_size + space - SPACE;
+    }
+    else if (extremityDOWN == false && extremityUP == false){
+        pos.y = start_x + x * genv->sprite_size + space;
+    }
     pos.w = genv->sprite_size - (space*2);
     pos.h = pos.w;
+    if (pos.w < (space/2)){
+        pos.w = (space/2);
+        pos.h = (space/2);
+    }
+
+    SDL_RenderCopy(pRenderer, tex, NULL, &pos);
+}
+
+void draw_txt_number_level(SDL_Texture* tex, SDL_Renderer* pRenderer, game_env genv, int y, int x, bool extremityUP, bool extremityDOWN) {
+    int space = genv->sprite_size/6;
+    int start_y = genv->windows_width / 2 - (genv->sprite_size * genv->nb_rows) / 2;
+    int start_x = genv->window_height / 2 - (genv->sprite_size * genv->nb_cols) / 2;
+
+    SDL_Rect pos;
+    pos.x = start_y + y * genv->sprite_size + space;
+    if (extremityUP){
+        pos.y = start_x + x * genv->sprite_size + genv->sprite_size + SPACE + (SPACE/2);
+    }
+    else if (extremityDOWN){
+        pos.y = start_x + x * genv->sprite_size + genv->sprite_size - SPACE + (SPACE/2);
+    }
+    else if (extremityDOWN == false && extremityUP == false){
+        pos.y = start_x + x * genv->sprite_size + genv->sprite_size + (SPACE/2);
+    }
+    pos.w = genv->sprite_size - (space*2);
+    pos.h = pos.w/4;
     if (pos.w < (space/2)){
         pos.w = (space/2);
         pos.h = (space/2);
