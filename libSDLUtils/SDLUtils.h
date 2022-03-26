@@ -20,6 +20,7 @@
 #include "env.h"
 
 #define WINDOW_NAME "Lightup"
+#define SPACE 20
 #define SPRITE_SIZE 64
 #define WINDOW_HEIGHT 800
 #define WINDOW_LENGHT 600
