@@ -37,18 +37,13 @@ static void draw_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, SDL_Texture*
 
         SDL_Rect text;
         SDL_QueryTexture(items[i], NULL, NULL, &text.w, &text.h);
-        if (text.w < rItem.w) {
-            text.x = rItem.w / 2;
-        } else {
-            text.w = rItem.w - 120;
-            text.x = rItem.x + 60;
-        }
+            text.w = rItem.w - SPACE*6;
+            text.x = rItem.x + SPACE*3;
+            text.h = rItem.h - SPACE*2;
+            text.y = rItem.y + SPACE;
 
-        if (text.h < rItem.h) {
-            text.y = rItem.h / 2;
-        } else {
-            text.h = rItem.h - 40;
-            text.y = rItem.y + 20;
+        if (text.h < SPACE - SPACE/3){
+            text.h = SPACE - SPACE/3;
         }
 
         SDL_RenderCopy(pRenderer, items[i], NULL, &text);
