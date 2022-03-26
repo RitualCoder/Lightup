@@ -244,6 +244,7 @@ game level_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv) {
 static bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game* g, SDL_Renderer* pRenderer,
                          game_env genv) {
     int mouse_x, mouse_y;
+    int space = 20;
     SDL_GetMouseState(&mouse_x, &mouse_y);
     int w, h;
     SDL_GetWindowSize(pWindow, &w, &h);
@@ -261,17 +262,16 @@ static bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game*
     if (event.type == SDL_MOUSEBUTTONDOWN) {
         if (event.button.button == (SDL_BUTTON_LEFT)) {  // NEW PROCESS (PAS UNIVERSEL QUE POUR 3 ITEM)
             int case_x;
-            int start_x = MENU_X;
-            int start_y = MENU_Y;
             int item_height = ((h - 60) - nbItem * 100) / nbItem;
-            if ((mouse_x > start_x) && (mouse_x < (w - start_x)) && (mouse_y > start_y) && (mouse_y < (h - start_y))) {
-                if (mouse_y > (start_y) && mouse_y < (start_y + item_height)) {
+            int item_width = (w - 500);
+            if ((mouse_x > MENU_X) && mouse_x < (item_width + MENU_X)) {
+                if (mouse_y > MENU_Y && mouse_y < (MENU_Y + item_height)) {
                     case_x = 1;
                 }
-                if (mouse_y > (start_y + item_height + 20) && mouse_y < (start_y + item_height + 100)) {
+                if (mouse_y > (MENU_Y + item_height + space) && mouse_y < (MENU_Y + (item_height*2) + space)) {
                     case_x = 2;
                 }
-                if (mouse_y > (start_y + item_height + 120) && mouse_y < (start_y + item_height + 200)) {
+                if (mouse_y > (MENU_Y + (item_height*2) + (space*2)) && (mouse_y < (MENU_Y + (item_height*3) + (space * 2)))) {
                     case_x = 3;
                 }
             }
