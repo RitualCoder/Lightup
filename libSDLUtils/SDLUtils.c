@@ -126,6 +126,7 @@ void loadWallTexture(game_env genv, SDL_Renderer* pRenderer) {
     genv->lightbulb = IMG_LoadTexture(pRenderer, "./img/lightbulb.png");
     genv->mark = IMG_LoadTexture(pRenderer, "./img/mark.png");
 
+    // check error on load
     if (genv->wall0 == NULL || genv->wall1 == NULL || genv->wall2 == NULL || genv->wall3 == NULL ||
         genv->wall4 == NULL || genv->wallu == NULL || genv->lightbulb == NULL || genv->mark == NULL) {
         SDL_printError(true);
@@ -198,7 +199,7 @@ static void draw_texture_at_pos(SDL_Texture* tex, SDL_Renderer* pRenderer, game_
     int start_y = genv->windows_width / 2 - (genv->sprite_size * genv->nb_rows) / 2;
     int start_x = genv->window_height / 2 - (genv->sprite_size * genv->nb_cols) / 2;
 
-    SDL_Rect pos;
+    SDL_Rect pos;  // rectangle for position and size of texture
     pos.x = start_y + y * genv->sprite_size;
     pos.y = start_x + x * genv->sprite_size;
     pos.w = genv->sprite_size;
@@ -308,7 +309,7 @@ static void SDL_DrawGame(game g, game_env genv, SDL_Renderer* pRenderer) {
             if (game_is_black(g, x, y)) {
                 SDL_Texture* draw = NULL;
                 int val = game_get_black_number(g, x, y);
-                switch (val) {
+                switch (val) {  // select wall texture
                     case (-1):
                         draw = genv->wallu;
                         break;
@@ -370,7 +371,7 @@ void render(game_env genv, SDL_Renderer* pRenderer, SDL_Window* pWindow, double 
 
     SDL_RenderPresent(pRenderer);
 
-// compute fps TODO: utiliser une moyenne plutot que un calcule à chaque frame
+// compute fps only in debug mode
 #ifdef DEBUG
     gettimeofday(&genv->endTime, NULL);
     double delta = deltaTime(genv->startTime, genv->endTime);

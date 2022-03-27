@@ -57,8 +57,8 @@ void game_loop(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv, game
     int buttonid;
     int NxtLevel = genv->actualgame + 1;
     char buffer[20] = {"\0"};
-    sprintf(buffer, "%d", NxtLevel); // Int to Char in a buffer
-    char nextLevel[50] = {"\0"}; // Stock the filename of the next level
+    sprintf(buffer, "%d", NxtLevel);  // Int to Char in a buffer
+    char nextLevel[50] = {"\0"};      // Stock the filename of the next level
     strcat(nextLevel, "levels/level");
     strcat(nextLevel, buffer);
     strcat(nextLevel, ".txt");
@@ -104,15 +104,14 @@ void game_loop(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv, game
                 SDL_Log("Next Level");
                 genv->state = "game";
                 run = false;
-                if (genv->actualgame == 9 || genv->actualgame == 0){
+                if (genv->actualgame == 9 || genv->actualgame == 0) {
                     genv->actualgame = 1;
                     *g = game_load("levels/level1.txt");
-                }
-                else {
+                } else {
                     *g = game_load(nextLevel);
                     genv->actualgame = genv->actualgame + 1;
                 }
-                
+
             } else {
                 SDL_Log("selection was %s", buttons[buttonid].text);
             }
