@@ -19,8 +19,8 @@ double deltaTime(struct timeval start, struct timeval end) {
 
 void update_title_Window(SDL_Window* pWindow, game_env genv){
     if (strcmp(genv->state, "game") == 0){
-        char buffer[5] = {"\0"};
-        char Title[20] = "Lightup - Level \0";
+        char buffer[20] = {"\0"};
+        char Title[40] = "Lightup - Level \0";
         sprintf(buffer, "%d", genv->actualgame);
         strcat(Title, buffer);
         SDL_SetWindowTitle(pWindow, Title);

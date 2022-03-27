@@ -56,9 +56,9 @@ game_env init_game_environment() {
 void game_loop(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv, game* g, double fps) {
     int buttonid;
     int NxtLevel = genv->actualgame + 1;
-    char buffer[5] = {"\0"};
+    char buffer[20] = {"\0"};
     sprintf(buffer, "%d", NxtLevel); // Int to Char in a buffer
-    char nextLevel[20] = {"\0"}; // Stock the filename of the next level
+    char nextLevel[50] = {"\0"}; // Stock the filename of the next level
     strcat(nextLevel, "levels/level");
     strcat(nextLevel, buffer);
     strcat(nextLevel, ".txt");
