@@ -77,8 +77,6 @@ void SDL_initAndSetName(SDL_Renderer** pRenderer, SDL_Window** pWindow) {
         SDL_printError(true);
     }
 
-    //SDL_SetWindowPosition(*pWindow, SDL_WINDOWPOS_CENTERED , SDL_WINDOWPOS_CENTERED);
-
     // Renderer init with gpu and frame limit
     *pRenderer = SDL_CreateRenderer(*pWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);  //
     if (*pRenderer == NULL) {
