@@ -24,109 +24,24 @@
 #define SPRITE_SIZE 64
 #define WINDOW_HEIGHT 800
 #define WINDOW_LENGHT 600
+#define MENU_X 250
+#define MENU_Y 160
 
-/**
- * @brief Init game environement
- *
- * @return game_env : the game environement
- */
-game_env init_game_environment();
-
-/**
- * @brief Print SDL erre and de-init if necessary
- *
- * @param init true if windows is init
- */
-void SDL_printError(bool init);
-
-/**
- * @brief init game and set windows name
- *
- * @param pRenderer a pointer for the renderer
- * @param pWindow a pointer for the window
- */
 void SDL_initAndSetName(SDL_Renderer** pRenderer, SDL_Window** pWindow);
-
-/**
- * @brief de-init SDL for propoer exit
- *
- * @param pRenderer a pointer for the renderer
- * @param pWindow a pointer for the window
- */
-void SDL_end(SDL_Renderer* pRenderer, SDL_Window* pWindow);
-
-/**
- * @brief Draw a grid on window, the size is defined by nb_cols and nb_rows
- *
- * @param genv game environment
- * @param pRenderer a pointer for the Renderer
- */
-void SDL_drawGrid(game_env genv, SDL_Renderer* pRenderer);
-
-/**
- * @brief Convert mouse coordinate to game internal coordinate
- *
- * @param genv game environment
- */
-void SDL_MouseToCase(game_env genv);
-
-/**
- * @brief Fill the case in black
- *
- * @param genv game environment
- * @param pRenderer a pointer for the Renderer
- */
-void SDL_DrawCase(game_env genv, SDL_Renderer* pRenderer);
-
-/**
- * @brief Draw back button top left corner
- *
- * @param genv game environment
- * @param pRenderer a pointer for the Renderer
- */ 
-void SDL_Draw_back(game_env genv, SDL_Renderer* pRenderer);
-
-
-/**
- * @brief print some debug information on stdout
- *
- * @param pRenderer the game renderer
- * @param pWindow the game windows
- */
 void printDebug(SDL_Renderer* pRenderer, SDL_Window* pWindow);
-
-/**
- * @brief
- *
- * @param genv
- * @param pRenderer
- * @param fps
- */
-void render(game_env genv, SDL_Renderer* pRenderer, SDL_Window* pWindow, double fps, game g);
-
-/**
- * @brief
- *
- * @param event
- * @param pWindow
- * @param genv
- * @return true
- * @return false
- */
-bool process(SDL_Event event, SDL_Window* pWindow, game_env genv, game g);
-
 void loadWallTexture(game_env genv, SDL_Renderer* pRenderer);
-
-void quit(game_env genv);
-
-bool init(SDL_Renderer** pRenderer, SDL_Window** pWindow, game g, game_env genv);
-
-void draw_texture_at_pos(SDL_Texture* tex, SDL_Renderer* pRenderer, game_env genv, int y, int x);
-
-void draw_number_level(SDL_Texture* tex, SDL_Renderer* pRenderer, game_env genv, int y, int x, bool extremityUP, bool extremityDOWN);
-
-void draw_txt_number_level(SDL_Texture* tex, SDL_Renderer* pRenderer, game_env genv, int y, int x, bool extremityUP, bool extremityDOWN);
-
 void update_genv(game_env genv, game g);
+bool process(SDL_Event event, SDL_Window* pWindow, game_env genv, game g);
+void render(game_env genv, SDL_Renderer* pRenderer, SDL_Window* pWindow, double fps, game g);
+SDL_Texture** make_all_text_texture(SDL_Renderer* pRenderer, char* text[], int nbtext, game_env genv,
+                                    SDL_Color textColor);
+void render_level_menu(game_env genv, SDL_Renderer* pRenderer, SDL_Texture* level_tex[], SDL_Texture* txt[],
+                       int nbLevel);
+
+bool level_process(SDL_Event event, SDL_Window* pWindow, game_env genv, game* g);
+void clean_texture_tab(SDL_Texture* tab[], int nbItem);
+void draw_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, SDL_Texture* items[], int nbItem);
+bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game* g, SDL_Renderer* pRenderer, game_env genv);
+double deltaTime(struct timeval start, struct timeval end);
 
 #endif

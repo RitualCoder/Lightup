@@ -13,59 +13,6 @@
 #include "libgame/game_aux.h"
 #include "libgame/game_tools.h"
 
-const SDL_MessageBoxButtonData buttons[] = {
-    {/* .flags, .buttonid, .text */ 0, 0, "menu"},
-    {SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "retry"},
-    {SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 2, "exit"},
-};
-
-int game_loop(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv, game g, double fps) {
-    int buttonid;
-    SDL_MessageBoxData messageboxwin = {SDL_MESSAGEBOX_INFORMATION, pWindow, "You win !", "select a button",
-                                        SDL_arraysize(buttons),     buttons, NULL};
-    bool run = true;
-    SDL_Event event;
-    update_genv(genv, g);
-
-    while (run) {
-        // fps start frame
-        gettimeofday(&genv->startTime, NULL);
-
-        while (SDL_PollEvent(&event)) {  // process input
-            run = process(event, pWindow, genv, g);
-            if (!run) {
-                break;
-            }
-        }
-
-        // game Render
-        render(genv, pRenderer, pWindow, fps, g);
-        if (game_is_over(g)) {
-            if (SDL_ShowMessageBox(&messageboxwin, &buttonid) < 0) {
-                SDL_Log("error displaying message box");
-            }
-            if (buttonid == 0) {
-                SDL_Log("Menu");
-                run = false;
-                genv->state = "main_menu";
-            }
-            if (buttonid == 1) {
-                SDL_Log("Retry");
-                game_restart(g);
-            }
-            if (buttonid == 2) {
-                SDL_Log("EXIT");
-                genv->state = "exit";
-                run = false;
-            } else {
-                SDL_Log("selection was %s", buttons[buttonid].text);
-            }
-        }
-    }
-
-    return 0;
-}
-
 int main(int argc, char* argv[]) {
     // load game in passed in parametter
     game_env genv = init_game_environment();

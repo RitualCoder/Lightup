@@ -6,5 +6,5 @@ project(SDLUtils C)
 set(CMAKE_C_FLAGS "-std=c99 -Wall")
 
 #création de la librairie
-add_library(SDLUtils SDLUtils.c SDLUtils.h SDLMenu.c SDLMenu.h)
+add_library(SDLUtils SDLUtils.c SDLUtils.h SDLMenu.c SDLMenu.h )
 

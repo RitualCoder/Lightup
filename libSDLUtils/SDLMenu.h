@@ -18,13 +18,16 @@
 #include "../libgame/game.h"
 #include "env.h"
 
+#define WHITE \
+    { 255, 255, 255, 0 }
+#define BLACK \
+    { 0, 0, 0, 0 }
 
-#define WHITE {255,255,255,0}
-#define BLACK {0,0,0,0}
-#define MENU_X 250
-#define MENU_Y 160
-
-game main_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv);
-
+bool init(SDL_Renderer** pRenderer, SDL_Window** pWindow, game g, game_env genv);
+void game_loop(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv, game g, double fps);
 game level_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv);
+game main_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv);
+void SDL_end(SDL_Renderer* pRenderer, SDL_Window* pWindow);
+void quit(game_env genv);
+game_env init_game_environment();
 #endif
