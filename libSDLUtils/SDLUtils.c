@@ -609,6 +609,7 @@ bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game* g, SDL
             switch (case_x) {
                 case 1:
                     run = false;
+                    genv->actualgame = 0;
                     *g = game_default();
                     genv->state = "game";
                     break;
