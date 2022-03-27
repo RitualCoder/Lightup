@@ -46,11 +46,11 @@ void SDL_Draw_back(game_env genv, SDL_Renderer* pRenderer) {
     genv->back = SDL_CreateTextureFromSurface(pRenderer, back_x);
     SDL_FreeSurface(back_x);
     SDL_Rect rect;
-    SDL_QueryTexture(genv->back, NULL, NULL, &rect.w, &rect.h);  // TROUVER COEFFICIENT
-    rect.h = 20;
-    rect.w = 70;
-    rect.x = 10;
-    rect.y = 10;
+    SDL_QueryTexture(genv->back, NULL, NULL, &rect.w, &rect.h);
+    rect.h = SPACE;
+    rect.w = SPACE*4 - SPACE/2;
+    rect.x = SPACE/2;
+    rect.y = SPACE/2;
     SDL_RenderCopy(pRenderer, genv->back, NULL, &rect);
     SDL_DestroyTexture(genv->back);
 }
@@ -66,7 +66,7 @@ void SDL_Draw_help(game_env genv, SDL_Renderer* pRenderer, SDL_Window* pWindow) 
     SDL_QueryTexture(genv->help, NULL, NULL, &rect.w, &rect.h);  // TROUVER COEFFICIENT
     rect.h = SPACE;
     rect.w = SPACE*3;
-    rect.x = w - SPACE*4 - (SPACE/2);
+    rect.x = w - (SPACE*4 - SPACE/2);
     rect.y = SPACE/2;
     SDL_RenderCopy(pRenderer, genv->help, NULL, &rect);
     SDL_DestroyTexture(genv->help);
@@ -399,8 +399,10 @@ bool process(SDL_Event event, SDL_Window* pWindow, game_env genv, game g) {
                 genv->mouse_y < SPACE * 2) {
                 SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "HELP",
                                          "Left click to put a lightbulb\n"
-                                         "Right click to put a mark\n"
-                                         "Tap 's' to solve the grid\n\n"
+                                         "Right click to put a mark\n\n"
+                                         "Tap 'z' to undo and 'y' to redo\n"
+                                         "Tap 's' to solve the grid\n"
+                                         "Tap 'r' to restart the game\n\n"
                                          "You must illuminate the entire grid !\n"
                                          "Good Luck !",
                                          pWindow);
@@ -438,6 +440,9 @@ bool process(SDL_Event event, SDL_Window* pWindow, game_env genv, game g) {
         }
         if (event.key.keysym.sym == SDLK_w) {
             game_save(g, "sdl_game_save.txt");
+        }
+        if (event.key.keysym.sym == SDLK_r) {
+            game_restart(g);
         }
         if (event.key.keysym.sym == SDLK_ESCAPE) {
             genv->state = "main_menu";
