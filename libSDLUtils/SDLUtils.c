@@ -64,10 +64,10 @@ void SDL_Draw_help(game_env genv, SDL_Renderer* pRenderer, SDL_Window* pWindow) 
     SDL_FreeSurface(back_x);
     SDL_Rect rect;
     SDL_QueryTexture(genv->help, NULL, NULL, &rect.w, &rect.h);  // TROUVER COEFFICIENT
-    rect.h = 20;
-    rect.w = 60;
-    rect.x = w - 70;
-    rect.y = 10;
+    rect.h = SPACE;
+    rect.w = SPACE*3;
+    rect.x = w - SPACE*4 - (SPACE/2);
+    rect.y = SPACE/2;
     SDL_RenderCopy(pRenderer, genv->help, NULL, &rect);
     SDL_DestroyTexture(genv->help);
 }

@@ -1,6 +1,7 @@
 /**
  * @file env.h
- * @author Guillaume Dindart (you@domain.com)
+ * @author Guillaume Dindart (guillaume.dindart@etu.u-bordeaux.fr)
+ * @author Enzo Cornaggia (enzo.cornaggia@etu.u-bordeaux.fr)
  * @brief En environement struct for lightup game
  * @version 0.2
  * @date 2022-03-08
@@ -14,8 +15,9 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <sys/time.h>
+
 /**
- * @brief
+ * @brief The environment game structure
  *
  */
 struct envS {
