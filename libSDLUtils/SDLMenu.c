@@ -85,10 +85,10 @@ void SDL_DrawCaseCord(game_env genv, SDL_Renderer* pRenderer, int x, int y, bool
     rect.w = genv->sprite_size;
     rect.x = start_x + genv->sprite_size * x;
     if (extremityUP == true){
-        rect.y = start_y + genv->sprite_size * y + SPACE;
+        rect.y = start_y + genv->sprite_size * y + SPACE*1.5;
     }
     else if (extremityDOWN == true) {
-        rect.y = start_y + genv->sprite_size * y - SPACE;
+        rect.y = start_y + genv->sprite_size * y - SPACE*1.5;
     }
     else if ((extremityDOWN == false) && (extremityUP == false)){
         rect.y = start_y + genv->sprite_size * y;

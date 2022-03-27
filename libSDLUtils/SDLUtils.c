@@ -193,10 +193,10 @@ void draw_number_level(SDL_Texture* tex, SDL_Renderer* pRenderer, game_env genv,
     SDL_Rect pos;
     pos.x = start_y + y * genv->sprite_size + space;
     if (extremityUP){
-        pos.y = start_x + x * genv->sprite_size + space + SPACE;
+        pos.y = start_x + x * genv->sprite_size + space + SPACE*1.5;
     }
     else if (extremityDOWN){
-        pos.y = start_x + x * genv->sprite_size + space - SPACE;
+        pos.y = start_x + x * genv->sprite_size + space - SPACE*1.5;
     }
     else if (extremityDOWN == false && extremityUP == false){
         pos.y = start_x + x * genv->sprite_size + space;
@@ -219,10 +219,10 @@ void draw_txt_number_level(SDL_Texture* tex, SDL_Renderer* pRenderer, game_env g
     SDL_Rect pos;
     pos.x = start_y + y * genv->sprite_size + space;
     if (extremityUP){
-        pos.y = start_x + x * genv->sprite_size + genv->sprite_size + SPACE + (SPACE/2);
+        pos.y = start_x + x * genv->sprite_size + genv->sprite_size + SPACE*2;
     }
     else if (extremityDOWN){
-        pos.y = start_x + x * genv->sprite_size + genv->sprite_size - SPACE + (SPACE/2);
+        pos.y = start_x + (x * genv->sprite_size) + genv->sprite_size - SPACE;
     }
     else if (extremityDOWN == false && extremityUP == false){
         pos.y = start_x + x * genv->sprite_size + genv->sprite_size + (SPACE/2);
@@ -425,6 +425,7 @@ bool process(SDL_Event event, SDL_Window* pWindow, game_env genv, game g) {
             game_redo(g);
         }
         if (event.key.keysym.sym == SDLK_s) {
+            game_restart(g);
             game_solve(g);
         }
         if (event.key.keysym.sym == SDLK_w) {
