@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <stdbool.h>
+#include <string.h>
 
 #include "../libgame/game.h"
 #include "../libgame/game_tools.h"
@@ -52,34 +53,41 @@ game_env init_game_environment() {
     return genv;
 }
 
-void game_loop(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv, game g, double fps) {
+void game_loop(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv, game* g, double fps) {
     int buttonid;
+    int NxtLevel = genv->actualgame + 1;
+    char buffer[5] = {"\0"};
+    sprintf(buffer, "%d", NxtLevel); // Int to Char in a buffer
+    char nextLevel[20] = {"\0"}; // Stock the filename of the next level
+    strcat(nextLevel, "levels/level");
+    strcat(nextLevel, buffer);
+    strcat(nextLevel, ".txt");
     const SDL_MessageBoxButtonData buttons[] = {
-        {/* .flags, .buttonid, .text */ 0, 0, "menu"},
-        {SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "retry"},
-        {SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 2, "exit"},
+        {/* .flags, .buttonid, .text */ 0, 0, "Menu"},
+        {SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "Retry"},
+        {SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 2, "Next level"},
     };
     SDL_MessageBoxData messageboxwin = {SDL_MESSAGEBOX_INFORMATION, pWindow, "You win !", "select a button",
                                         SDL_arraysize(buttons),     buttons, NULL};
 
     bool run = true;
     SDL_Event event;
-    update_genv(genv, g);
+    update_genv(genv, *g);
 
     while (run) {
         // fps start frame
         gettimeofday(&genv->startTime, NULL);
 
         while (SDL_PollEvent(&event)) {  // process input
-            run = process(event, pWindow, genv, g);
+            run = process(event, pWindow, genv, *g);
             if (!run) {
                 break;
             }
         }
 
         // game Render
-        render(genv, pRenderer, pWindow, fps, g);
-        if (game_is_over(g)) {
+        render(genv, pRenderer, pWindow, fps, *g);
+        if (game_is_over(*g)) {
             if (SDL_ShowMessageBox(&messageboxwin, &buttonid) < 0) {
                 SDL_Log("error displaying message box");
             }
@@ -90,15 +98,24 @@ void game_loop(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv, game
             }
             if (buttonid == 1) {
                 SDL_Log("Retry");
-                game_restart(g);
+                game_restart(*g);
             }
             if (buttonid == 2) {
-                SDL_Log("EXIT");
-                genv->state = "exit";
+                SDL_Log("Next Level");
+                genv->state = "game";
                 run = false;
+                if (genv->actualgame == 9 || genv->actualgame == 0){
+                    genv->actualgame = 1;
+                    *g = game_load("levels/level1.txt");
+                }
+                else {
+                    *g = game_load(nextLevel);
+                }
+                genv->actualgame = genv->actualgame + 1;
             } else {
                 SDL_Log("selection was %s", buttons[buttonid].text);
             }
+            update_genv(genv, *g);
         }
     }
 

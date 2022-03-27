@@ -667,46 +667,55 @@ bool level_process(SDL_Event event, SDL_Window* pWindow, game_env genv, game* g)
                     case 0:
                         *g = game_load("levels/level1.txt");
                         genv->state = "game";
+                        genv->actualgame = 1;
                         run = false;
                         break;
                     case 1:
                         *g = game_load("levels/level2.txt");
                         genv->state = "game";
+                        genv->actualgame = 2;
                         run = false;
                         break;
                     case 2:
                         *g = game_load("levels/level3.txt");
                         genv->state = "game";
+                        genv->actualgame = 3;
                         run = false;
                         break;
                     case 3:
                         *g = game_load("levels/level4.txt");
                         genv->state = "game";
+                        genv->actualgame = 4;
                         run = false;
                         break;
                     case 4:
                         *g = game_load("levels/level5.txt");
                         genv->state = "game";
+                        genv->actualgame = 5;
                         run = false;
                         break;
                     case 5:
                         *g = game_load("levels/level6.txt");
                         genv->state = "game";
+                        genv->actualgame = 6;
                         run = false;
                         break;
                     case 6:
                         *g = game_load("levels/level7.txt");
                         genv->state = "game";
+                        genv->actualgame = 7;
                         run = false;
                         break;
                     case 7:
                         *g = game_load("levels/level8.txt");
                         genv->state = "game";
+                        genv->actualgame = 8;
                         run = false;
                         break;
                     case 8:
                         *g = game_load("levels/level9.txt");
                         genv->state = "game";
+                        genv->actualgame = 9;
                         run = false;
                         break;
                     default:

@@ -52,7 +52,7 @@ game_env init_game_environment();
  * @param g Instance of playing game
  * @param fps An fps counter (Only in DEBUG mode)
  */
-void game_loop(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv, game g, double fps);
+void game_loop(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv, game* g, double fps);
 
 /**
  * @brief A level selection menu

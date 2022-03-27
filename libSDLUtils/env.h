@@ -28,6 +28,7 @@ struct envS {
     int case_x, case_y;
     int nb_rows, nb_cols;
     int sprite_size;
+    int actualgame;
     Uint32 button;
 
     SDL_Texture* wallu;

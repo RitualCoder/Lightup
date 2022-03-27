@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
         }
 
         else if (strcmp("game", genv->state) == 0) {
-            game_loop(pRenderer, pWindow, genv, g, fps);
+            game_loop(pRenderer, pWindow, genv, &g, fps);
         }
 
         else if (strcmp("exit", genv->state) == 0) {
