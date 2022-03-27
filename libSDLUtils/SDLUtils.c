@@ -17,6 +17,19 @@ double deltaTime(struct timeval start, struct timeval end) {
     return (end.tv_sec - end.tv_sec) * 1000.0 + (end.tv_usec - start.tv_usec) / 1000.0;
 }
 
+void update_title_Window(SDL_Window* pWindow, game_env genv){
+    if (strcmp(genv->state, "game") == 0){
+        char buffer[5] = {"\0"};
+        char Title[20] = "Lightup - Level \0";
+        sprintf(buffer, "%d", genv->actualgame);
+        strcat(Title, buffer);
+        SDL_SetWindowTitle(pWindow, Title);
+    }
+    else {
+        SDL_SetWindowTitle(pWindow, "Lightup");
+    }
+}
+
 void SDL_DrawCaseCord(game_env genv, SDL_Renderer* pRenderer, int x, int y, bool extremityUP, bool extremityDOWN) {
     int start_x = genv->windows_width / 2 - (genv->sprite_size * genv->nb_rows) / 2;
     int start_y = genv->window_height / 2 - (genv->sprite_size * genv->nb_cols) / 2;
@@ -612,6 +625,7 @@ bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game* g, SDL
                     genv->actualgame = 0;
                     *g = game_default();
                     genv->state = "game";
+                    SDL_SetWindowTitle(pWindow,"Level 0");
                     break;
                 case 2:
                     run = false;
@@ -638,6 +652,8 @@ bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game* g, SDL
     return run;
 }
 
+
+
 bool level_process(SDL_Event event, SDL_Window* pWindow, game_env genv, game* g) {
     bool run = true;
     SDL_GetWindowSize(pWindow, &genv->windows_width, &genv->window_height);
@@ -659,6 +675,7 @@ bool level_process(SDL_Event event, SDL_Window* pWindow, game_env genv, game* g)
             if (genv->mouse_x > SPACE / 2 && genv->mouse_x < SPACE * 4 && genv->mouse_y > SPACE / 2 &&
                 genv->mouse_y < SPACE * 2) {
                 genv->state = "main_menu";
+                SDL_SetWindowTitle(pWindow,"Lightup");
                 run = false;
             }
             if (genv->case_x % 2 == 0 && genv->case_y % 2 == 0) {

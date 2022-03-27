@@ -38,6 +38,15 @@
 double deltaTime(struct timeval start, struct timeval end);
 
 /**
+ * @brief Update the title of the window
+ *
+ * @param pWindow An SDL2 window
+ * @param genv The game environment
+ * @return A double
+ */
+void update_title_Window(SDL_Window* pWindow, game_env genv);
+
+/**
  * @brief Draw the menu level selection in LOAD
  *
  * @param genv The game environment

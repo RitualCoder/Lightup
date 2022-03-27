@@ -84,7 +84,7 @@ void game_loop(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv, game
                 break;
             }
         }
-
+        update_title_Window(pWindow, genv);
         // game Render
         render(genv, pRenderer, pWindow, fps, *g);
         if (game_is_over(*g)) {
@@ -110,8 +110,9 @@ void game_loop(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv, game
                 }
                 else {
                     *g = game_load(nextLevel);
+                    genv->actualgame = genv->actualgame + 1;
                 }
-                genv->actualgame = genv->actualgame + 1;
+                
             } else {
                 SDL_Log("selection was %s", buttons[buttonid].text);
             }
