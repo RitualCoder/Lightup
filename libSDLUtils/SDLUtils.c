@@ -609,7 +609,7 @@ bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game* g, SDL
     }
     if (event.type == SDL_MOUSEBUTTONDOWN) {
         if (event.button.button == (SDL_BUTTON_LEFT)) {  // NEW PROCESS (PAS UNIVERSEL QUE POUR 3 ITEM)
-            int case_x;
+            int case_x = 0;
             int item_height = (w / (nbItem + 6));
             int item_width = (w / 2);
             if ((mouse_x > mx) && mouse_x < (item_width + mx)) {
