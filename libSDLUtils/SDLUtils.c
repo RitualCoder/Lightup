@@ -17,20 +17,20 @@ double deltaTime(struct timeval start, struct timeval end) {
     return (end.tv_sec - end.tv_sec) * 1000.0 + (end.tv_usec - start.tv_usec) / 1000.0;
 }
 
-void update_title_Window(SDL_Window* pWindow, game_env genv){
-    if (strcmp(genv->state, "game") == 0){
+void update_title_Window(SDL_Window* pWindow, game_env genv) {
+    if (strcmp(genv->state, "game") == 0) {
         char buffer[20] = {"\0"};
         char Title[40] = "Lightup - Level \0";
         sprintf(buffer, "%d", genv->actualgame);
         strcat(Title, buffer);
         SDL_SetWindowTitle(pWindow, Title);
-    }
-    else {
+    } else {
         SDL_SetWindowTitle(pWindow, "Lightup");
     }
 }
 
-void SDL_DrawCaseCord(game_env genv, SDL_Renderer* pRenderer, int x, int y, bool extremityUP, bool extremityDOWN) {
+static void SDL_DrawCaseCord(game_env genv, SDL_Renderer* pRenderer, int x, int y, bool extremityUP,
+                             bool extremityDOWN) {
     int start_x = genv->windows_width / 2 - (genv->sprite_size * genv->nb_rows) / 2;
     int start_y = genv->window_height / 2 - (genv->sprite_size * genv->nb_cols) / 2;
 
@@ -53,7 +53,7 @@ void SDL_DrawCaseCord(game_env genv, SDL_Renderer* pRenderer, int x, int y, bool
     SDL_RenderFillRect(pRenderer, &rect);
 }
 
-void SDL_Draw_back(game_env genv, SDL_Renderer* pRenderer) {
+static void SDL_Draw_back(game_env genv, SDL_Renderer* pRenderer) {
     SDL_Color color = {0, 0, 0, 255};
     SDL_Surface* back_x = TTF_RenderText_Blended(genv->pFont, "< BACK", color);
     genv->back = SDL_CreateTextureFromSurface(pRenderer, back_x);
@@ -61,14 +61,14 @@ void SDL_Draw_back(game_env genv, SDL_Renderer* pRenderer) {
     SDL_Rect rect;
     SDL_QueryTexture(genv->back, NULL, NULL, &rect.w, &rect.h);
     rect.h = SPACE;
-    rect.w = SPACE*4 - SPACE/2;
-    rect.x = SPACE/2;
-    rect.y = SPACE/2;
+    rect.w = SPACE * 4 - SPACE / 2;
+    rect.x = SPACE / 2;
+    rect.y = SPACE / 2;
     SDL_RenderCopy(pRenderer, genv->back, NULL, &rect);
     SDL_DestroyTexture(genv->back);
 }
 
-void SDL_Draw_help(game_env genv, SDL_Renderer* pRenderer, SDL_Window* pWindow) {
+static void SDL_Draw_help(game_env genv, SDL_Renderer* pRenderer, SDL_Window* pWindow) {
     int w, h;
     SDL_GetWindowSize(pWindow, &w, &h);
     SDL_Color color = {0, 0, 0, 255};
@@ -78,14 +78,14 @@ void SDL_Draw_help(game_env genv, SDL_Renderer* pRenderer, SDL_Window* pWindow) 
     SDL_Rect rect;
     SDL_QueryTexture(genv->help, NULL, NULL, &rect.w, &rect.h);  // TROUVER COEFFICIENT
     rect.h = SPACE;
-    rect.w = SPACE*3;
-    rect.x = w - (SPACE*4 - SPACE/2);
-    rect.y = SPACE/2;
+    rect.w = SPACE * 3;
+    rect.x = w - (SPACE * 4 - SPACE / 2);
+    rect.y = SPACE / 2;
     SDL_RenderCopy(pRenderer, genv->help, NULL, &rect);
     SDL_DestroyTexture(genv->help);
 }
 
-void SDL_printError(bool init) {
+static void SDL_printError(bool init) {
     SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "[DEBUG] > %s", SDL_GetError());
     if (init) {
         SDL_Quit();
@@ -132,7 +132,7 @@ void loadWallTexture(game_env genv, SDL_Renderer* pRenderer) {
     }
 }
 
-void SDL_drawGrid(game_env genv, SDL_Renderer* pRenderer) {
+static void SDL_drawGrid(game_env genv, SDL_Renderer* pRenderer) {
     // set color of grid
     SDL_SetRenderDrawColor(pRenderer, 0, 0, 0, 255);
 
@@ -154,7 +154,7 @@ void SDL_drawGrid(game_env genv, SDL_Renderer* pRenderer) {
     }
 }
 
-void SDL_MouseToCase(game_env genv) {
+static void SDL_MouseToCase(game_env genv) {
     int start_x = genv->windows_width / 2 - (genv->sprite_size * genv->nb_rows) / 2;
     int start_y = genv->window_height / 2 - (genv->sprite_size * genv->nb_cols) / 2;
     int mouse_x_local = genv->mouse_x - start_x;
@@ -172,7 +172,7 @@ void SDL_MouseToCase(game_env genv) {
     }
 }
 
-void SDL_DrawCase(game_env genv, SDL_Renderer* pRenderer) {
+static void SDL_DrawCase(game_env genv, SDL_Renderer* pRenderer) {
     if (genv->case_x < 0 || genv->case_y < 0) {  // not draw if mouse is out of grid
         return;
     }
@@ -194,7 +194,7 @@ void SDL_DrawCase(game_env genv, SDL_Renderer* pRenderer) {
     SDL_SetRenderDrawBlendMode(pRenderer, SDL_BLENDMODE_NONE);  // deactivate blend mode
 }
 
-void draw_texture_at_pos(SDL_Texture* tex, SDL_Renderer* pRenderer, game_env genv, int y, int x) {
+static void draw_texture_at_pos(SDL_Texture* tex, SDL_Renderer* pRenderer, game_env genv, int y, int x) {
     int start_y = genv->windows_width / 2 - (genv->sprite_size * genv->nb_rows) / 2;
     int start_x = genv->window_height / 2 - (genv->sprite_size * genv->nb_cols) / 2;
 
@@ -207,8 +207,8 @@ void draw_texture_at_pos(SDL_Texture* tex, SDL_Renderer* pRenderer, game_env gen
     SDL_RenderCopy(pRenderer, tex, NULL, &pos);
 }
 
-void draw_number_level(SDL_Texture* tex, SDL_Renderer* pRenderer, game_env genv, int y, int x, bool extremityUP,
-                       bool extremityDOWN) {
+static void draw_number_level(SDL_Texture* tex, SDL_Renderer* pRenderer, game_env genv, int y, int x, bool extremityUP,
+                              bool extremityDOWN) {
     int space = genv->sprite_size / 4;
     int start_y = genv->windows_width / 2 - (genv->sprite_size * genv->nb_rows) / 2;
     int start_x = genv->window_height / 2 - (genv->sprite_size * genv->nb_cols) / 2;
@@ -232,8 +232,8 @@ void draw_number_level(SDL_Texture* tex, SDL_Renderer* pRenderer, game_env genv,
     SDL_RenderCopy(pRenderer, tex, NULL, &pos);
 }
 
-void draw_txt_number_level(SDL_Texture* tex, SDL_Renderer* pRenderer, game_env genv, int y, int x, bool extremityUP,
-                           bool extremityDOWN) {
+static void draw_txt_number_level(SDL_Texture* tex, SDL_Renderer* pRenderer, game_env genv, int y, int x,
+                                  bool extremityUP, bool extremityDOWN) {
     int space = genv->sprite_size / 6;
     int start_y = genv->windows_width / 2 - (genv->sprite_size * genv->nb_rows) / 2;
     int start_x = genv->window_height / 2 - (genv->sprite_size * genv->nb_cols) / 2;
@@ -257,7 +257,7 @@ void draw_txt_number_level(SDL_Texture* tex, SDL_Renderer* pRenderer, game_env g
     SDL_RenderCopy(pRenderer, tex, NULL, &pos);
 }
 
-void drawLighted(game g, game_env genv, SDL_Renderer* pRenderer) {
+static void drawLighted(game g, game_env genv, SDL_Renderer* pRenderer) {
     int start_x = genv->windows_width / 2 - (genv->sprite_size * genv->nb_rows) / 2;
     int start_y = genv->window_height / 2 - (genv->sprite_size * genv->nb_cols) / 2;
 
@@ -278,7 +278,7 @@ void drawLighted(game g, game_env genv, SDL_Renderer* pRenderer) {
     }
 }
 
-void drawError(game g, game_env genv, SDL_Renderer* pRenderer) {
+static void drawError(game g, game_env genv, SDL_Renderer* pRenderer) {
     int start_x = genv->windows_width / 2 - (genv->sprite_size * genv->nb_rows) / 2;
     int start_y = genv->window_height / 2 - (genv->sprite_size * genv->nb_cols) / 2;
 
@@ -299,7 +299,7 @@ void drawError(game g, game_env genv, SDL_Renderer* pRenderer) {
     }
 }
 
-void SDL_DrawGame(game g, game_env genv, SDL_Renderer* pRenderer) {
+static void SDL_DrawGame(game g, game_env genv, SDL_Renderer* pRenderer) {
     drawLighted(g, genv, pRenderer);
     drawError(g, genv, pRenderer);
 
@@ -405,10 +405,9 @@ bool process(SDL_Event event, SDL_Window* pWindow, game_env genv, game g) {
         if (event.button.button == (SDL_BUTTON_LEFT)) {
             if (genv->mouse_x > SPACE / 2 && genv->mouse_x < SPACE * 4 && genv->mouse_y > SPACE / 2 &&
                 genv->mouse_y < SPACE * 2) {
-                if (genv->actualgame != 0){
+                if (genv->actualgame != 0) {
                     genv->state = "level_sel";
-                }
-                else {
+                } else {
                     genv->state = "main_menu";
                 }
                 ret = false;
@@ -486,7 +485,8 @@ void clean_texture_tab(SDL_Texture* tab[], int nbItem) {
     free(tab);
 }
 
-void SDL_Draw_level(game_env genv, SDL_Renderer* pRenderer, SDL_Texture* level_tex[], SDL_Texture* txt[], int nbLevel) {
+static void SDL_Draw_level(game_env genv, SDL_Renderer* pRenderer, SDL_Texture* level_tex[], SDL_Texture* txt[],
+                           int nbLevel) {
     int levelIndex = 0;
 
     for (int x = 0; x < genv->nb_cols; x++) {
@@ -567,7 +567,7 @@ void draw_menu(SDL_Renderer* pRenderer, SDL_Window* pWindow, SDL_Texture* items[
     return;
 }
 
-SDL_Texture* text_at_texture(SDL_Renderer* pRenderer, char* text, TTF_Font* pFont, SDL_Color textColor) {
+static SDL_Texture* text_at_texture(SDL_Renderer* pRenderer, char* text, TTF_Font* pFont, SDL_Color textColor) {
     SDL_Surface* surface;
     surface = TTF_RenderText_Solid(pFont, text, textColor);
     SDL_Texture* texture = SDL_CreateTextureFromSurface(pRenderer, surface);
@@ -630,7 +630,7 @@ bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game* g, SDL
                     genv->actualgame = 0;
                     *g = game_default();
                     genv->state = "game";
-                    SDL_SetWindowTitle(pWindow,"Level 0");
+                    SDL_SetWindowTitle(pWindow, "Level 0");
                     break;
                 case 2:
                     run = false;
@@ -656,8 +656,6 @@ bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game* g, SDL
     }
     return run;
 }
-
-
 
 bool level_process(SDL_Event event, SDL_Window* pWindow, game_env genv, game* g) {
     bool run = true;
