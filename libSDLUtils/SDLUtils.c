@@ -405,7 +405,12 @@ bool process(SDL_Event event, SDL_Window* pWindow, game_env genv, game g) {
         if (event.button.button == (SDL_BUTTON_LEFT)) {
             if (genv->mouse_x > SPACE / 2 && genv->mouse_x < SPACE * 4 && genv->mouse_y > SPACE / 2 &&
                 genv->mouse_y < SPACE * 2) {
-                genv->state = "main_menu";
+                if (genv->actualgame != 0){
+                    genv->state = "level_sel";
+                }
+                else {
+                    genv->state = "main_menu";
+                }
                 ret = false;
             }
             if (genv->mouse_x > (w - SPACE * 4) && genv->mouse_x < w && genv->mouse_y > SPACE / 2 &&
@@ -675,7 +680,6 @@ bool level_process(SDL_Event event, SDL_Window* pWindow, game_env genv, game* g)
             if (genv->mouse_x > SPACE / 2 && genv->mouse_x < SPACE * 4 && genv->mouse_y > SPACE / 2 &&
                 genv->mouse_y < SPACE * 2) {
                 genv->state = "main_menu";
-                SDL_SetWindowTitle(pWindow,"Lightup");
                 run = false;
             }
             if (genv->case_x % 2 == 0 && genv->case_y % 2 == 0) {
