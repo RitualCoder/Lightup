@@ -95,6 +95,7 @@ void game_loop(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv, game
                 SDL_Log("Menu");
                 run = false;
                 genv->state = "main_menu";
+                update_title_Window(pWindow, genv);
             }
             if (buttonid == 1) {
                 SDL_Log("Retry");
