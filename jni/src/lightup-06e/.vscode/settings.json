@@ -1,0 +1,20 @@
+{
+  "cmake.debugConfig": {
+    "args": ["new"],
+    "stopAtEntry": true
+  },
+  "files.associations": {
+    "game_examples.h": "c",
+    "game_private.h": "c",
+    "chrono": "c",
+    "random": "c",
+    "limits": "c",
+    "algorithm": "c",
+    "game_ext.h": "c",
+    "game_tools.h": "c",
+    "game.h": "c",
+    "*.tcc": "c",
+    "ios": "c"
+  },
+  "C_Cpp.errorSquiggles": "Disabled"
+}
