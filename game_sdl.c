@@ -22,7 +22,7 @@ int main(int argc, char* argv[]) {
         g = game_load(argv[1]);
         genv->state = "game";
     } else {
-        g = game_random(MIN + rand() % (MAX + 1 - MIN), MIN + rand() % (MAX + 1 - MIN), false, 10, false);
+        g = game_default();
     }
     update_genv(genv, g);
 
