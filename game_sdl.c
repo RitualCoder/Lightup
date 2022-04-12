@@ -12,6 +12,7 @@
 #include "libgame/game.h"
 #include "libgame/game_aux.h"
 #include "libgame/game_tools.h"
+#include "libgame/game_random.h"
 
 int main(int argc, char* argv[]) {
     // load game in passed in parametter
@@ -21,7 +22,7 @@ int main(int argc, char* argv[]) {
         g = game_load(argv[1]);
         genv->state = "game";
     } else {
-        g = game_default();
+        g = game_random(MIN + rand() % (MAX + 1 - MIN), MIN + rand() % (MAX + 1 - MIN), false, 10, false);
     }
     update_genv(genv, g);
 

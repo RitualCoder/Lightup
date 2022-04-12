@@ -14,7 +14,8 @@
     "game_tools.h": "c",
     "game.h": "c",
     "*.tcc": "c",
-    "ios": "c"
+    "ios": "c",
+    "game_aux.h": "c"
   },
   "C_Cpp.errorSquiggles": "Disabled"
 }

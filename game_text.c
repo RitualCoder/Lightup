@@ -14,6 +14,7 @@
 #include "./libgame/game_aux.h"
 #include "./libgame/game_ext.h"
 #include "./libgame/game_tools.h"
+#include "libgame/game_random.h"
 
 /* ************************************************************************** */
 
@@ -112,7 +113,7 @@ int main(int argc, char *argv[]) {
     if (argc == 2)
         g = game_load(argv[1]);
     else
-        g = game_default();
+        g = game_random(7, 7, false, 6, false);
     assert(g);
     game_print(g);
     bool win = game_is_over(g);

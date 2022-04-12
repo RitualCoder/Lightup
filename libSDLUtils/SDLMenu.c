@@ -7,6 +7,7 @@
 
 #include "../libgame/game.h"
 #include "../libgame/game_tools.h"
+#include "../libgame/game_random.h"
 #include "SDLUtils.h"
 #include "env.h"
 
@@ -104,10 +105,14 @@ void game_loop(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv, game
                 SDL_Log("Next Level");
                 genv->state = "game";
                 run = false;
-                if (genv->actualgame == 9 || genv->actualgame == 0) {
+                if (genv->actualgame == 9) {
                     genv->actualgame = 1;
                     *g = game_load("levels/level1.txt");
-                } else {
+                }
+                if (genv->actualgame == 0) {
+                    *g = game_random(7, 7, false, 10, false);
+                } 
+                else {
                     *g = game_load(nextLevel);
                     genv->actualgame = genv->actualgame + 1;
                 }

@@ -24,8 +24,8 @@ set(CMAKE_C_FLAGS_DEBUG "-g --coverage -D DEBUG")    # use CMake option: -DCMAKE
 set(CMAKE_C_FLAGS_RELEASE "-O3 -DNDEBUG")   # use CMake option: -DCMAKE_BUILD_TYPE=RELEASE
 
 
-set(GameSources libgame/game.c libgame/game_ext.c libgame/game_aux.c libgame/game_private.c libgame/game_tools.c)
-set(GameHeaders libgame/game.h libgame/game_ext.h libgame/game_aux.h libgame/game_private.h libgame/game_tools.c)
+set(GameSources libgame/game.c libgame/game_ext.c libgame/game_aux.c libgame/game_private.c libgame/game_tools.c libgame/game_random.c)
+set(GameHeaders libgame/game.h libgame/game_ext.h libgame/game_aux.h libgame/game_private.h libgame/game_tools.h libgame/game_random.h)
 
 set(StackSources libstack/queue.c)
 set(StackHeaders libstack/queue.h)
