@@ -42,6 +42,7 @@ struct envS {
     SDL_Texture* mark;
 
     SDL_Texture* back;
+    SDL_Texture* solve;
     SDL_Texture* help;
 
     TTF_Font* pFont;

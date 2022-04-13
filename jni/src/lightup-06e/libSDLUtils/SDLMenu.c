@@ -107,14 +107,15 @@ void game_loop(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv, game
                 if (genv->actualgame == 0) {
                     *g = game_random(7, 7, false, 10, false);
                 } 
-                if (genv->actualgame == 9) {
+                else if (genv->actualgame == 9) {
                     genv->actualgame = 1;
                     *g = game_load("level1.txt");
-                } else {
+                } 
+                else if (genv->actualgame > 0 || genv->actualgame <= 8) {
                     *g = game_load(nextLevel);
                     genv->actualgame = genv->actualgame + 1;
                 }
-
+                
             } else {
                 SDL_Log("selection was %s", buttons[buttonid].text);
             }
