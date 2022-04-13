@@ -19,14 +19,16 @@ double deltaTime(struct timeval start, struct timeval end) {
 }
 
 void update_title_Window(SDL_Window* pWindow, game_env genv) {
-    if (strcmp(genv->state, "game") == 0) {
+    SDL_SetWindowTitle(pWindow, "Lightup");
+    if (strcmp(genv->state, "game") == 0 && genv->actualgame == 0){
+        SDL_SetWindowTitle(pWindow, "Lightup - Level 7x7");
+    }
+    if (strcmp(genv->state, "game") == 0 && genv->actualgame != 0) {
         char buffer[20] = {"\0"};
         char Title[40] = "Lightup - Level \0";
         sprintf(buffer, "%d", genv->actualgame);
         strcat(Title, buffer);
         SDL_SetWindowTitle(pWindow, Title);
-    } else {
-        SDL_SetWindowTitle(pWindow, "Lightup");
     }
 }
 
@@ -69,6 +71,23 @@ static void SDL_Draw_back(game_env genv, SDL_Renderer* pRenderer) {
     SDL_DestroyTexture(genv->back);
 }
 
+static void SDL_Draw_solve(game_env genv, SDL_Renderer* pRenderer, SDL_Window* pWindow) {
+    int w, h;
+    SDL_GetWindowSize(pWindow, &w, &h);
+    SDL_Color color = {0, 0, 0, 255};
+    SDL_Surface* solve_x = TTF_RenderText_Blended(genv->pFont, "SOLVE", color);
+    genv->solve = SDL_CreateTextureFromSurface(pRenderer, solve_x);
+    SDL_FreeSurface(solve_x);
+    SDL_Rect rect;
+    SDL_QueryTexture(genv->solve, NULL, NULL, &rect.w, &rect.h);
+    rect.h = SPACE;
+    rect.w = SPACE * 4;
+    rect.x = w - (SPACE * 5);
+    rect.y = h - SPACE - (SPACE/2);
+    SDL_RenderCopy(pRenderer, genv->solve, NULL, &rect);
+    SDL_DestroyTexture(genv->solve);
+}
+
 static void SDL_Draw_help(game_env genv, SDL_Renderer* pRenderer, SDL_Window* pWindow) {
     int w, h;
     SDL_GetWindowSize(pWindow, &w, &h);
@@ -80,8 +99,8 @@ static void SDL_Draw_help(game_env genv, SDL_Renderer* pRenderer, SDL_Window* pW
     SDL_QueryTexture(genv->help, NULL, NULL, &rect.w, &rect.h);  // TROUVER COEFFICIENT
     rect.h = SPACE;
     rect.w = SPACE * 3;
-    rect.x = w - (SPACE * 4 - SPACE / 2);
-    rect.y = SPACE / 2;
+    rect.x = (w - SPACE * 4);
+    rect.y = SPACE/2;
     SDL_RenderCopy(pRenderer, genv->help, NULL, &rect);
     SDL_DestroyTexture(genv->help);
 }
@@ -368,6 +387,7 @@ void render(game_env genv, SDL_Renderer* pRenderer, SDL_Window* pWindow, double 
     SDL_drawGrid(genv, pRenderer);
     SDL_DrawCase(genv, pRenderer);
     SDL_Draw_back(genv, pRenderer);
+    SDL_Draw_solve(genv, pRenderer, pWindow);
     SDL_Draw_help(genv, pRenderer, pWindow);
 
     SDL_RenderPresent(pRenderer);
@@ -385,6 +405,7 @@ bool process(SDL_Event event, SDL_Window* pWindow, game_env genv, game g) {
     bool ret = true;
     SDL_GetWindowSize(pWindow, &genv->windows_width, &genv->window_height);
     int w = genv->windows_width;
+    int h = genv->window_height;
     if (genv->window_height < genv->windows_width) {
         genv->sprite_size = (genv->window_height - SPACE * 3) / genv->nb_cols;
     } else {
@@ -425,6 +446,10 @@ bool process(SDL_Event event, SDL_Window* pWindow, game_env genv, game g) {
                                          "You must illuminate the entire grid !\n"
                                          "Good Luck !",
                                          pWindow);
+            }
+            if (genv->mouse_x > w - (SPACE * 5) && genv->mouse_x < w && genv->mouse_y > (h - SPACE - (SPACE/2)) &&
+                genv->mouse_y < (h - (SPACE/2))) {
+                game_solve(g);
             }
             if (game_check_move(g, genv->case_y, genv->case_x,
                                 S_LIGHTBULB)) {  // Check if the move on the grid is legit for a lightbulb
