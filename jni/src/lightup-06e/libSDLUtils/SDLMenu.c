@@ -104,7 +104,10 @@ void game_loop(SDL_Renderer* pRenderer, SDL_Window* pWindow, game_env genv, game
                 SDL_Log("Next Level");
                 genv->state = "game";
                 run = false;
-                if (genv->actualgame == 9 || genv->actualgame == 0) {
+                if (genv->actualgame == 0) {
+                    *g = game_random(7, 7, false, 10, false);
+                } 
+                if (genv->actualgame == 9) {
                     genv->actualgame = 1;
                     *g = game_load("level1.txt");
                 } else {

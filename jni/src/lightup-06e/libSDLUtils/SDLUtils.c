@@ -634,7 +634,7 @@ bool menu_process(SDL_Event event, SDL_Window* pWindow, int nbItem, game* g, SDL
                 case 1:
                     run = false;
                     genv->actualgame = 0;
-                    *g = game_default();
+                    *g = game_random(7, 7, false, 8, false);
                     genv->state = "game";
                     SDL_SetWindowTitle(pWindow, "Level 0");
                     break;
