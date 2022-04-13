@@ -25,7 +25,7 @@ bool init(SDL_Renderer** pRenderer, SDL_Window** pWindow, game g, game_env genv)
         printf("[Error] TTF_Init: %s\n", TTF_GetError());
         exit(2);
     }
-    genv->pFont = TTF_OpenFont("04B_20__.ttf", 1000);
+    genv->pFont = TTF_OpenFont("arial.ttf", 1000);
 
     // mouse
     SDL_PumpEvents();
