@@ -4,14 +4,24 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/ico" href="assets/favicon.png" />
     <title>LightUp 06E</title>
+    <link rel="stylesheet" type="text/css" href="game.css">
+    <link rel="stylesheet" media="screen and (max-width: 900px)" href="mobile.css" />
 </head>
 <body>
-    <p>Si les murs ne s'affiche essayez de recharger la page. (Il y a des problèmes avec le chargement des images)</p>
-    <canvas id="game_canvas" width="400px" height="400px"></canvas>
-    <script src="game.js"></script>
-    <script src="lightup.js"> </script>
-    <input type="button" value="Redo" onclick="redo()"> <input type="button" value="Undo" onclick="undo()"> <input type="button" value="Solve" onclick="solve()">
-    <input type="button" value="New game easy" onclick="newg_3x3()"> <input type="button" value="New game Medium" onclick="newg_5x5()"> <input type="button" value="New game Medium +" onclick="newg_7x7()"> <input type="button" value="New game hard" onclick="newg_10x10()">
+    <div class="game">
+        <h1 class="font">Light-Up</h1>
+        <div>
+            <canvas id="game_canvas" width="350%" height="350%" style="cursor: pointer; display: inline-block;"></canvas>
+        </div>
+        <script src="game.js"></script>
+        <script src="lightup.js"> </script>
+        <p class="font" style="font-size: 10px; ">Si les murs ne s'affiche pas essayez de recharger la page ou de cliquer sur une case.</p>
+        <div style="margin-bottom: 30px;">
+            <input type="button" value="Redo" onclick="redo()"> <input type="button" value="Undo" onclick="undo()"> <input type="button" value="Solve" onclick="solve()">
+            <input type="button" value="Level easy" onclick="newg_3x3()"> <input type="button" value="Level Medium" onclick="newg_5x5()"> <input type="button" value="Level Medium +" onclick="newg_7x7()"> <input type="button" value="Level hard" onclick="newg_10x10()">
+        </div>
+    </div>
 </body>
 </html>
