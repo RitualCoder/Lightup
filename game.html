@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LightUp 06E</title>
+</head>
+<body>
+    <p>Si les murs ne s'affiche essayez de recharger la page. (Il y a des problèmes avec le chargement des images)</p>
+    <canvas id="game_canvas" width="400px" height="400px"></canvas>
+    <script src="game.js"></script>
+    <script src="lightup.js"> </script>
+    <input type="button" value="Redo" onclick="redo()"> <input type="button" value="Undo" onclick="undo()"> <input type="button" value="Solve" onclick="solve()">
+    <input type="button" value="New game easy" onclick="newg_3x3()"> <input type="button" value="New game Medium" onclick="newg_5x5()"> <input type="button" value="New game Medium +" onclick="newg_7x7()"> <input type="button" value="New game hard" onclick="newg_10x10()">
+</body>
+</html>
