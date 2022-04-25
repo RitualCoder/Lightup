@@ -34,10 +34,14 @@ wallu.src = 'assets/wallu.png';
 const lightbulb = new Image();
 lightbulb.src = 'assets/lightbulb.png';
 
+const mark = new Image();
+mark.src = 'assets/mark.png';
+
 /*Load Event type*/
 //window.addEventListener("load", start);
 var canvas = document.getElementById("game_canvas");
 canvas.addEventListener('click', placeLight); //clique gauche
+canvas.addEventListener('contextmenu', placeMark);
 
 function mouse_to_case(event) {
     event.preventDefault();
@@ -80,9 +84,35 @@ function placeLight(event) {
         return;
     } else {
         if (Module._is_lightbulb(g, case_y, case_x)) {
-            Module._play_move(g, case_y, case_x, BLANK);
+            if (Module._check_move(g, case_y, case_x, BLANK)) {
+                Module._play_move(g, case_y, case_x, BLANK);
+            }
         } else {
-            Module._play_move(g, case_y, case_x, LIGHTBULB);
+            if (Module._check_move(g, case_y, case_x, LIGHTBULB)) {
+                Module._play_move(g, case_y, case_x, LIGHTBULB);
+            }
+        }
+        printGame(g);
+    }
+
+}
+
+function placeMark(event) {
+    event.preventDefault();
+    var pos = mouse_to_case(event);
+    var case_x = pos[0];
+    var case_y = pos[1];
+    if (case_x < 0 || case_y < 0) {
+        return;
+    } else {
+        if (Module._is_marked(g, case_y, case_x)) {
+            if (Module._check_move(g, case_y, case_x, BLANK)) {
+                Module._play_move(g, case_y, case_x, BLANK);
+            }
+        } else {
+            if (Module._check_move(g, case_y, case_x, MARK)) {
+                Module._play_move(g, case_y, case_x, MARK);
+            }
         }
         printGame(g);
     }
@@ -220,6 +250,9 @@ function drawGridContent(g) {
             }
             else if (Module._is_lightbulb(g, y, x)) {
                 ctx.drawImage(lightbulb, (startx + x * spriteSize), (starty + y * spriteSize), spriteSize, spriteSize);
+            }
+            else if (Module._is_marked(g, y, x)) {
+                ctx.drawImage(mark, (startx + x * spriteSize), (starty + y * spriteSize), spriteSize, spriteSize);
             }
 
         }
