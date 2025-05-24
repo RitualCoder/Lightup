@@ -1,5 +1,5 @@
 #Version Cmake
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.10)
 
 #projet
 project("Lightup" C)
@@ -8,10 +8,32 @@ include(CTest)
 enable_testing()
 
 #on cherche SDL2
-find_package(SDL2 REQUIRED)
+find_package(PkgConfig REQUIRED)
 
-set(SDL2_ALL_INC ${SDL2_INCLUDE_DIRS})
-set(SDL2_ALL_LIBS ${SDL2_LIBRARIES} -lSDL2_ttf -lSDL2_image) # add extra SDL2 libraries
+# on cherche SDL2, SDL2_image et SDL2_ttf via pkg-config
+pkg_check_modules(SDL2     REQUIRED sdl2)
+pkg_check_modules(SDL2_TTF REQUIRED SDL2_ttf)
+pkg_check_modules(SDL2_IMG REQUIRED SDL2_image)
+
+# includes communs
+include_directories(
+  ${SDL2_INCLUDE_DIRS}
+  ${SDL2_TTF_INCLUDE_DIRS}
+  ${SDL2_IMG_INCLUDE_DIRS}
+)
+
+# chemins de linkage
+link_directories(
+  ${SDL2_LIBRARY_DIRS}
+  ${SDL2_TTF_LIBRARY_DIRS}
+  ${SDL2_IMG_LIBRARY_DIRS}
+)
+
+set(SDL2_ALL_LIBS
+  ${SDL2_LIBRARIES}
+  ${SDL2_TTF_LIBRARIES}
+  ${SDL2_IMG_LIBRARIES}
+)
 
 message(STATUS "SDL2 include dir: ${SDL2_ALL_INC}")
 message(STATUS "SDL2 all libraries: ${SDL2_ALL_LIBS}")
