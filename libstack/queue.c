@@ -22,7 +22,6 @@ struct element_s {
 
 /* *********************************************************** */
 
-typedef struct queue_s queue;
 typedef struct element_s element_t;
 
 /* *********************************************************** */
